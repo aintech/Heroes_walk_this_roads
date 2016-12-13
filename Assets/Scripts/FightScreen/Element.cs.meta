@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 640d86d193a9f7e4c83ec93a21b83e2c
+timeCreated: 1474290148
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - fireElement: {fileID: 21300002, guid: ce8a6fba14f17e84a8bc43d5ab323520, type: 3}
+  - waterElement: {fileID: 21300004, guid: ce8a6fba14f17e84a8bc43d5ab323520, type: 3}
+  - earthElement: {fileID: 21300006, guid: ce8a6fba14f17e84a8bc43d5ab323520, type: 3}
+  - airElement: {fileID: 21300008, guid: ce8a6fba14f17e84a8bc43d5ab323520, type: 3}
+  - lightElement: {fileID: 21300010, guid: ce8a6fba14f17e84a8bc43d5ab323520, type: 3}
+  - darkElement: {fileID: 21300012, guid: ce8a6fba14f17e84a8bc43d5ab323520, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

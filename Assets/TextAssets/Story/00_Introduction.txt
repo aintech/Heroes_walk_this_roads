@@ -1,0 +1,7 @@
+﻿bg:black<>Тук-тук...
+<>- Заходите!
+bg:introduction;prt:guild_secretary<> - О, привет! Ты Алика, правильно?
+prt:alika<>- Да, из академии сразу к вам.
+prt:guild_secretary<>- Ваш корабль готов, ваша первая цель - Друид. Удачи!
+bg:introduction_nude;prt:alika<>- Спасибо! До встречи...
+prt:guild_secretary<>- Пока.

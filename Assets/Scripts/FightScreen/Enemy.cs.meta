@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c0f230185b247264fa385df410b3fb18
+timeCreated: 1469102084
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - harpyIdle: {fileID: 21300000, guid: c86876b8b5610784786e46b8bacc5e9e, type: 3}
+  - harpyAttack: {fileID: 21300002, guid: c86876b8b5610784786e46b8bacc5e9e, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

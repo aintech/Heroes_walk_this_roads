@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 194532118fb8d0d4c9ae8e42cf73b3ff
+timeCreated: 1481387699
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - nude: {fileID: 21300000, guid: a66111ea69160684ab8d99255ae4fb42, type: 3}
+  - underwear: {fileID: 21300000, guid: 3b49c9fe51a7d2641a0ecbacb4b29e19, type: 3}
+  - armor: {fileID: 21300000, guid: 93de5177a50ea23449a00e6c8a8db522, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

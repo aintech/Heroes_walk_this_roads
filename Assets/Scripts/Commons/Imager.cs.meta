@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 7c8ef03d2cb2c7a4490164e34a5a2f18
+timeCreated: 1473772115
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - aluriaBG: {fileID: 21300000, guid: cd80c6354505b2c48a3c0fee814fa2d7, type: 3}
+  - corasBG: {fileID: 21300000, guid: d9d0d23e76cdb8e49931ed809dafeb4c, type: 3}
+  - portraitAlika: {fileID: 2800000, guid: 19623e684b190b34aa406787c0dcda73, type: 3}
+  - portraitRokot: {fileID: 2800000, guid: d42663f668e090c4aa4f07242a1ce767, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e8e5a27371857a14fb391c1b59fb7587
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - inventoryBtnSprite: {fileID: 21300002, guid: a4a6b8c5652bc914eb4f084c0e06baf5,
+      type: 3}
+  - inventoryBtnSpriteDisabled: {fileID: 21300006, guid: a4a6b8c5652bc914eb4f084c0e06baf5,
+      type: 3}
+  - storageBtnSprite: {fileID: 21300000, guid: a4a6b8c5652bc914eb4f084c0e06baf5, type: 3}
+  - storageBtnSpriteDisabled: {fileID: 21300008, guid: a4a6b8c5652bc914eb4f084c0e06baf5,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

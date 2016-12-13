@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 0932f2c4542c58c439da3d3b1590771e
+timeCreated: 1469103567
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - enchantedForest: {fileID: 21300000, guid: 8e2353198f8205d488faf2b3bf90d754, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

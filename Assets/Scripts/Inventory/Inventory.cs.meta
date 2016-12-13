@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 0c1a0e5d334148c4cba0de8359ae2134
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - inventoryItemPrefab: {fileID: 400000, guid: 1f5b736f2fd62a74c907553481368e00,
+      type: 2}
+  - moveUpBtnSprite: {fileID: 21300012, guid: a4a6b8c5652bc914eb4f084c0e06baf5, type: 3}
+  - moveDownBtnSprite: {fileID: 21300016, guid: a4a6b8c5652bc914eb4f084c0e06baf5,
+      type: 3}
+  - moveUpBtnSpriteDisabled: {fileID: 21300014, guid: a4a6b8c5652bc914eb4f084c0e06baf5,
+      type: 3}
+  - moveDownBtnSpriteDisabled: {fileID: 21300018, guid: a4a6b8c5652bc914eb4f084c0e06baf5,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

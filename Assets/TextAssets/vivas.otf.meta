@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: c4f5ca8427172ee41a36f5cdf16e51eb
+timeCreated: 1474526480
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - ss_vivas
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 17193e6562317564a9fcc2b9bc92293b, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

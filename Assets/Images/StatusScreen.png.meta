@@ -1,0 +1,464 @@
+fileFormatVersion: 2
+guid: 1056e969b7409cd45a614aee66976e67
+timeCreated: 1481402816
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: StatusScreen_InventoryBG
+    21300002: Inventory_Ship_BG
+    21300004: Inventory_ShowBtn
+    21300006: Inventory_ShowBtnHover
+    21300008: Inventory_CloseBtn
+    21300010: Inventory_CloseBtnHover
+    21300012: Inventory_PerksBtn
+    21300014: Inventory_PerksBtn_Hover
+    21300016: Inventory_ShipBtn
+    21300018: InventoryShipBtn_Hover
+    21300020: Inventory_EquipmentBtn
+    21300022: Inventory_EquipmentBtn_Hover
+    21300024: Inventory_UpBtn
+    21300026: Inventory_DownBtn
+    21300028: Inventory_SortBtn
+    21300030: Inventory_UpBtn_Hover
+    21300032: Inventory_DownBtn_Hover
+    21300034: Inventory_SortBtn_Hover
+    21300036: Inventory_Icon_HandWeapon
+    21300038: Inventory_Icon_BodyArmor
+    21300040: Inventory_Icon_Radar
+    21300042: Inventory_Icon_Generator
+    21300044: Inventory_Icon_Shield
+    21300046: Inventory_Icon_Armor
+    21300048: Inventory_Icon_Droid
+    21300050: Inventory_Icon_Weapon
+    21300052: Inventory_Icon_Harvester
+    21300054: Inventory_Icon_Engine
+    21300056: Inventory_SlotBG
+    21300058: Inventory_SlotBorder
+    21300060: Inventory_SlotActive
+    21300062: Inventory_ShipBtn_Hover
+    21300064: ItemDescriptor_Button
+    21300066: ItemDescriptor_Loading
+    21300068: StatusScreen_RepairBtn
+    21300070: StatusScreen_RepairBtn_Hover
+    21300072: Inventory_CabinBtn
+    21300074: Inventory_CabinBtn_Hover
+    21300076: Inventory_Icon_Supply
+    21300078: StatusScreen_AddBtn
+    21300080: StatusScreen_AddBtnHover
+    21300082: StatusScreen_LevelUp
+    21300084: StatusScreen_SlotBG
+    21300086: StatusScreen_SlotBGActive
+    21300088: StatusScreen_HelmetSlot
+    21300090: StatusScreen_AmuletSlot
+    21300092: StatusScreen_ArmorSlot
+    21300094: StatusScreen_GloveSlot
+    21300096: StatusScreen_WeaponSlot
+    21300098: StatusScreen_ShieldSlot
+    21300100: StatusScreen_RingSlot
+    21300102: StatusScreen_AttributesBG
+    21300104: StatusScreen_ItemBorder
+    21300106: StatusScreen_SupplySlot
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: StatusScreen_InventoryBG
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 37
+        width: 1005
+        height: 867
+      alignment: 9
+      pivot: {x: 0.52606744, y: 0.628665}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_UpBtn
+      rect:
+        serializedVersion: 2
+        x: 1382
+        y: 661
+        width: 45
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_DownBtn
+      rect:
+        serializedVersion: 2
+        x: 1382
+        y: 516
+        width: 45
+        height: 87
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_SortBtn
+      rect:
+        serializedVersion: 2
+        x: 1386
+        y: 384
+        width: 37
+        height: 57
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_UpBtn_Hover
+      rect:
+        serializedVersion: 2
+        x: 1540
+        y: 661
+        width: 44
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_DownBtn_Hover
+      rect:
+        serializedVersion: 2
+        x: 1540
+        y: 516
+        width: 44
+        height: 87
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_SortBtn_Hover
+      rect:
+        serializedVersion: 2
+        x: 1543
+        y: 384
+        width: 38
+        height: 57
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_SlotBG
+      rect:
+        serializedVersion: 2
+        x: 1629
+        y: 1740
+        width: 120
+        height: 121
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_SlotBorder
+      rect:
+        serializedVersion: 2
+        x: 1777
+        y: 1739
+        width: 123
+        height: 123
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Inventory_SlotActive
+      rect:
+        serializedVersion: 2
+        x: 1629
+        y: 1891
+        width: 120
+        height: 121
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_RepairBtn
+      rect:
+        serializedVersion: 2
+        x: 1793
+        y: 1906
+        width: 91
+        height: 91
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_RepairBtn_Hover
+      rect:
+        serializedVersion: 2
+        x: 1923
+        y: 1906
+        width: 91
+        height: 91
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_AddBtn
+      rect:
+        serializedVersion: 2
+        x: 1703
+        y: 687
+        width: 43
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_AddBtnHover
+      rect:
+        serializedVersion: 2
+        x: 1703
+        y: 608
+        width: 43
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_LevelUp
+      rect:
+        serializedVersion: 2
+        x: 1703
+        y: 507
+        width: 42
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_SlotBG
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 782
+        width: 121
+        height: 121
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_SlotBGActive
+      rect:
+        serializedVersion: 2
+        x: 1501
+        y: 781
+        width: 123
+        height: 123
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_HelmetSlot
+      rect:
+        serializedVersion: 2
+        x: 1097
+        y: 804
+        width: 68
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_AmuletSlot
+      rect:
+        serializedVersion: 2
+        x: 1221
+        y: 802
+        width: 84
+        height: 84
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_ArmorSlot
+      rect:
+        serializedVersion: 2
+        x: 1089
+        y: 666
+        width: 84
+        height: 75
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_GloveSlot
+      rect:
+        serializedVersion: 2
+        x: 1228
+        y: 666
+        width: 70
+        height: 75
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_WeaponSlot
+      rect:
+        serializedVersion: 2
+        x: 1089
+        y: 533
+        width: 84
+        height: 53
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_ShieldSlot
+      rect:
+        serializedVersion: 2
+        x: 1227
+        y: 521
+        width: 72
+        height: 77
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_RingSlot
+      rect:
+        serializedVersion: 2
+        x: 1092
+        y: 373
+        width: 78
+        height: 79
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_AttributesBG
+      rect:
+        serializedVersion: 2
+        x: 1065
+        y: 37
+        width: 484
+        height: 303
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_ItemBorder
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 781
+        width: 123
+        height: 123
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_SupplySlot
+      rect:
+        serializedVersion: 2
+        x: 1221
+        y: 361
+        width: 84
+        height: 103
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
