@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class FightScreen : MonoBehaviour, ButtonHolder {
 
-	public static bool ENEMY_DEAD_ANIM_DONE = false;
-
 	private ElementsHolder elementsHolder;
 
 	private SpriteRenderer iconsHolderRender;
@@ -24,17 +22,9 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 
 	private Enemy enemy;
 
-	private FightResultScreen resultScreen;
-
-	private Animator enemyDeadAnimator;
-
-	private Transform deadStone;
-
-	private Vector2 deadStoneInitPos = new Vector2(0, 2f);
-
 	private FightProcessor fightProcessor;
 
-	private bool fightStarted, fightOver, startAnimDone, enemyDeadPlaying;
+	private bool fightStarted, startAnimDone, enemyDeadPlaying;
 
 	private bool playerWin;
 
@@ -77,17 +67,12 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 		elementEffectPlayer = transform.Find("ElementEffectPlayer").GetComponent<ElementEffectPlayer>();
 		fightInterface = transform.Find("Fight Interface").GetComponent<FightInterface>().init(this);
 		enemy = transform.Find("Enemy").GetComponent<Enemy>();
-		resultScreen = transform.Find("Fight Result Screen").GetComponent<FightResultScreen>().init(this, enemy);
-		enemyDeadAnimator = transform.Find("EnemyDeadAnim").GetComponent<Animator>();
-		deadStone = enemyDeadAnimator.transform.Find("DeadStone");
 		enemyPos = enemy.transform.localPosition;
-//		elementsHolder.init();
 		enemy.init(this);
 		elementEffectPlayer.init(this, enemy);
 		fightProcessor.init(this, elementsHolder, enemy);
 
 		elementsHolder.gameObject.SetActive(true);
-		enemyDeadAnimator.gameObject.SetActive(false);
 		gameObject.SetActive(false);
 
 		Transform actionsHolder = transform.Find("Actions Holder");
@@ -108,6 +93,8 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 
 		captureBtn = transform.Find ("Capture Button").GetComponent<Button> ().init ();
 		releaseBtn = transform.Find ("Release Button").GetComponent<Button> ().init ();
+
+        transform.Find("Background").gameObject.SetActive(true);
 
 		Player.fightScreen = this;
 
@@ -134,9 +121,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 		fightInterface.setEnemy(enemy);
 		elementsHolder.setActive(true);
 
-		deadStone.transform.localPosition = deadStoneInitPos;
-		enemyDeadAnimator.gameObject.SetActive(false);
-		fightStarted = startAnimDone = fightOver = false;
+		fightStarted = startAnimDone = false;
 		foreach (StatusEffect eff in enemyStatusEffects) {
 			eff.initEnemy (enemy);
 		}
@@ -202,8 +187,6 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 		itemDescriptor.setDisabled();
 		elementsHolder.holderAnimator.playElementsDisapperance ();
 		elementsHolder.setActive(false);
-
-		fightOver = true;
 	}
 
 	public void showFightEndDisplay () {
@@ -249,11 +232,6 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 			}
 		}
         world.backFromFight(playerWin);
-//		scanningScreen.endFight(playerWin);
-	}
-
-	public FightResultScreen getResultScreen () {
-		return resultScreen;
 	}
 
 	public FightProcessor getFightProcessor () {

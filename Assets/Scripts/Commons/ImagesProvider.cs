@@ -4,10 +4,10 @@ using System.Collections;
 public class ImagesProvider : MonoBehaviour {
 
 	public Sprite[] weaponSprites, shieldSprites, helmetSprites, armorSprites, gloveSprites, amuletSprites, ringSprites, materialSprites, supplySprites,
-					enemyMarkerSprites;
+					enemyMarkerSprites, locationMarkerSprites;
 
 	public static Sprite[] weapons, shields, helmets, armors, gloves, amulets, rings, materials, supplies,
-						   enemyMarkers;
+						   enemyMarkers, locationMarkers;
 
 	public void init () {
         weapons = weaponSprites;
@@ -21,6 +21,7 @@ public class ImagesProvider : MonoBehaviour {
 		supplies = supplySprites;
 
 		enemyMarkers = enemyMarkerSprites;
+        locationMarkers = locationMarkerSprites;
 	}
 
 	public static Sprite getEnemyMarkerSprite (EnemyType type) {
@@ -29,6 +30,14 @@ public class ImagesProvider : MonoBehaviour {
 			default: Debug.Log("Unknown enemy type: " + type); return null;
 		}
 	}
+
+    public static Sprite getLocationMarkerSprite (LocationType type) {
+        switch (type) {
+            case LocationType.ROUTINE: return locationMarkers[0];
+            case LocationType.BANDIT_FORTRESS: return locationMarkers[1];
+            default: Debug.Log("Unknown location type: " + type); return null;
+        }
+    }
 
 	public static Sprite getItemSprite (ItemData data) {
 		switch (data.itemType) {

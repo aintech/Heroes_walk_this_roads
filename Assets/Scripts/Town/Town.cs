@@ -12,7 +12,7 @@ public class Town : MonoBehaviour {
 
     public Town init (World world) {
         this.world = world;
-        world.addTown(World.Location.ROUTINE, this);
+        world.town = this;
 
         mainScreen = transform.Find("Main").GetComponent<TownMainScreen>().init(this);
 
@@ -28,7 +28,7 @@ public class Town : MonoBehaviour {
         return this;
     }
 
-    public void walkInTown () {
+    public void walkInTown (LocationType type) {
         if (checkStoryline()) {
             Vars.gameplay.story.playNextChapter();
         } else {
@@ -38,7 +38,7 @@ public class Town : MonoBehaviour {
     }
 
     public void leaveTown () {
-        world.showWorld(World.Location.ROUTINE);
+        world.showWorld(LocationType.ROUTINE);
         gameObject.SetActive(false);
     }
 

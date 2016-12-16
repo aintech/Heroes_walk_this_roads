@@ -11,7 +11,9 @@ public class Player {
 
     public static int endurance = 10;
 
-    public static int agility = 10;
+    public static int agility = 15;
+
+    public static int initiative { get { return agility; } private set{;} }
 
 	public static int health { get; private set; }
 

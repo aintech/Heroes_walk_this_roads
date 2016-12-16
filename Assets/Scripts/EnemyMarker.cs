@@ -21,12 +21,14 @@ public class EnemyMarker : MonoBehaviour {
 
     public bool alive { get; private set; }
 
-    public EnemyMarker init (World world, Transform landscape, EnemyType enemyType) {
+    private Location location;
+
+    public EnemyMarker init (World world, Transform landscape, EnemyType enemyType, Location location) {
         this.world = world;
 		trans = transform;
         image = GetComponent<SpriteRenderer>();
         trans.SetParent(landscape);
-		resetMarker(enemyType);
+        resetMarker(enemyType, location);
 
 		return this;
 	}
@@ -38,16 +40,18 @@ public class EnemyMarker : MonoBehaviour {
 //		targetPosition.y = dist * Mathf.Sin(angle);
 	}
 
-	public void resetMarker (EnemyType enemyType) {
+    public void resetMarker (EnemyType enemyType, Location location) {
 		this.enemyType = enemyType;
+        this.location = location;
         alive = true;
         image.sprite = ImagesProvider.getEnemyMarkerSprite(enemyType);
-		initPos();
+        initPos();
 	}
 
     private void initPos () {
+        Point initPoint = location.position;
         do {
-            position = new Point(Random.Range(10, 30), Random.Range(10, 30));
+            position = new Point(Random.Range(initPoint.x - 10, initPoint.x + 10), Random.Range(initPoint.y - 10, initPoint.y + 10));
         } while (!world.worldMap[position.x, position.y] && !world.isLocationPoint(position));
         moveToPos();
     }

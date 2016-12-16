@@ -79,7 +79,7 @@ public class QuantityPopup : MonoBehaviour, ButtonHolder, Closeable {
         this.listener = listener;
         this.holder = holder;
 
-        buying = listener is Shop;
+        buying = listener is Market && ((Market)listener).type == Inventory.InventoryType.MARKET_BUY;
 
         count = holder.item.quantity;
         barScale.x = 1f / (float)count;

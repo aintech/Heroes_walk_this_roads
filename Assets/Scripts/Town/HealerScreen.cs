@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HealerScreen : ShopScreen {
+public class HealerScreen : TownScreen {
 
     private Button healBtn;
 
@@ -31,11 +31,6 @@ public class HealerScreen : ShopScreen {
     private void updateHealBtn () {
         healBtn.setActive(healCost > 0 && healCost <= Vars.gold);
         healBtn.setText("Лечение" + (healCost == 0? "": (" (" + healCost.ToString() + ")")));
-    }
-
-    public override void closeShop () {
-        updateHealBtn();
-        setVisible(true);
     }
 
     public override void fireButton (Button btn) {

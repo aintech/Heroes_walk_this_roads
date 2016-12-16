@@ -52,6 +52,6 @@ public class Gameplay : MonoBehaviour {
     public void startGame () {
         statusScreen.inventory.fillWithRandomItems(50, "Player Item");
         statusScreen.inventory.calculateFreeVolume();
-        town.walkInTown();
+        town.walkInTown(LocationType.ROUTINE);
     }
 }

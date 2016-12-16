@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour {
 
-	private const float damageToPerkMultiplier = .01f;
-
 	private SpriteRenderer render;
 
 	public int health { get; private set; }
@@ -16,7 +14,7 @@ public class Enemy : MonoBehaviour {
 
 	public int damage { get; private set; }
 
-	public int dexterity { get; private set; }
+	public int initiative { get; private set; }
 
 	public EnemyType enemyType { get; private set; }
 
@@ -33,7 +31,7 @@ public class Enemy : MonoBehaviour {
 		health = enemyType.health();
 		maxHealth = health;
 		armor = enemyType.armor();
-		dexterity = enemyType.dexterity();
+        initiative = enemyType.initiative();
 		setSprite();
 		gameObject.SetActive(true);
 	}

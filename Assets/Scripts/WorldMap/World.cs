@@ -1,14 +1,11 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 public class World : MonoBehaviour {
 
     public Transform locationPrefab, enemyMarkerPrefab;
-
-    public Sprite routineMarker;
-
-    private Dictionary<Location, Town> towns = new Dictionary<Location, Town>();
 
     private const float TILE_SIDE = 64;
 
@@ -30,13 +27,20 @@ public class World : MonoBehaviour {
 
     private Vector2 screenSize;
 
-    private Dictionary<Location, Point> worldLocations = new Dictionary<Location, Point>();
+    private Dictionary<LocationType, Location> worldLocations = new Dictionary<LocationType, Location>();
+
+    private Dictionary<Point, LocationType> locationPositions = new Dictionary<Point, LocationType>();
 
     private List<EnemyMarker> enemies = new List<EnemyMarker>();
 
     private FightScreen fightScreen;
 
     private EnemyMarker fightEnemy;
+
+    private Location fightLocation;
+
+    [HideInInspector]
+    public Town town;
 
     public World init (FightScreen fightScreen) {
         this.fightScreen = fightScreen;
@@ -67,6 +71,10 @@ public class World : MonoBehaviour {
 
         landscapePosition = landscape.localPosition;
 
+        foreach(LocationType locType in Enum.GetValues(typeof(LocationType))) {
+            addLocation(locType);
+        }
+
         fillWithEnemies();
 
         gameObject.SetActive(false);
@@ -83,34 +91,26 @@ public class World : MonoBehaviour {
         }
     }
 
+    public void addLocation (LocationType type) {
+        Location location = Instantiate<Transform>(locationPrefab).GetComponent<Location>().init(type, locationsContainer, cellSize);
+        worldLocations.Add(type, location);
+        locationPositions.Add(location.position, type);
+    }
+
     private void fillWithEnemies () {
-        for (int i = 0; i < 5; i++) {
-            EnemyMarker marker = Instantiate<Transform>(enemyMarkerPrefab).GetComponent<EnemyMarker>().init(this, landscape, EnemyType.ROGUE);
-            enemies.Add(marker);
+        foreach (Location location in worldLocations.Values) {
+            if (location.type.isEnemyCamp()) {
+                EnemyType[] enemyTypes = location.type.spawn();
+                for (int i = 0; i < 5; i++) {
+                    EnemyMarker marker = Instantiate<Transform>(enemyMarkerPrefab).GetComponent<EnemyMarker>().init(this, landscape, EnemyType.ROGUE, location);
+                    enemies.Add(marker);
+                }
+            }
         }
     }
 
-    public void addTown (Location location, Town town) {
-        addLocation(location);
-        towns.Add(location, town);
-    }
-
-    public void addLocation (Location location) {
-        worldLocations.Add(location, null);
-        Transform loc = Instantiate<Transform>(locationPrefab);
-        switch (location) {
-            case Location.ROUTINE:
-                loc.GetComponent<SpriteRenderer>().sprite = routineMarker;
-                worldLocations[location] = new Point(5, 3);
-                break;
-            default: Debug.Log("Unknown location type: " + location); break;
-        }
-        loc.SetParent(locationsContainer);
-        loc.localPosition = new Vector3(worldLocations[location].x * cellSize, worldLocations[location].y * cellSize, 0);
-    }
-
-    public void showWorld (Location location) {
-        currPoint.setPoint(worldLocations[location]);
+    public void showWorld (LocationType type) {
+        currPoint.setPoint(worldLocations[type].position);
         currPoint.y--;
         tempPoint.setPoint(currPoint);
         adjustWorld();
@@ -144,12 +144,10 @@ public class World : MonoBehaviour {
     }
 
     private bool checkPosition (Point point) {
-        if (worldLocations.ContainsValue(point)) {
-            foreach (KeyValuePair<Location, Point> pair in worldLocations) {
-                if (point.isSame(pair.Value)) {
-                    visitLocation(pair.Key);
-                    return true;
-                }
+        if (locationPositions.ContainsKey(point)) {
+            if (!worldLocations[locationPositions[point]].isRuined) {
+                visitLocation(locationPositions[point]);
+                return true;
             }
         }
         timeCounter = Time.time + nextActionTime;
@@ -157,7 +155,7 @@ public class World : MonoBehaviour {
     }
 
     public bool isLocationPoint (Point point) {
-        return worldLocations.ContainsValue(point);
+        return locationPositions.ContainsKey(point);
     }
 
     private void adjustWorld () {
@@ -198,17 +196,26 @@ public class World : MonoBehaviour {
     }
 
     public void backFromFight (bool winner) {
-        fightEnemy.disable();
+        if (fightEnemy != null) {
+            fightEnemy.disable();
+            fightEnemy = null;
+        }
+        if (fightLocation != null) {
+            fightLocation.ruin();
+            fightLocation = null;
+        }
         enabled = true;
         checkEnemyCollision();
     }
 
-    private void visitLocation (Location location) {
-        towns[location].walkInTown();
-        gameObject.SetActive(false);
-    }
-
-    public enum Location {
-        ROUTINE
+    private void visitLocation (LocationType type) {
+        if (type.isTown()) {
+            town.walkInTown(type);
+            gameObject.SetActive(false);
+        } else if (type.isEnemyCamp()) {
+            fightLocation = worldLocations[type];
+            fightScreen.startFight(type.boss());
+            enabled = false;
+        }
     }
 }

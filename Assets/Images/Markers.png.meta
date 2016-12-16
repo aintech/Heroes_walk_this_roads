@@ -1,12 +1,14 @@
 fileFormatVersion: 2
 guid: 62e9050db8f7b5f4a9578025a9640af8
-timeCreated: 1481632856
+timeCreated: 1481722937
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: Markers_Player
     21300002: Markers_Routine
     21300004: Markers_Rogue
+    21300006: Markers_BanditFortress
+    21300008: Markers_Ruins
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -60,7 +62,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 64
         width: 64
         height: 64
       alignment: 6
@@ -72,7 +74,7 @@ TextureImporter:
       name: Markers_Routine
       rect:
         serializedVersion: 2
-        x: 64
+        x: 0
         y: 0
         width: 64
         height: 64
@@ -85,7 +87,33 @@ TextureImporter:
       name: Markers_Rogue
       rect:
         serializedVersion: 2
+        x: 64
+        y: 64
+        width: 64
+        height: 64
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Markers_BanditFortress
+      rect:
+        serializedVersion: 2
         x: 128
+        y: 0
+        width: 64
+        height: 64
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Markers_Ruins
+      rect:
+        serializedVersion: 2
+        x: 64
         y: 0
         width: 64
         height: 64

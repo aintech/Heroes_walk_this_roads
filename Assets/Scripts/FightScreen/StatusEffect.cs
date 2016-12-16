@@ -24,10 +24,11 @@ public class StatusEffect : MonoBehaviour {
 	private Color32 disabledColor = new Color32(255, 255, 255, 120), enabledColor = new Color32(255, 255, 255, 255);
 
 	public StatusEffect init () {
-		turnsText = transform.Find("Turns").GetComponent<StrokeText>().init("default", 5);
 		inProgress = false;
 
-		render = GetComponent<SpriteRenderer>();
+        render = GetComponent<SpriteRenderer>();
+
+        turnsText = transform.Find("Turns").GetComponent<StrokeText>().init(render.sortingLayerName, render.sortingOrder + 1);
 
 		gameObject.SetActive(false);
 

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class FightEffectPlayer : MonoBehaviour {
 
-	public Sprite damageSprite, healSprite, poisonSprite, blindSprite, paralizeSprite, armorSprite, regenerateSprite, speedSprite;
+	public Sprite damageSprite, healSprite, blindSprite, paralizeSprite, armorSprite, regenerateSprite, speedSprite, missSprite;
 
 	private Transform bg, effectImage;
 
@@ -165,10 +165,10 @@ public class FightEffectPlayer : MonoBehaviour {
 				effectTxt.color = red;
 				effectTxt.text = "Паралич";
 				break;
-			case FightEffectType.POISON:
-				effectRender.sprite = poisonSprite;
+            case FightEffectType.MISS:
+                effectRender.sprite = missSprite;
 				effectTxt.color = red;
-				effectTxt.text = "Отравление";
+				effectTxt.text = "Промах";
 				break;
 			default: Debug.Log("Unknown effect type: " + type); break;
 		}

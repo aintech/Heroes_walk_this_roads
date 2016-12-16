@@ -20,15 +20,11 @@ public static class EnemyDescriptor {
 	}
 
 	public static int damage (this EnemyType type) {
-		return 10;
+		return 20;
 	}
 
-	public static int dexterity (this EnemyType type) {
+	public static int initiative (this EnemyType type) {
 		return 10;
-	}
-
-	public static int speed (this EnemyType type) {
-		return 3;
 	}
 
 	public static int armor (this EnemyType type) {

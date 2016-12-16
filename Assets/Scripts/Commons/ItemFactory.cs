@@ -78,9 +78,9 @@ public static class ItemFactory {
 			case SupplyType.PARALIZING_DUST:
 				duration = quality == ItemQuality.UNIQUE? 7: quality == ItemQuality.RARE? 6: quality == ItemQuality.SUPERIOR? 5: quality == ItemQuality.GOOD? 4: 3;
 				break;
-			case SupplyType.SPEED_POTION:
-				value = quality == ItemQuality.UNIQUE? 5: quality == ItemQuality.RARE? 4: quality == ItemQuality.SUPERIOR? 3: quality == ItemQuality.GOOD? 2: 1;
-				duration = 5;
+            case SupplyType.SPEED_POTION:
+                value = quality == ItemQuality.UNIQUE || quality == ItemQuality.RARE? 2: 1;
+                duration = quality == ItemQuality.UNIQUE? 15: quality == ItemQuality.RARE? 10: quality == ItemQuality.SUPERIOR? 10: quality == ItemQuality.GOOD? 7: 5;
 				break;
 			case SupplyType.REGENERATION_POTION:
 				value = Mathf.RoundToInt(type.value() * level * qualityMultiplier(quality));

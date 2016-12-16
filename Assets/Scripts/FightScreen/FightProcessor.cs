@@ -22,22 +22,31 @@ public class FightProcessor : MonoBehaviour {
 
 	private int playerActions, enemyActions;
 
+    private float playerInitiativeDiff, enemyInitiativeDiff, playerInitiativeCounter, enemyInitiativeCounter;
+
 	public void init (FightScreen fightScreen, ElementsHolder elementsHolder, Enemy enemy) {
 		this.fightScreen = fightScreen;
 		this.elementsHolder = elementsHolder;
 		this.enemy = enemy;
 	}
 
-	public void startFight () {
+    public void startFight () {
+        playerInitiativeCounter = 0;
+        enemyInitiativeCounter = 0;
+        calcInitiative();
 		calcActions();
 		updateStatusEffects();
 		switchMachineState(StateMachine.PLAYER_TURN);
 	}
 
+    private void calcInitiative () {
+        playerInitiativeDiff = Mathf.Max(1f, (float)Player.initiative / (float)enemy.initiative) - 1;
+        enemyInitiativeDiff = Mathf.Max(1f, (float)enemy.initiative / (float)Player.initiative) - 1;
+    }
+
 	private void calcActions () {
 		calcActions(true);
 		calcActions(false);
-
 	}
 
 	private void calcActions (bool asPlayer) {
@@ -48,9 +57,20 @@ public class FightProcessor : MonoBehaviour {
 			return;
 		}
 
-		int actions;
-		if (asPlayer) { actions = 3; }
-		else { actions = enemy.enemyType.speed(); }
+        int actions = 1;
+		if (asPlayer) {
+            playerInitiativeCounter += playerInitiativeDiff;
+            if (playerInitiativeCounter > 1) {
+                actions += Mathf.FloorToInt(playerInitiativeCounter);
+                playerInitiativeCounter -= Mathf.FloorToInt(playerInitiativeCounter);
+            }
+        } else {
+            enemyInitiativeCounter += enemyInitiativeDiff;
+            if (enemyInitiativeCounter > 1) {
+                actions += Mathf.FloorToInt(enemyInitiativeCounter);
+                enemyInitiativeCounter -= Mathf.FloorToInt(enemyInitiativeCounter);
+            }
+        }
 
 		if (fightScreen.getStatusEffectByType(StatusEffectType.SPEED, asPlayer).inProgress) {
 			actions += fightScreen.getStatusEffectByType(StatusEffectType.SPEED, asPlayer).value;
@@ -58,6 +78,7 @@ public class FightProcessor : MonoBehaviour {
 
 		if (asPlayer) { playerActions = actions; }
 		else { enemyActions = actions; }
+
 		fightScreen.updateActionTexts(playerActions, enemyActions);
 	}
 
@@ -176,8 +197,12 @@ public class FightProcessor : MonoBehaviour {
 	}
 
 	private void calculateEnemyTurnResult () {
+        if (fightScreen.getStatusEffectByType(StatusEffectType.BLINDED, false).inProgress && (Random.value < .5f)) {
+            fightScreen.fightEffectPlayer.playEffect(FightEffectType.MISS, 0);
+        } else {
+            fightScreen.fightEffectPlayer.playEffect(FightEffectType.DAMAGE, Player.hitPlayer(enemy.damage));
+        }
 		FIGHT_ANIM_PLAYER_DONE = false;
-		fightScreen.fightEffectPlayer.playEffect(FightEffectType.DAMAGE, Player.hitPlayer(enemy.damage));
 		enemyActions--;
 		fightScreen.updateActionTexts(playerActions, enemyActions);
 	}
