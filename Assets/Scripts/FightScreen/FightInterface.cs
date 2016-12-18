@@ -6,7 +6,7 @@ public class FightInterface : MonoBehaviour {
 
 	private Transform enemyHealthBar, playerHealthBar;
 
-	private Enemy enemy;
+	private EnemyHolder enemy;
 
 	private Vector3 enemyBarScale, playerBarScale;
 
@@ -17,6 +17,8 @@ public class FightInterface : MonoBehaviour {
 	private StrokeText enemyArmorValue;
 
 	private FightScreen fightScreen;
+
+	private List<HeroPortrait> portraits = new List<HeroPortrait>();
 
 	public FightInterface init (FightScreen fightScreen) {
 		this.fightScreen = fightScreen;
@@ -36,12 +38,17 @@ public class FightInterface : MonoBehaviour {
 			fightScreen.enemyStatusEffects.Add(statusEffectHolder.GetChild(i).GetComponent<StatusEffect>().init());
 		}
 
+		Transform portraitsHolder = transform.Find("Portraits");
+		for (int i = 0; i < portraitsHolder.childCount; i++) {
+			portraits.Add(portraitsHolder.GetChild(i).GetComponent<HeroPortrait>().init());
+		}
+
 		gameObject.SetActive(true);
 
 		return this;
 	}
 
-	public void setEnemy (Enemy enemy) {
+	public void setEnemy (EnemyHolder enemy) {
 		this.enemy = enemy;
 		enemyMax = enemy.health;
 		updateEnemyBar();

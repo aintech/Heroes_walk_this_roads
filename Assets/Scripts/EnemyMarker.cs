@@ -44,7 +44,7 @@ public class EnemyMarker : MonoBehaviour {
 		this.enemyType = enemyType;
         this.location = location;
         alive = true;
-        image.sprite = ImagesProvider.getEnemyMarkerSprite(enemyType);
+        image.sprite = ImagesProvider.getEnemyMarker(enemyType);
         initPos();
 	}
 

@@ -2,6 +2,8 @@
 using System.Collections;
 
 public abstract class ItemData {
+	[HideInInspector]
+	public Item item;
 	public ItemType itemType { get; protected set; }
 	public string name { get; protected set; }
 	public string description { get; protected set; }

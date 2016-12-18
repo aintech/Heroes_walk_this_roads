@@ -43,6 +43,7 @@ public class Item : MonoBehaviour {
 
 	public Item init (ItemData itemData) {
 		this.itemData = itemData;
+		itemData.item = this;
 
 		render = GetComponent<SpriteRenderer>();
 
@@ -54,15 +55,15 @@ public class Item : MonoBehaviour {
 		updateQuantityText();
 
 		switch (itemData.itemType) {
-    		case ItemType.WEAPON: render.sprite = ImagesProvider.getWeaponSprite(((WeaponData)itemData).type); break;
-    		case ItemType.SHIELD: render.sprite = ImagesProvider.getShieldSprite(((ShieldData)itemData).type); break;
-    		case ItemType.HELMET: render.sprite = ImagesProvider.getHelmetSprite (((HelmetData)itemData).type); break;
-            case ItemType.ARMOR: render.sprite = ImagesProvider.getArmorSprite(((ArmorData)itemData).type); break;  
-            case ItemType.GLOVE: render.sprite = ImagesProvider.getGloveSprite(((GloveData)itemData).type); break;
-            case ItemType.AMULET: render.sprite = ImagesProvider.getAmuletSprite(((AmuletData)itemData).type); break;
-            case ItemType.RING: render.sprite = ImagesProvider.getRingSprite(((RingData)itemData).type); break;
-            case ItemType.MATERIAL: render.sprite = ImagesProvider.getMaterialSprite(((MaterialData)itemData).type); break;
-			case ItemType.SUPPLY: render.sprite = ImagesProvider.getSupplySprite(((SupplyData)itemData).type); break;
+    		case ItemType.WEAPON: render.sprite = ImagesProvider.getWeapon(((WeaponData)itemData).type); break;
+    		case ItemType.SHIELD: render.sprite = ImagesProvider.getShield(((ShieldData)itemData).type); break;
+    		case ItemType.HELMET: render.sprite = ImagesProvider.getHelmet(((HelmetData)itemData).type); break;
+            case ItemType.ARMOR: render.sprite = ImagesProvider.getArmor(((ArmorData)itemData).type); break;  
+            case ItemType.GLOVE: render.sprite = ImagesProvider.getGlove(((GloveData)itemData).type); break;
+            case ItemType.AMULET: render.sprite = ImagesProvider.getAmulet(((AmuletData)itemData).type); break;
+            case ItemType.RING: render.sprite = ImagesProvider.getRing(((RingData)itemData).type); break;
+            case ItemType.MATERIAL: render.sprite = ImagesProvider.getMaterial(((MaterialData)itemData).type); break;
+			case ItemType.SUPPLY: render.sprite = ImagesProvider.getSupply(((SupplyData)itemData).type); break;
 			default: Debug.Log("Unknown item type: " + itemData.itemType); break;
 		}
 		return this;

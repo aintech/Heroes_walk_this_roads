@@ -15,7 +15,7 @@ public class Location : MonoBehaviour{
         this.type = type;
         isRuined = false;
         position = type.position();
-        GetComponent<SpriteRenderer>().sprite = ImagesProvider.getLocationMarkerSprite(type);
+        GetComponent<SpriteRenderer>().sprite = ImagesProvider.getLocationMarker(type);
         transform.SetParent(container);
         transform.localPosition = new Vector3(position.x * cellSize, position.y * cellSize, 0);
         return this;

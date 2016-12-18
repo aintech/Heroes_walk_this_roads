@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class StatusScreen : InventoryContainedScreen, Closeable {
 
-    public Sprite nude, underwear, armor;
-
 	private ItemDescriptor itemDescriptor;
 
     private SpriteRenderer playerRender;
@@ -18,9 +16,13 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 
     public List<SupplySlot> supplySlots { get; private set; }
 
+	private List<HeroPortrait> portraits = new List<HeroPortrait>();
+
     private StrokeText healthValue, experienceValue, damageValue, armorValue, strengthValue, enduranceValue, agilityValue;
 
     private bool onTownMainScreen;
+
+	public Hero chosenHero { get; private set; }
 
 	public StatusScreen init (ItemDescriptor itemDescriptor) {
 		this.itemDescriptor = itemDescriptor;
@@ -74,6 +76,13 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
         playerRender =  transform.Find("Player Image").GetComponent<SpriteRenderer>();
         playerRender.gameObject.SetActive(true);
 
+		Transform portraitsHolder = transform.Find("Portraits");
+		portraitsHolder.gameObject.SetActive(true);
+		for (int i = 0; i < portraitsHolder.childCount; i++) {
+			portraits.Add(portraitsHolder.GetChild(i).GetComponent<HeroPortrait>().init(this));
+		}
+
+		chooseHero(portraits[0]);
         updateAttributes();
 
         Player.statusScreen = this;
@@ -84,13 +93,13 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 	}
 
     public void updateAttributes () {
-        healthValue.setText(Player.health.ToString());// + (Player.health < Player.maxHealth? "/" + Player.maxHealth.ToString(): "");
-        experienceValue.setText(((int)Player.experience).ToString() + " %");
-        damageValue.setText(Player.damage.ToString());
-        armorValue.setText(Player.armorClass.ToString());
-        strengthValue.setText(Player.strength.ToString());
-        enduranceValue.setText(Player.endurance.ToString());
-        agilityValue.setText(Player.agility.ToString());
+		healthValue.setText(chosenHero.health.ToString());// + (Player.health < Player.maxHealth? "/" + Player.maxHealth.ToString(): "");
+		experienceValue.setText(((int)chosenHero.experience).ToString() + " %");
+		damageValue.setText(chosenHero.damage().ToString());
+		armorValue.setText(chosenHero.armorClass.ToString());
+		strengthValue.setText(chosenHero.strength.ToString());
+		enduranceValue.setText(chosenHero.endurance.ToString());
+		agilityValue.setText(chosenHero.agility.ToString());
     }
 
     public EquipmentSlot getEquipmentSlot (ItemType type) {
@@ -107,10 +116,6 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
         }
         Debug.Log("Unknown slot index: " + index);
         return null;
-    }
-
-    public void updatePlayerImage () {
-        playerRender.sprite = Player.armor == null? (Vars.EROTIC? nude: underwear): armor;
     }
 
 	public void showScreen () {
@@ -238,6 +243,29 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 				}
 			}
 		}
+	}
+
+	public void chooseHero (HeroPortrait HeroPortrait) {
+		foreach (EquipmentSlot slot in equipmentSlots) {
+			slot.hideItem();
+		}
+		foreach (HeroPortrait portrait in portraits) {
+			portrait.choose(portrait == HeroPortrait);
+		}
+		chosenHero = Vars.heroes[HeroPortrait.type];
+
+		if (chosenHero.weapon != null) { getEquipmentSlot(ItemType.WEAPON).setItem(chosenHero.weapon.item); }
+		if (chosenHero.armor != null) { getEquipmentSlot(ItemType.ARMOR).setItem(chosenHero.armor.item); }
+		if (chosenHero.helmet != null) { getEquipmentSlot(ItemType.HELMET).setItem(chosenHero.helmet.item); }
+		if (chosenHero.shield != null) { getEquipmentSlot(ItemType.SHIELD).setItem(chosenHero.shield.item); }
+		if (chosenHero.glove != null) { getEquipmentSlot(ItemType.GLOVE).setItem(chosenHero.glove.item); }
+		if (chosenHero.amulet != null) { getEquipmentSlot(ItemType.AMULET).setItem(chosenHero.amulet.item); }
+		if (chosenHero.ring_1 != null) { ringSlots[0].setItem(chosenHero.ring_1.item); }
+		if (chosenHero.ring_1 != null) { ringSlots[1].setItem(chosenHero.ring_2.item); }
+
+		playerRender.sprite = ImagesProvider.getHero(chosenHero.type);
+
+		updateAttributes();
 	}
 
 	public void sendToVars () {

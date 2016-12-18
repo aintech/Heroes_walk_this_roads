@@ -86,8 +86,7 @@ public static class Imager {
 					}
 				}
 				Debug.Log("Unmapped portrait: " + typeName[1]);
-				break;
-			default: Debug.Log("Unmapped texture: " + typeName[0] + " - " + typeName[1]); break;
+			break;
 		}
 	}
 }

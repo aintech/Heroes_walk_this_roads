@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class Gameplay : MonoBehaviour {
@@ -26,6 +27,10 @@ public class Gameplay : MonoBehaviour {
         ItemFactory.itemPrefab = itemPrefab;
 
         Imager.init();
+		foreach (HeroType hType in Enum.GetValues(typeof(HeroType))) {
+			Vars.heroes.Add(hType, new Hero().init(hType));
+		}
+
         Player.init();
 
         Camera.main.GetComponent<Utils>().init();

@@ -10,9 +10,9 @@ public class ElementEffectPlayer : MonoBehaviour {
 
 	private FightScreen fightScreen;
 
-	private Enemy enemy;
+	private EnemyHolder enemy;
 
-	public void init (FightScreen fightScreen, Enemy enemy) {
+	public void init (FightScreen fightScreen, EnemyHolder enemy) {
 		this.fightScreen = fightScreen;
 		this.enemy = enemy;
 

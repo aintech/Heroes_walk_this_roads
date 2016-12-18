@@ -15,15 +15,15 @@ public static class EnemyDescriptor {
 		}
 	}
 
-	public static int health (this EnemyType type) {
-		return 100;
+	public static int strenght (this EnemyType type) {
+		return 10;
 	}
 
-	public static int damage (this EnemyType type) {
-		return 20;
+	public static int endurance (this EnemyType type) {
+		return 10;
 	}
 
-	public static int initiative (this EnemyType type) {
+	public static int agility (this EnemyType type) {
 		return 10;
 	}
 

@@ -35,9 +35,9 @@ public class FightResultScreen : MonoBehaviour, ButtonHolder {
 
 	private Button captureBtn, releaseBtn;
 
-	private Enemy enemy;
+	private EnemyHolder enemy;
 
-	public FightResultScreen init (FightScreen fightScreen, Enemy enemy) {
+	public FightResultScreen init (FightScreen fightScreen, EnemyHolder enemy) {
 		this.fightScreen = fightScreen;
 		this.enemy = enemy;
 
@@ -94,7 +94,7 @@ public class FightResultScreen : MonoBehaviour, ButtonHolder {
 //		closeScreen();
 //	}
 
-	public void showFightResultScreen (Enemy enemy) {
+	public void showFightResultScreen (EnemyHolder enemy) {
 //		this.winSprite = enemy == null? null: enemy.getRandomWinSprite();
 //		this.rankPoints = enemy == null? 0: enemy.getEnemyType().getRankPoints();
 //		this.rankPoints = rankPoints;

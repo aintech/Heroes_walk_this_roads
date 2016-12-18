@@ -64,7 +64,7 @@ public class Player {
         else if (armorMod is HelmetData) { Player.helmet = (HelmetData)armorMod; }
         else if (armorMod is GloveData) { Player.glove = (GloveData)armorMod; }
         calculateArmorClass();
-        statusScreen.updatePlayerImage();
+//        statusScreen.updatePlayerImage();
 	}
 
 	public static void unEquipArmor (ArmorModifier armorMod) {
@@ -73,7 +73,7 @@ public class Player {
 		else if (armorMod is HelmetData) { Player.helmet = null; }
 		else if (armorMod is GloveData) { Player.glove = null; }
         calculateArmorClass();
-        statusScreen.updatePlayerImage();
+//        statusScreen.updatePlayerImage();
 	}
 
     public static void equipAmulet (AmuletData amulet) {

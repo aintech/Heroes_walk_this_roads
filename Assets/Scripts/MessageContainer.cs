@@ -66,7 +66,7 @@ public class MessageContainer {
 
 		private void loadPortrait (string portraitName) {
 			switch (portraitName) {
-				case "ALIKA": portrait = Imager.getPortrait(CharacterType.ALIKA); break;
+//				case "ALIKA": portrait = Imager.getPortrait(CharacterType.ALIKA); break;
 //				case "ROKOT": portrait = Imager.getPortrait(CharacterType.ROKOT); break;
 				default: Debug.Log("Unknown portrait: " + portraitName); break;
 			}

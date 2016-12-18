@@ -38,6 +38,8 @@ public class MarketScreen : TownScreen {
 
         gameObject.SetActive (true);
 
+		itemDescriptor.setEnabled();
+
         Messenger.showMessage("Правая кнопка мыши - купить или продать предмет.");
     }
 

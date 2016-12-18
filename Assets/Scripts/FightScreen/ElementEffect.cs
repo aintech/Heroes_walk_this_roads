@@ -27,7 +27,7 @@ public class ElementEffect : MonoBehaviour {
 
 	private Step step = Step.APPEAR;
 
-	private Enemy enemy;
+	private EnemyHolder enemy;
 
 	private int index, frameTime = 2, frameCounter;
 
@@ -37,7 +37,7 @@ public class ElementEffect : MonoBehaviour {
 
 	private TextMesh hitText, hitTextBG;
 
-	public void init (FightScreen fightScreen, Enemy enemy) {
+	public void init (FightScreen fightScreen, EnemyHolder enemy) {
 		this.fightScreen = fightScreen;
 		this.enemy = enemy;
 		trans = transform;

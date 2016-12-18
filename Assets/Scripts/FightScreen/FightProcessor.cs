@@ -10,7 +10,7 @@ public class FightProcessor : MonoBehaviour {
 
 	private ElementsHolder elementsHolder;
 
-	private Enemy enemy;
+	private EnemyHolder enemy;
 
 	public static bool PLAYER_MOVE_DONE = false;
 
@@ -24,7 +24,7 @@ public class FightProcessor : MonoBehaviour {
 
     private float playerInitiativeDiff, enemyInitiativeDiff, playerInitiativeCounter, enemyInitiativeCounter;
 
-	public void init (FightScreen fightScreen, ElementsHolder elementsHolder, Enemy enemy) {
+	public void init (FightScreen fightScreen, ElementsHolder elementsHolder, EnemyHolder enemy) {
 		this.fightScreen = fightScreen;
 		this.elementsHolder = elementsHolder;
 		this.enemy = enemy;

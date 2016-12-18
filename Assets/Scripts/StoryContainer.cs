@@ -31,7 +31,7 @@ public class StoryContainer {
 		}
 
 		private void loadPortrait (string portraitName) {
-			portrait = portraitName == null? null: Imager.getPortrait(CharacterDescriptor.nameToType(portraitName));
+//			portrait = portraitName == null? null: Imager.getPortrait(CharacterDescriptor.nameToType(portraitName));
 		}
 	}
 }

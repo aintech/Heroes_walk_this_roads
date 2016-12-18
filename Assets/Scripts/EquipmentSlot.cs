@@ -7,10 +7,11 @@ public class EquipmentSlot : Slot {
     public StatusScreen statusScreen;
 
 	public override void setItem (Item item) {
+		if (!item.gameObject.activeInHierarchy) { item.gameObject.SetActive(true); }
 		if (item.type == ItemType.WEAPON) {
-			Player.equipWeapon((WeaponData)item.itemData);
+			statusScreen.chosenHero.equipWeapon((WeaponData)item.itemData);
 		} else if (item.itemData is ArmorModifier) {
-			Player.equipArmor((ArmorModifier)item.itemData);
+			statusScreen.chosenHero.equipArmor((ArmorModifier)item.itemData);
 		}
 		base.setItem (item);
         statusScreen.updateAttributes();
@@ -18,12 +19,19 @@ public class EquipmentSlot : Slot {
 
 	public override Item takeItem () {
 		if (item.type == ItemType.WEAPON) {
-			Player.equipWeapon(null);
+			statusScreen.chosenHero.equipWeapon(null);
 		} else if (item.itemData is ArmorModifier) {
-			Player.unEquipArmor((ArmorModifier)item.itemData);
+			statusScreen.chosenHero.unEquipArmor((ArmorModifier)item.itemData);
 		}
         Item tempItem = base.takeItem();
         statusScreen.updateAttributes();
         return tempItem;
+	}
+
+	public void hideItem () {
+		if (item != null) {
+			Item temp = base.takeItem();
+			temp.gameObject.SetActive(false);
+		}
 	}
 }

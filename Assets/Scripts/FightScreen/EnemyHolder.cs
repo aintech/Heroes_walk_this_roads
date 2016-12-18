@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Enemy : MonoBehaviour {
+public class EnemyHolder : MonoBehaviour {
 
 	private SpriteRenderer render;
 
@@ -27,11 +27,11 @@ public class Enemy : MonoBehaviour {
 
 	public void initEnemy (EnemyType enemyType) {
 		this.enemyType = enemyType;
-		damage = enemyType.damage();
-		health = enemyType.health();
+		damage = enemyType.strenght();
+		health = enemyType.endurance() * 10;
 		maxHealth = health;
 		armor = enemyType.armor();
-        initiative = enemyType.initiative();
+		initiative = enemyType.agility();
 		setSprite();
 		gameObject.SetActive(true);
 	}

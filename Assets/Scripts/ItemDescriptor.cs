@@ -112,27 +112,28 @@ public class ItemDescriptor : MonoBehaviour {
 	void Update () {
 		if (Input.GetMouseButtonDown(1)) {
 			passRightClick();
-		}
-		if (onScreen) {
-			if (Utils.hit == null) {
-				hide ();
-			} else if (Utils.hit != null) {
-				tempHolder = Utils.hit.GetComponent<ItemHolder> ();
-				if (tempHolder == null || tempHolder.item == null) {
-					hide ();
-				} else if (tempHolder != holder || tempHolder.item != item) {
-					showDescription (tempHolder);
-				}
-			}
-			pos = Utils.mousePos;
-			if (pos.y < minY + spaceOffset.y) { pos.y = minY + spaceOffset.y; }
-			if (pos.x > maxX + spaceOffset.x) { pos.x = maxX + spaceOffset.x; }
-			trans.localPosition = pos;
 		} else {
-			if (Utils.hit != null) {
-				holder = Utils.hit.GetComponent<ItemHolder>();
-				if (holder != null && holder.item != null) {
-					showDescription(holder);
+			if (onScreen) {
+				if (Utils.hit == null) {
+					hide ();
+				} else if (Utils.hit != null) {
+					tempHolder = Utils.hit.GetComponent<ItemHolder> ();
+					if (tempHolder == null || tempHolder.item == null) {
+						hide ();
+					} else if (tempHolder != holder || tempHolder.item != item) {
+						showDescription (tempHolder);
+					}
+				}
+				pos = Utils.mousePos;
+				if (pos.y < minY + spaceOffset.y) { pos.y = minY + spaceOffset.y; }
+				if (pos.x > maxX + spaceOffset.x) { pos.x = maxX + spaceOffset.x; }
+				trans.localPosition = pos;
+			} else {
+				if (Utils.hit != null) {
+					holder = Utils.hit.GetComponent<ItemHolder>();
+					if (holder != null && holder.item != null) {
+						showDescription(holder);
+					}
 				}
 			}
 		}

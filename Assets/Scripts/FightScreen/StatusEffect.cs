@@ -13,7 +13,7 @@ public class StatusEffect : MonoBehaviour {
 
 	private StrokeText turnsText;
 
-	private Enemy enemy;
+	private EnemyHolder enemy;
 
 	public bool inProgress { get; private set; }
 
@@ -35,7 +35,7 @@ public class StatusEffect : MonoBehaviour {
 		return this;
 	}
 
-	public void initEnemy (Enemy enemy) {
+	public void initEnemy (EnemyHolder enemy) {
 		this.enemy = enemy;
 	}
 

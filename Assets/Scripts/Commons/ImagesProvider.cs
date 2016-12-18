@@ -4,10 +4,12 @@ using System.Collections;
 public class ImagesProvider : MonoBehaviour {
 
 	public Sprite[] weaponSprites, shieldSprites, helmetSprites, armorSprites, gloveSprites, amuletSprites, ringSprites, materialSprites, supplySprites,
-					enemyMarkerSprites, locationMarkerSprites;
+					enemyMarkerSprites, locationMarkerSprites,
+					heroSprites, heroPortraitSprites;
 
 	public static Sprite[] weapons, shields, helmets, armors, gloves, amulets, rings, materials, supplies,
-						   enemyMarkers, locationMarkers;
+						   enemyMarkers, locationMarkers,
+						   heroes, heroPortraits;
 
 	public void init () {
         weapons = weaponSprites;
@@ -19,19 +21,41 @@ public class ImagesProvider : MonoBehaviour {
         rings = ringSprites;
 		materials = materialSprites;
 		supplies = supplySprites;
+		heroes = heroSprites;
+		heroPortraits = heroPortraitSprites;
 
 		enemyMarkers = enemyMarkerSprites;
         locationMarkers = locationMarkerSprites;
 	}
 
-	public static Sprite getEnemyMarkerSprite (EnemyType type) {
+	public static Sprite getHero (HeroType type) {
+		switch (type) {
+		case HeroType.ALIKA: return heroes[0];
+		case HeroType.VICTORIA: return heroes[1];
+		case HeroType.LIARA: return heroes [2];
+		case HeroType.KATE: return heroes [3];
+		default: Debug.Log ("Unknown hero type: " + type); return null;
+		}
+	}
+
+	public static Sprite getHeroPortrait (HeroType type) {
+		switch (type) {
+			case HeroType.ALIKA: return heroPortraits[0];
+			case HeroType.VICTORIA: return heroPortraits[1];
+			case HeroType.LIARA: return heroPortraits [2];
+			case HeroType.KATE: return heroPortraits [3];
+			default: Debug.Log ("Unknown hero type: " + type); return null;
+		}
+	}
+
+	public static Sprite getEnemyMarker (EnemyType type) {
 		switch (type) {
 			case EnemyType.ROGUE: return enemyMarkers[0];
 			default: Debug.Log("Unknown enemy type: " + type); return null;
 		}
 	}
 
-    public static Sprite getLocationMarkerSprite (LocationType type) {
+    public static Sprite getLocationMarker (LocationType type) {
         switch (type) {
             case LocationType.ROUTINE: return locationMarkers[0];
             case LocationType.BANDIT_FORTRESS: return locationMarkers[1];
@@ -39,22 +63,22 @@ public class ImagesProvider : MonoBehaviour {
         }
     }
 
-	public static Sprite getItemSprite (ItemData data) {
+	public static Sprite getItem (ItemData data) {
 		switch (data.itemType) {
-			case ItemType.SUPPLY: return getSupplySprite(((SupplyData)data).type);
-			case ItemType.WEAPON: return getWeaponSprite(((WeaponData)data).type);
-			case ItemType.SHIELD: return getShieldSprite(((ShieldData)data).type);
-			case ItemType.HELMET: return getHelmetSprite(((HelmetData)data).type);
-			case ItemType.ARMOR: return getArmorSprite(((ArmorData)data).type);
-			case ItemType.GLOVE: return getGloveSprite(((GloveData)data).type);
-            case ItemType.AMULET: return getAmuletSprite(((AmuletData)data).type);
-            case ItemType.RING: return getRingSprite(((RingData)data).type);
-			case ItemType.MATERIAL: return getMaterialSprite(((MaterialData)data).type);
+			case ItemType.SUPPLY: return getSupply(((SupplyData)data).type);
+			case ItemType.WEAPON: return getWeapon(((WeaponData)data).type);
+			case ItemType.SHIELD: return getShield(((ShieldData)data).type);
+			case ItemType.HELMET: return getHelmet(((HelmetData)data).type);
+			case ItemType.ARMOR: return getArmor(((ArmorData)data).type);
+			case ItemType.GLOVE: return getGlove(((GloveData)data).type);
+            case ItemType.AMULET: return getAmulet(((AmuletData)data).type);
+            case ItemType.RING: return getRing(((RingData)data).type);
+			case ItemType.MATERIAL: return getMaterial(((MaterialData)data).type);
 			default: Debug.Log("Unknown item type: " + data.itemType); return null;
 		}
 	}
 
-	public static Sprite getSupplySprite (SupplyType type) {
+	public static Sprite getSupply (SupplyType type) {
 		switch (type) {
 			case SupplyType.HEALTH_POTION: return supplies[0];
 			case SupplyType.ARMOR_POTION: return supplies[1];
@@ -66,7 +90,7 @@ public class ImagesProvider : MonoBehaviour {
 		}
 	}
 
-	public static Sprite getMaterialSprite (MaterialType type) {
+	public static Sprite getMaterial (MaterialType type) {
 		switch (type) {
 			case MaterialType.WOOD_STICK: return materials[0];
 			case MaterialType.STEEL_BAR: return materials[1];
@@ -74,7 +98,7 @@ public class ImagesProvider : MonoBehaviour {
 		}
 	}
 
-	public static Sprite getWeaponSprite (WeaponType type) {
+	public static Sprite getWeapon (WeaponType type) {
 		switch (type) {
 			case WeaponType.IRON_SWORD: return weapons[0];
 			case WeaponType.SQUIRE_SWORD: return weapons[1];
@@ -83,7 +107,7 @@ public class ImagesProvider : MonoBehaviour {
 		}
 	}
 
-	public static Sprite getShieldSprite (ShieldType type) {
+	public static Sprite getShield (ShieldType type) {
 		switch (type) {
 			case ShieldType.WOOD: return shields[0];
 			case ShieldType.IRON: return shields[1];
@@ -92,7 +116,7 @@ public class ImagesProvider : MonoBehaviour {
 		}
 	}
 
-	public static Sprite getHelmetSprite (HelmetType type) {
+	public static Sprite getHelmet (HelmetType type) {
 		switch (type) {
 			case HelmetType.LEATHER: return helmets[0];
 			case HelmetType.IRON: return helmets[1];
@@ -101,7 +125,7 @@ public class ImagesProvider : MonoBehaviour {
 		}
 	}
 
-	public static Sprite getArmorSprite (ArmorType type) {
+	public static Sprite getArmor (ArmorType type) {
 		switch (type) {
 			case ArmorType.LEATHER: return armors[0];
 			case ArmorType.IRON: return armors[1];
@@ -110,7 +134,7 @@ public class ImagesProvider : MonoBehaviour {
 		}
 	}
 
-	public static Sprite getGloveSprite (GloveType type) {
+	public static Sprite getGlove (GloveType type) {
 		switch (type) {
 			case GloveType.LEATHER: return gloves[0];
 			case GloveType.IRON: return gloves[1];
@@ -119,14 +143,14 @@ public class ImagesProvider : MonoBehaviour {
 		}
 	}
 
-    public static Sprite getAmuletSprite (AmuletType type) {
+    public static Sprite getAmulet (AmuletType type) {
 		switch (type) {
             case AmuletType.RABBIT_LEG: return amulets[0];
 			default: Debug.Log("Unknown amulet type: " + type); return null;
 		}
     }
 
-    public static Sprite getRingSprite (RingType type) {
+    public static Sprite getRing (RingType type) {
         switch (type) {
             case RingType.COPPER: return rings[0];
             default: Debug.Log("Unknown ring type: " + type); return null;

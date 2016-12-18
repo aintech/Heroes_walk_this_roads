@@ -18,6 +18,8 @@ public static class Vars {
 	public static Story.Chapter chapter = Story.Chapter.NONE;
 
 	public static int itemTypeCharsInLine = 20;
+
+	public static Dictionary<HeroType, Hero> heroes = new Dictionary<HeroType, Hero> ();
 }
 
 /* TODO:

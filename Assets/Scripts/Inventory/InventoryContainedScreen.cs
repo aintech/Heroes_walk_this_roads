@@ -18,6 +18,7 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 	protected void innerInit(Inventory inventory, string layerName) {
 		this.inventory = inventory;
 		chosenItemBorder = transform.Find ("Chosen Item Border");
+		if (chosenItemBorder != null) { chosenItemBorder.gameObject.SetActive(false); }
 	}
 
 	void Update () {

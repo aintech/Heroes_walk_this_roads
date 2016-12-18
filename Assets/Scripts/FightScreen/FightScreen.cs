@@ -20,7 +20,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 
 	private FightInterface fightInterface;
 
-	private Enemy enemy;
+	private EnemyHolder enemy;
 
 	private FightProcessor fightProcessor;
 
@@ -66,7 +66,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 		fightEffectPlayer = transform.Find("Fight Effect Player").GetComponent<FightEffectPlayer>().init();
 		elementEffectPlayer = transform.Find("ElementEffectPlayer").GetComponent<ElementEffectPlayer>();
 		fightInterface = transform.Find("Fight Interface").GetComponent<FightInterface>().init(this);
-		enemy = transform.Find("Enemy").GetComponent<Enemy>();
+		enemy = transform.Find("Enemy").GetComponent<EnemyHolder>();
 		enemyPos = enemy.transform.localPosition;
 		enemy.init(this);
 		elementEffectPlayer.init(this, enemy);
