@@ -103,7 +103,7 @@ public class Player {
 			return 0;
 		} else {
 			health -= (damageAmount - armorAmount);
-			if (fightInterface.gameObject.activeInHierarchy) { fightInterface.updatePlayerBar(); }
+//			if (fightInterface.gameObject.activeInHierarchy) { fightInterface.updatePlayerBar(); }
 			return damageAmount - armorAmount;
 		}
 	}
@@ -112,11 +112,11 @@ public class Player {
 		if (amount + health > maxHealth) {
 			int heal = maxHealth - health;
 			setHealthToMax();
-			if (fightInterface.gameObject.activeInHierarchy) { fightInterface.updatePlayerBar(); }
+//			if (fightInterface.gameObject.activeInHierarchy) { fightInterface.updatePlayerBar(); }
 			return heal;
 		} else {
 			health += amount;
-			if (fightInterface.gameObject.activeInHierarchy) { fightInterface.updatePlayerBar(); }
+//			if (fightInterface.gameObject.activeInHierarchy) { fightInterface.updatePlayerBar(); }
 			return amount;
 		}
 	}

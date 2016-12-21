@@ -179,10 +179,14 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 //		if (enemy.transform.localPosition.x > enemyFinalX) { enemyPos.x -= enemyAppearSpeed; }
 //		else { enemyPos.x = enemyFinalX; }
 
-		if (holderColor.a < 1) { holderColor.a += .03f; }
-		else { holderColor.a = 1;}
+		if (holderColor.a < 1) {
+			holderColor.a += .03f;
+			iconsHolderRender.color = holderColor;
+		} else {
+			startAnimDone = true;
+		}
+//		else { holderColor.a = 1;}
 
-		iconsHolderRender.color = holderColor;
 //		enemy.transform.localPosition = enemyPos;
 
 //		if (holderColor.a >= 1 && enemy.transform.position.x <= enemyFinalX) {

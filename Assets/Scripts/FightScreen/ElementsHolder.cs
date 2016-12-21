@@ -14,17 +14,17 @@ public class ElementsHolder : MonoBehaviour {
 	
 	private const float HALF_CELL_STEP = CELL_STEP / 2;
 
-	public const int START_SORT_ORDER = 3;
+	public static int START_SORT_ORDER { get; private set; }
 
-	private const int DRAGGED_SORT_ORDER = ROWS + START_SORT_ORDER + 2;
+	private int DRAGGED_SORT_ORDER;// = ROWS + START_SORT_ORDER + 2;
 	
-	private const int AFTER_DRAG_ORDER = DRAGGED_SORT_ORDER - 1;
+	private int AFTER_DRAG_ORDER;// = DRAGGED_SORT_ORDER - 1;
 	
-	private const float START_Y = (ROWS / 2) * CELL_STEP;// + HALF_CELL_STEP;
+	private float START_Y;// = (ROWS / 2) * CELL_STEP;// + HALF_CELL_STEP;
 
-	private const float MAX_X = (COLUMNS / 2) * CELL_STEP - HALF_CELL_STEP;
+	private float MAX_X;// = (COLUMNS / 2) * CELL_STEP - HALF_CELL_STEP;
 
-	private const float MAX_Y = (ROWS / 2) * CELL_STEP;
+	private float MAX_Y;// = (ROWS / 2) * CELL_STEP;
 
 	private MoveRestrict moveRestrict = MoveRestrict.VERTICAL;
 	
@@ -50,12 +50,18 @@ public class ElementsHolder : MonoBehaviour {
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLUMNS; j++) {
 				element = Instantiate<Transform>(elementPrefab).GetComponent<Element>().init();
+				if (START_SORT_ORDER == 0) { START_SORT_ORDER = element.GetComponent<SpriteRenderer>().sortingOrder; }
 				element.transform.SetParent(transform);
 				elements[i,j] = element;
 				element.setRowAndColumn(i, j);
 				element.getRender().sortingOrder = i + START_SORT_ORDER;
 			}
 		}
+		DRAGGED_SORT_ORDER = ROWS + START_SORT_ORDER + 2;
+		AFTER_DRAG_ORDER = DRAGGED_SORT_ORDER - 1;
+		START_Y = (ROWS / 2) * CELL_STEP;
+		MAX_X = (COLUMNS / 2) * CELL_STEP - HALF_CELL_STEP;
+		MAX_Y = (ROWS / 2) * CELL_STEP;
 		holderAnimator = GetComponent<ElementsHolderAnimator> ().init (fightScreen, elements);
 		return this;
 	}
@@ -101,7 +107,7 @@ public class ElementsHolder : MonoBehaviour {
 				element.gameObject.SetActive(false);
 			}
 		}
-//		holderAnimator.playElementsApperance ();
+		holderAnimator.playElementsApperance ();
 	}
 
 //	public void startElementsDrop () {
@@ -273,7 +279,7 @@ public class ElementsHolder : MonoBehaviour {
 			elements[changeElement.getRow(), changeElement.getColumn()] = changeElement;
 			elements[draggedElement.getRow(), draggedElement.getColumn()] = draggedElement;
 			
-			FightProcessor.PLAYER_MOVE_DONE = true;
+			FightProcessor.PLAYER_CHECKED_ELEMENTS = true;
 		}
 		
 		draggedElement.target = draggedElement.cellCenter;

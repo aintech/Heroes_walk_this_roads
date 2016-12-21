@@ -116,6 +116,7 @@ public class ElementEffect : MonoBehaviour {
 	}
 
 	private void moveEffect () {
+		Debug.Log("Move element to elements pool!");
 //		if (trans.localPosition.x >= enemyX) {
         if (Vector2.Distance(trans.position, elementsPoolTrans.position) < closeDistance) {
 			emitter.gameObject.SetActive(false);

@@ -12,6 +12,8 @@ public class FightProcessor : MonoBehaviour {
 
 	private List<EnemyHolder> enemies;
 
+	public static bool PLAYER_CHECKED_ELEMENTS = false;
+
 	public static bool PLAYER_MOVE_DONE = false;
 
 	public static bool ELEMENTS_ANIM_DONE = true;
@@ -62,12 +64,14 @@ public class FightProcessor : MonoBehaviour {
         characterIndex = -1;
 		updateStatusEffects();
         heroes = new List<Hero>(Vars.heroes.Values);
-        switchMachineState(StateMachine.PICK_NEXT_CHARACTER);
+		switchMachineState(StateMachine.CHECKING_ELEMENTS_POOL_ACTIONS);
 	}
 
 	void Update () {
 		switch (machineState) {
 			case StateMachine.NOT_IN_FIGHT: break;
+			case StateMachine.CHECKING_ELEMENTS_POOL_ACTIONS: checkPlayerChoosenElements (); break;
+			case StateMachine.AFTER_ELEMENTS_CHECKED: break;
             case StateMachine.PICK_NEXT_CHARACTER: pickNextCharacter(); break;
             case StateMachine.CHARACTER_TURN: checkCharacterTurn(); break;
             case StateMachine.ICONS_ANIMATION: checkFightAndIconAnimation(); break;
@@ -77,6 +81,17 @@ public class FightProcessor : MonoBehaviour {
 			case StateMachine.PLAYER_WIN: endFight(true); break;
 			case StateMachine.ENEMY_WIN: endFight(false); break;
 		}
+	}
+
+	private void checkPlayerChoosenElements () {
+		elementsHolder.checkPlayerInput();
+		if (PLAYER_CHECKED_ELEMENTS) {
+			switchMachineState(StateMachine.PICK_NEXT_CHARACTER);
+		}
+	}
+
+	private void afterElementsChecked () {
+		Debug.Log("Lets move on!");
 	}
 
     private void pickNextCharacter () {
@@ -255,6 +270,7 @@ public class FightProcessor : MonoBehaviour {
 
 	private enum StateMachine {
 		NOT_IN_FIGHT,
+		CHECKING_ELEMENTS_POOL_ACTIONS, AFTER_ELEMENTS_CHECKED,
 		ICONS_ANIMATION, ICONS_POSITIONING,
         PICK_NEXT_CHARACTER, CHARACTER_TURN, AFTER_HERO_TURN, AFTER_ENEMY_TURN,
 		PLAYER_WIN, ENEMY_WIN
