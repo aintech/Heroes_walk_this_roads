@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class FightScreen : MonoBehaviour, ButtonHolder {
 
+    public Transform queuePortraitPrefab, enemyHolderPrefab;
+
 	private ElementsHolder elementsHolder;
 
 	private SpriteRenderer iconsHolderRender;
@@ -20,7 +22,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 
 	private FightInterface fightInterface;
 
-	private EnemyHolder enemy;
+    private List<EnemyHolder> enemies = new List<EnemyHolder>();
 
 	private FightProcessor fightProcessor;
 
@@ -52,6 +54,10 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
     [HideInInspector]
     public World world;
 
+    private ElementsPool elementsPool;
+
+    private List<QueuePortrait> queuePortraits = new List<QueuePortrait>();
+
 	public FightScreen init () {
         statusScreen = Vars.gameplay.statusScreen;
         itemDescriptor = Vars.gameplay.itemDescriptor;
@@ -66,11 +72,14 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 		fightEffectPlayer = transform.Find("Fight Effect Player").GetComponent<FightEffectPlayer>().init();
 		elementEffectPlayer = transform.Find("ElementEffectPlayer").GetComponent<ElementEffectPlayer>();
 		fightInterface = transform.Find("Fight Interface").GetComponent<FightInterface>().init(this);
-		enemy = transform.Find("Enemy").GetComponent<EnemyHolder>();
-		enemyPos = enemy.transform.localPosition;
-		enemy.init(this);
-		elementEffectPlayer.init(this, enemy);
-		fightProcessor.init(this, elementsHolder, enemy);
+//		enemy = transform.Find("Enemy").GetComponent<EnemyHolder>();
+//		enemyPos = enemy.transform.localPosition;
+//		enemy.init(this);
+
+        elementsPool = transform.Find("Elements Pool").GetComponent<ElementsPool>().init();
+
+        elementEffectPlayer.init(this, elementsPool);
+		fightProcessor.init(this, elementsHolder, enemies);
 
 		elementsHolder.gameObject.SetActive(true);
 		gameObject.SetActive(false);
@@ -101,7 +110,8 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 		return this;
 	}
 
-	public void startFight (EnemyType type) {
+	public void startFight (List<EnemyType> types) {
+        initEnemies(types);
 		SupplySlot supSlot;
         foreach (SupplySlot slot in statusScreen.supplySlots) {
 			if (slot.item != null) {
@@ -112,25 +122,39 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 		}
         itemDescriptor.setEnabled();
 		playerWin = false;
-		enemy.initEnemy(type);
+//		enemy.initEnemy(types[0]);
 		holderColor = new Color(1, 1, 1, 0);
 		iconsHolderRender.color = holderColor;
 		elementsHolder.initializeElements();
-		enemy.transform.localPosition = new Vector2(10, enemyPos.y);
-		enemyPos = enemy.transform.localPosition;
-		fightInterface.setEnemy(enemy);
+//		enemy.transform.localPosition = new Vector2(10, enemyPos.y);
+//		enemyPos = enemy.transform.localPosition;
+//		fightInterface.setEnemy(enemy);
 		elementsHolder.setActive(true);
 
 		fightStarted = startAnimDone = false;
-		foreach (StatusEffect eff in enemyStatusEffects) {
-			eff.initEnemy (enemy);
-		}
+//		foreach (StatusEffect eff in enemyStatusEffects) {
+//			eff.initEnemy (enemy);
+//		}
+
+        fightInterface.updateHeroRepresentatives();
+        fightProcessor.prepare(types);
 
 		captureBtn.setVisible (false);
 		releaseBtn.setVisible (false);
 
 		gameObject.SetActive(true);
 	}
+
+    private void initEnemies (List<EnemyType> types) {
+        if (types.Count > enemies.Count) {
+            while (enemies.Count < types.Count) {
+                enemies.Add(Instantiate<Transform>(enemyHolderPrefab).GetComponent<EnemyHolder>().init(this));
+            }
+        }
+        for (int i = 0; i < types.Count; i++) {
+            enemies[i].initEnemy(types[i]);
+        }
+    }
 
 	private SupplySlot getSlot (int index) {
 		foreach (SupplySlot slot in supplySlots) {
@@ -152,20 +176,20 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 	}
 
 	private void animatingFightStart () {
-		if (enemy.transform.localPosition.x > enemyFinalX) { enemyPos.x -= enemyAppearSpeed; }
-		else { enemyPos.x = enemyFinalX; }
+//		if (enemy.transform.localPosition.x > enemyFinalX) { enemyPos.x -= enemyAppearSpeed; }
+//		else { enemyPos.x = enemyFinalX; }
 
 		if (holderColor.a < 1) { holderColor.a += .03f; }
 		else { holderColor.a = 1;}
 
 		iconsHolderRender.color = holderColor;
-		enemy.transform.localPosition = enemyPos;
+//		enemy.transform.localPosition = enemyPos;
 
-		if (holderColor.a >= 1 && enemy.transform.position.x <= enemyFinalX) {
-			startAnimDone = true;
-			elementsHolder.holderAnimator.playElementsApperance ();
-//			elementsHolder.startElementsDrop();
-		}
+//		if (holderColor.a >= 1 && enemy.transform.position.x <= enemyFinalX) {
+//			startAnimDone = true;
+//			elementsHolder.holderAnimator.playElementsApperance ();
+////			elementsHolder.startElementsDrop();
+//		}
 	}
 
 	public void finishFight (bool playerWin) {

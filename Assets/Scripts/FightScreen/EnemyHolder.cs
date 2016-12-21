@@ -2,42 +2,30 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class EnemyHolder : MonoBehaviour {
+public class EnemyHolder : CharacterRepresentative {
 
 	private SpriteRenderer render;
 
-	public int health { get; private set; }
-
-	public int maxHealth { get; private set; }
-
-	public int armor { get; private set; }
-
-	public int damage { get; private set; }
-
-	public int initiative { get; private set; }
-
-	public EnemyType enemyType { get; private set; }
+    public Enemy enemy { get; private set; }
 
 	private FightScreen fightScreen;
 
-	public void init (FightScreen fightScreen) {
+    public EnemyHolder init (FightScreen fightScreen) {
 		this.fightScreen = fightScreen;
 		render = GetComponent<SpriteRenderer>();
+        return this;
 	}
 
-	public void initEnemy (EnemyType enemyType) {
-		this.enemyType = enemyType;
-		damage = enemyType.strenght();
-		health = enemyType.endurance() * 10;
-		maxHealth = health;
-		armor = enemyType.armor();
-		initiative = enemyType.agility();
-		setSprite();
+    public Enemy initEnemy (EnemyType enemyType) {
+        enemy = new Enemy().init(enemyType);
+        enemy.representative = this;
+        updateSprite();
 		gameObject.SetActive(true);
+        return enemy;
 	}
 
-	private void setSprite () {
-		render.sprite = Imager.getEnemy(enemyType, (float) health / (float)maxHealth);
+	private void updateSprite () {
+        render.sprite = ImagesProvider.getEnemy(enemy.type);// Imager.getEnemy(enemy.type, (float) enemy.health / (float) enemy.maxHealth);
 	}
 
 	public void playHit () {
@@ -46,33 +34,9 @@ public class EnemyHolder : MonoBehaviour {
 //		setSprite();
 	}
 
-	public int hitEnemy (int damageAmount, int iconsCount)  {
-		int armorAmount = armor;
-		if (fightScreen.getStatusEffectByType(StatusEffectType.ARMORED, false).inProgress) {
-			armorAmount += fightScreen.getStatusEffectByType(StatusEffectType.ARMORED, false).value;
-		}
-		if (damageAmount <= armorAmount) {
-			return 0;
-		} else {
-			health -= (damageAmount - armorAmount);
-			setSprite();
-//			Player.updatePerk(PerkType.SWORDSMAN, damageAmount * damageToPerkMultiplier);
-			return damageAmount - armorAmount;
-		}
-	}
-
-	public int heal (int amount) {
-		if (amount + health > maxHealth) {
-			int calc = maxHealth - health;
-			health = maxHealth;
-//			if (fightInterface.gameObject.activeInHierarchy) { fightInterface.updatePlayerBar(); }
-			return calc;
-		} else {
-			health += amount;
-//			if (fightInterface.gameObject.activeInHierarchy) { fightInterface.updatePlayerBar(); }
-			return amount;
-		}
-	}
+    public override void choose (bool asActive) {
+//        throw new System.NotImplementedException ();
+    }
 
 	public void destroyEnemy () {
 		gameObject.SetActive(false);

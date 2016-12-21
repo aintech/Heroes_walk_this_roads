@@ -35,6 +35,12 @@ public static class HeroDescriptor {
 	}
 
 	public static int agility (this HeroType type) {
-		return 10;
+        switch (type) {
+            case HeroType.KATE: return 10;
+            case HeroType.LIARA: return 11;
+            case HeroType.VICTORIA: return 12;
+            case HeroType.ALIKA: return 13;
+            default: return 1;
+        }
 	}
 }

@@ -66,4 +66,7 @@ public class Hero : Character {
 	private void calculateArmorClass () {
 		armorClass = (armor == null? 0: armor.armorClass()) + (helmet == null? 0: helmet.armorClass()) + (shield == null? 0: shield.armorClass()) + (glove == null? 0: glove.armorClass());
 	}
+
+    public override bool isHero () { return true; }
+    public override string name () { return type.name(); }
 }

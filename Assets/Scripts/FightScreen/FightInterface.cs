@@ -50,14 +50,14 @@ public class FightInterface : MonoBehaviour {
 
 	public void setEnemy (EnemyHolder enemy) {
 		this.enemy = enemy;
-		enemyMax = enemy.health;
+        enemyMax = enemy.enemy.health;
 		updateEnemyBar();
 		updateEnemyArmor();
 		updatePlayerBar();
 	}
 
 	public void updateEnemyBar () {
-		enemyBarScale.y = Mathf.Max(1, enemy.health) / enemyMax;
+        enemyBarScale.y = Mathf.Max(1, enemy.enemy.health) / enemyMax;
 		enemyHealthBar.localScale = enemyBarScale;
 	}
 
@@ -67,7 +67,13 @@ public class FightInterface : MonoBehaviour {
 	}
 
 	public void updateEnemyArmor () {
-		enemyArmorValue.setText(enemy.armor.ToString());
-		enemyArmorValue.transform.localScale = enemy.armor < 10? armorScaleOne: armorScaleDouble;
+        enemyArmorValue.setText(enemy.enemy.armorClass.ToString());
+        enemyArmorValue.transform.localScale = enemy.enemy.armorClass < 10? armorScaleOne: armorScaleDouble;
 	}
+
+    public void updateHeroRepresentatives () {
+        foreach (HeroPortrait port in portraits) {
+            port.updateRepresentative();
+        }
+    }
 }

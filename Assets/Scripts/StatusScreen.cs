@@ -121,6 +121,10 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 	public void showScreen () {
 		if (gameObject.activeInHierarchy) { return; }
 
+        foreach (HeroPortrait port in portraits) {
+            port.updateRepresentative();
+        }
+
 //		UserInterface.showInterface = false;
         itemDescriptor.setEnabled();
 

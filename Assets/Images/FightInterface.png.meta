@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e7be655b3b23b104d92a6dde128b2e54
-timeCreated: 1481975189
+timeCreated: 1482329725
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -10,6 +10,11 @@ TextureImporter:
     21300006: HealthBar_BG
     21300008: FightInterface_Armor
     21300010: FightInterface_PortraitHealthBar
+    21300012: FightInterface_ElementsSquare
+    21300014: FightInterface_SideBar
+    21300016: FightInterface_QueueBG
+    21300018: FightInterface_QueueChosed
+    21300020: FightInterface_QueueDelimiter
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -75,10 +80,10 @@ TextureImporter:
       name: HealthBar_Holders
       rect:
         serializedVersion: 2
-        x: 256
-        y: 166
-        width: 105
-        height: 700
+        x: 22
+        y: 104
+        width: 699
+        height: 105
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -88,12 +93,12 @@ TextureImporter:
       name: HealthBar_Bar
       rect:
         serializedVersion: 2
-        x: 159
-        y: 275
-        width: 43
-        height: 482
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 130
+        y: 341
+        width: 482
+        height: 43
+      alignment: 5
+      pivot: {x: 1, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -101,23 +106,10 @@ TextureImporter:
       name: HealthBar_BG
       rect:
         serializedVersion: 2
-        x: 29
-        y: 270
-        width: 56
-        height: 492
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: FightInterface_Armor
-      rect:
-        serializedVersion: 2
-        x: 395
-        y: 159
-        width: 105
-        height: 121
+        x: 126
+        y: 252
+        width: 491
+        height: 55
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -127,12 +119,77 @@ TextureImporter:
       name: FightInterface_PortraitHealthBar
       rect:
         serializedVersion: 2
-        x: 171
-        y: 624
+        x: 1539
+        y: 409
         width: 20
         height: 120
       alignment: 7
       pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: FightInterface_ElementsSquare
+      rect:
+        serializedVersion: 2
+        x: 1021
+        y: 130
+        width: 305
+        height: 305
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: FightInterface_SideBar
+      rect:
+        serializedVersion: 2
+        x: 1465
+        y: 0
+        width: 135
+        height: 1000
+      alignment: 5
+      pivot: {x: 1, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: FightInterface_QueueBG
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 428
+        width: 112
+        height: 111
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: FightInterface_QueueChosed
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 428
+        width: 112
+        height: 111
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: FightInterface_QueueDelimiter
+      rect:
+        serializedVersion: 2
+        x: 358
+        y: 460
+        width: 136
+        height: 57
+      alignment: 5
+      pivot: {x: 1, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0

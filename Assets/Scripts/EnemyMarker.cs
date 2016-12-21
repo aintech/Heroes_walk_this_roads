@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class EnemyMarker : MonoBehaviour {
 
@@ -7,7 +8,7 @@ public class EnemyMarker : MonoBehaviour {
 
 	public Transform trans { get; private set; }
 
-	public EnemyType enemyType { get; private set; }
+	public List<EnemyType> enemyTypes { get; private set; }
 
 	private float waitTime, minWaitTime = 1, maxWaitTime = 7;
 
@@ -23,12 +24,12 @@ public class EnemyMarker : MonoBehaviour {
 
     private Location location;
 
-    public EnemyMarker init (World world, Transform landscape, EnemyType enemyType, Location location) {
+    public EnemyMarker init (World world, Transform landscape, List<EnemyType> enemyTypes, Location location) {
         this.world = world;
 		trans = transform;
         image = GetComponent<SpriteRenderer>();
         trans.SetParent(landscape);
-        resetMarker(enemyType, location);
+        resetMarker(enemyTypes, location);
 
 		return this;
 	}
@@ -40,19 +41,23 @@ public class EnemyMarker : MonoBehaviour {
 //		targetPosition.y = dist * Mathf.Sin(angle);
 	}
 
-    public void resetMarker (EnemyType enemyType, Location location) {
-		this.enemyType = enemyType;
+    public void resetMarker (List<EnemyType> enemyTypes, Location location) {
+		this.enemyTypes = enemyTypes;
         this.location = location;
         alive = true;
-        image.sprite = ImagesProvider.getEnemyMarker(enemyType);
+        image.sprite = ImagesProvider.getEnemyMarker(enemyTypes[0]);
         initPos();
 	}
 
     private void initPos () {
         Point initPoint = location.position;
-        do {
-            position = new Point(Random.Range(initPoint.x - 10, initPoint.x + 10), Random.Range(initPoint.y - 10, initPoint.y + 10));
-        } while (!world.worldMap[position.x, position.y] && !world.isLocationPoint(position));
+        if (location.type == LocationType.ROUTINE) {
+            position = new Point(location.position.x + 1, location.position.y - 1);
+        } else {
+            do {
+                position = new Point(Random.Range(initPoint.x - 10, initPoint.x + 10), Random.Range(initPoint.y - 10, initPoint.y + 10));
+            } while (!world.worldMap[position.x, position.y] && !world.isLocationPoint(position));
+        }
         moveToPos();
     }
 

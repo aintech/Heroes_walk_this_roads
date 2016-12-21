@@ -10,7 +10,7 @@ public static class LocationDescriptor {
 
     private static Dictionary<LocationType, Point> positions;
 
-    private static Dictionary<LocationType, EnemyType> bosses;
+    private static Dictionary<LocationType, List<EnemyType>> bosses;
 
     private static Dictionary<LocationType, EnemyType[]> spawns;
 
@@ -31,10 +31,11 @@ public static class LocationDescriptor {
         return type == LocationType.BANDIT_FORTRESS;
     }
 
-    public static EnemyType boss (this LocationType type) {
+    public static List<EnemyType> boss (this LocationType type) {
         if (bosses == null) {
-            bosses = new Dictionary<LocationType, EnemyType>();
-            bosses.Add(LocationType.BANDIT_FORTRESS, EnemyType.ROGUE);
+            EnemyType[] bossFighters = {EnemyType.ROGUE, EnemyType.ROGUE, EnemyType.ROGUE};
+            bosses = new Dictionary<LocationType, List<EnemyType>>();
+            bosses.Add(LocationType.BANDIT_FORTRESS, new List<EnemyType>(bossFighters));
         }
         return bosses[type];
     }

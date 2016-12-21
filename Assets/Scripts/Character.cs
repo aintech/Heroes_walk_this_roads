@@ -20,6 +20,8 @@ public abstract class Character {
 
 	public int armorClass { get; protected set; }
 
+    public CharacterRepresentative representative;
+
 	public Dictionary<StatusEffectType, StatusEffect> statusEffects = new Dictionary<StatusEffectType, StatusEffect>();
 
 	public void innerInit (int strength, int endurance, int agility) {
@@ -40,9 +42,9 @@ public abstract class Character {
 	public int hit (int damageAmount)  {
 		int armorAmount = armorClass;
 
-		if (statusEffects[StatusEffectType.ARMORED].inProgress) {
-			armorAmount += statusEffects[StatusEffectType.ARMORED].value;
-		}
+//		if (statusEffects[StatusEffectType.ARMORED].inProgress) {
+//			armorAmount += statusEffects[StatusEffectType.ARMORED].value;
+//		}
 
 		if (damageAmount <= armorAmount) {
 			return 0;
@@ -69,4 +71,8 @@ public abstract class Character {
 	public void setHealthToMax () {
 		health = maxHealth;
 	}
+
+    public abstract bool isHero();
+
+    public abstract string name();
 }

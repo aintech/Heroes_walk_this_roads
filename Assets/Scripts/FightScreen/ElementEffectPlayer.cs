@@ -10,15 +10,15 @@ public class ElementEffectPlayer : MonoBehaviour {
 
 	private FightScreen fightScreen;
 
-	private EnemyHolder enemy;
+    private ElementsPool elementsPool;
 
-	public void init (FightScreen fightScreen, EnemyHolder enemy) {
+    public void init (FightScreen fightScreen, ElementsPool elementsPool) {
 		this.fightScreen = fightScreen;
-		this.enemy = enemy;
+        this.elementsPool = elementsPool;
 
 		while (elementEffects.Count <= 3) {
 			ElementEffect effect = Instantiate<Transform>(elementEffectPrefab).GetComponent<ElementEffect>();
-			effect.init(fightScreen, enemy);
+            effect.init(fightScreen, elementsPool);
 			effect.gameObject.SetActive(false);
 			elementEffects.Add(effect);
 		}
@@ -35,7 +35,7 @@ public class ElementEffectPlayer : MonoBehaviour {
 
 		if (effect == null) {
 			effect = Instantiate<Transform>(elementEffectPrefab).GetComponent<ElementEffect>();
-			effect.init(fightScreen, enemy);
+            effect.init(fightScreen, elementsPool);
 			elementEffects.Add(effect);
 		}
 

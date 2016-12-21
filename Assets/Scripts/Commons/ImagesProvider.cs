@@ -5,11 +5,13 @@ public class ImagesProvider : MonoBehaviour {
 
 	public Sprite[] weaponSprites, shieldSprites, helmetSprites, armorSprites, gloveSprites, amuletSprites, ringSprites, materialSprites, supplySprites,
 					enemyMarkerSprites, locationMarkerSprites,
-					heroSprites, heroPortraitSprites;
+					heroSprites, heroPortraitSprites, heroQueueSprites,
+                    enemySprites, enemyQueueSprtes;
 
 	public static Sprite[] weapons, shields, helmets, armors, gloves, amulets, rings, materials, supplies,
 						   enemyMarkers, locationMarkers,
-						   heroes, heroPortraits;
+						   heroes, heroPortraits, heroQueue,
+                           enemies, enemyQueue;
 
 	public void init () {
         weapons = weaponSprites;
@@ -23,6 +25,9 @@ public class ImagesProvider : MonoBehaviour {
 		supplies = supplySprites;
 		heroes = heroSprites;
 		heroPortraits = heroPortraitSprites;
+        heroQueue = heroQueueSprites;
+        enemies = enemySprites;
+        enemyQueue = enemyQueueSprtes;
 
 		enemyMarkers = enemyMarkerSprites;
         locationMarkers = locationMarkerSprites;
@@ -47,6 +52,30 @@ public class ImagesProvider : MonoBehaviour {
 			default: Debug.Log ("Unknown hero type: " + type); return null;
 		}
 	}
+
+    public static Sprite getHeroQueue (HeroType type) {
+        switch (type) {
+            case HeroType.ALIKA: return heroQueue[0];
+            case HeroType.VICTORIA: return heroQueue[1];
+            case HeroType.LIARA: return heroQueue [2];
+            case HeroType.KATE: return heroQueue [3];
+            default: Debug.Log ("Unknown hero type: " + type); return null;
+        }
+    }
+
+    public static Sprite getEnemy (EnemyType type) {
+        switch (type) {
+            case EnemyType.ROGUE: return enemies[0];
+            default: Debug.Log ("Unknown enemy type: " + type); return null;
+        }
+    }
+
+    public static Sprite getEnemyQueue (EnemyType type) {
+        switch (type) {
+            case EnemyType.ROGUE: return enemyQueue[0];
+            default: Debug.Log ("Unknown enemy type: " + type); return null;
+        }
+    }
 
 	public static Sprite getEnemyMarker (EnemyType type) {
 		switch (type) {

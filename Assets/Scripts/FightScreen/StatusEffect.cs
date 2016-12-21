@@ -75,7 +75,7 @@ public class StatusEffect : MonoBehaviour {
 				if (asPlayer) {
 					Player.heal (value);
 				} else {
-					enemy.heal (value);
+                    enemy.enemy.heal (value);
 				}
 				break;
 		}

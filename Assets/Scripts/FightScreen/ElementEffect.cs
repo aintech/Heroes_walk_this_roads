@@ -11,7 +11,7 @@ public class ElementEffect : MonoBehaviour {
 
 	private SpriteRenderer element, effectHit;
 
-	private Transform trans, emitter, BG, elementTrans, hitTextHolder;
+	private Transform trans, elementsPoolTrans, emitter, BG, elementTrans, hitTextHolder;
 
 	private ElementType type;
 
@@ -19,15 +19,15 @@ public class ElementEffect : MonoBehaviour {
 
 	private bool effectActive;
 
-	private Vector3 trailRot = Vector3.zero, initScale = new Vector3(1.5f, 1.5f, 1), scale, newPos, enemyCenter = new Vector3(enemyX, 0, 0);
+	private Vector3 trailRot = Vector3.zero, initScale = new Vector3(1.5f, 1.5f, 1), scale, newPos, targetCenter;
 
-	private float scaleSpeed = .05f, moveSpeed = .4f, txtSpeed = .07f, maxTxtY;
+	private float closeDistance = .5f, scaleSpeed = .05f, moveSpeed = .4f, txtSpeed = .07f, maxTxtY;
 
 	private Quaternion trailQuater = new Quaternion(), idleQuater = new Quaternion();
 
 	private Step step = Step.APPEAR;
 
-	private EnemyHolder enemy;
+    private ElementsPool elementsPool;
 
 	private int index, frameTime = 2, frameCounter;
 
@@ -37,10 +37,15 @@ public class ElementEffect : MonoBehaviour {
 
 	private TextMesh hitText, hitTextBG;
 
-	public void init (FightScreen fightScreen, EnemyHolder enemy) {
+    public void init (FightScreen fightScreen, ElementsPool elementsPool) {
 		this.fightScreen = fightScreen;
-		this.enemy = enemy;
-		trans = transform;
+        this.elementsPool = elementsPool;
+
+        trans = transform;
+        elementsPoolTrans = elementsPool.transform;
+
+        targetCenter = elementsPoolTrans.position;
+
 		elementTrans = trans.Find("EffectSprite");
 		BG = trans.Find("BG");
 		emitter = trans.Find("EffectTrail");
@@ -111,16 +116,17 @@ public class ElementEffect : MonoBehaviour {
 	}
 
 	private void moveEffect () {
-		if (trans.localPosition.x >= enemyX) {
+//		if (trans.localPosition.x >= enemyX) {
+        if (Vector2.Distance(trans.position, elementsPoolTrans.position) < closeDistance) {
 			emitter.gameObject.SetActive(false);
 			BG.gameObject.SetActive(false);
 			elementTrans.gameObject.SetActive(false);
-			trans.localPosition = enemyCenter;
+            trans.position = targetCenter;
 			newPos = hitTextHolder.localPosition;
 			maxTxtY = newPos.y + 2;
 			setHitText();
-			fightInterface.updateEnemyBar();
-			enemy.playHit();
+//			fightInterface.updateEnemyBar();
+            elementsPool.addElements();
 			effectHit.gameObject.SetActive(true);
 			step = Step.PLAY;
 		} else {
@@ -139,7 +145,7 @@ public class ElementEffect : MonoBehaviour {
 //						  status == StatusEffectType.BLINDED? "BLINDED":
 //						  status == StatusEffectType.PARALYZED? "PARALYZED": "";
 //		} else {
-		int damage = enemy.hitEnemy(value, elementsCount);
+        int damage = 123;// enemy.enemy.hit(value);
 		hitText.text = "-" + damage;
 		hitTextBG.text = "-" + damage;
 //			FightMessenger.addDamageMessage(enemy.getEnemyType().getName(), EnumDescriptor.getShotType(iconsCount), damage);

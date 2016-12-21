@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HeroPortrait : MonoBehaviour {
+public class HeroPortrait : CharacterRepresentative {
 
 	public Sprite normalBG, activeBG, noHeroBG;
 
@@ -40,7 +40,11 @@ public class HeroPortrait : MonoBehaviour {
 		return this;
 	}
 
-	public void choose (bool asActive) {
+    public void updateRepresentative () {
+        Vars.heroes[type].representative = this;
+    }
+
+	public override void choose (bool asActive) {
 		backgroundRender.sprite = asActive ? activeBG : normalBG;
 	}
 

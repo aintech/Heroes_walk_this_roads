@@ -10,7 +10,7 @@ public class FightProcessor : MonoBehaviour {
 
 	private ElementsHolder elementsHolder;
 
-	private EnemyHolder enemy;
+	private List<EnemyHolder> enemies;
 
 	public static bool PLAYER_MOVE_DONE = false;
 
@@ -20,146 +20,139 @@ public class FightProcessor : MonoBehaviour {
 
 	private FightScreen fightScreen;
 
-	private int playerActions, enemyActions;
+    private List<Character> queue;
 
-    private float playerInitiativeDiff, enemyInitiativeDiff, playerInitiativeCounter, enemyInitiativeCounter;
+    private Character currCharacter;
 
-	public void init (FightScreen fightScreen, ElementsHolder elementsHolder, EnemyHolder enemy) {
+    private int characterIndex;
+
+    private List<Hero> heroes;
+
+    private EnemyHolder currEnemy;
+
+	public void init (FightScreen fightScreen, ElementsHolder elementsHolder, List<EnemyHolder> enemies) {
 		this.fightScreen = fightScreen;
 		this.elementsHolder = elementsHolder;
-		this.enemy = enemy;
+		this.enemies = enemies;
 	}
 
-    public void startFight () {
-        playerInitiativeCounter = 0;
-        enemyInitiativeCounter = 0;
-        calcInitiative();
-		calcActions();
-		updateStatusEffects();
-		switchMachineState(StateMachine.PLAYER_TURN);
-	}
-
-    private void calcInitiative () {
-        playerInitiativeDiff = Mathf.Max(1f, (float)Player.initiative / (float)enemy.initiative) - 1;
-        enemyInitiativeDiff = Mathf.Max(1f, (float)enemy.initiative / (float)Player.initiative) - 1;
-    }
-
-	private void calcActions () {
-		calcActions(true);
-		calcActions(false);
-	}
-
-	private void calcActions (bool asPlayer) {
-		if (fightScreen.getStatusEffectByType(StatusEffectType.PARALIZED, asPlayer).inProgress) {
-			if (asPlayer) { playerActions = 0; }
-			else { enemyActions = 0; }
-			fightScreen.updateActionTexts(playerActions, enemyActions);
-			return;
-		}
-
-        int actions = 1;
-		if (asPlayer) {
-            playerInitiativeCounter += playerInitiativeDiff;
-            if (playerInitiativeCounter > 1) {
-                actions += Mathf.FloorToInt(playerInitiativeCounter);
-                playerInitiativeCounter -= Mathf.FloorToInt(playerInitiativeCounter);
-            }
-        } else {
-            enemyInitiativeCounter += enemyInitiativeDiff;
-            if (enemyInitiativeCounter > 1) {
-                actions += Mathf.FloorToInt(enemyInitiativeCounter);
-                enemyInitiativeCounter -= Mathf.FloorToInt(enemyInitiativeCounter);
-            }
+    public void prepare (List<EnemyType> enemyTypes) {
+        queue = new List<Character>();
+        foreach (Hero hero in Vars.heroes.Values) {
+            queue.Add(hero);
+        }
+        foreach (EnemyHolder enemyHolder in enemies) {
+            queue.Add(enemyHolder.enemy);
         }
 
-		if (fightScreen.getStatusEffectByType(StatusEffectType.SPEED, asPlayer).inProgress) {
-			actions += fightScreen.getStatusEffectByType(StatusEffectType.SPEED, asPlayer).value;
-		}
+        Character temp;
+        for (int write = 0; write < queue.Count; write++) {
+            for (int sort = 0; sort < queue.Count-1; sort++) {
+                if (queue[sort].initiative > queue[sort+1].initiative || (queue[sort].initiative == queue[sort+1].initiative && !queue[sort].isHero() && queue[sort+1].isHero())) {
+                    temp = queue[sort+1];
+                    queue[sort+1] = queue[sort];
+                    queue[sort] = temp;
+                }
+            }
+        }
+        currEnemy = enemies[0];
+    }
 
-		if (asPlayer) { playerActions = actions; }
-		else { enemyActions = actions; }
-
-		fightScreen.updateActionTexts(playerActions, enemyActions);
+    public void startFight () {
+        characterIndex = -1;
+		updateStatusEffects();
+        heroes = new List<Hero>(Vars.heroes.Values);
+        switchMachineState(StateMachine.PICK_NEXT_CHARACTER);
 	}
 
 	void Update () {
 		switch (machineState) {
 			case StateMachine.NOT_IN_FIGHT: break;
-			case StateMachine.PLAYER_TURN:
-				if (playerActions == 0) {
-					PLAYER_MOVE_DONE = false;
-					switchMachineState(StateMachine.ICONS_ANIMATION);
-				} else if (PLAYER_MOVE_DONE) {
-					PLAYER_MOVE_DONE = false;
-					playerActions--;
-					fightScreen.updateActionTexts(playerActions, enemyActions);
-					switchMachineState(StateMachine.ICONS_ANIMATION);
-				} else {
-					elementsHolder.checkPlayerInput();
-				}
-				break;
-			case StateMachine.ICONS_ANIMATION:
-				if (FIGHT_ANIM_PLAYER_DONE && FIGHT_ANIM_ENEMY_DONE) {
-					switchMachineState(StateMachine.PLAYER_MOVE_DONE);
-				}
-				break;
-			case StateMachine.PLAYER_MOVE_DONE:
-				afterPlayerMove();
-				switchMachineState(StateMachine.ICONS_POSITIONING);
-				break;
-			case StateMachine.ICONS_POSITIONING:
-				if (elementsHolder.isAllElementsOnCells()) {
-					if (enemy.health <= 0) { switchMachineState(StateMachine.PLAYER_WIN); }
-					else if (Player.health <= 0) { switchMachineState(StateMachine.ENEMY_WIN); }
-					else if (elementsHolder.checkElementsMatch()) {
-						switchMachineState(StateMachine.ICONS_ANIMATION);
-					} else {
-						if (playerActions == 0) {
-							switchMachineState(StateMachine.ENEMY_TURN);
-						} else {
-							switchMachineState(StateMachine.PLAYER_TURN);
-						}
-					}
-				}
-				break;
-			case StateMachine.ENEMY_TURN:
-				if (enemyActions > 0) { calculateEnemyTurnResult(); }
-				switchMachineState(StateMachine.ENEMY_MOVE_DONE);
-				break;
-			case StateMachine.ENEMY_MOVE_DONE:
-				if (FIGHT_ANIM_PLAYER_DONE && FIGHT_ANIM_ENEMY_DONE) {
-					if (Player.health <= 0) { switchMachineState(StateMachine.ENEMY_WIN); }
-					else if (enemyActions > 0) { switchMachineState(StateMachine.ENEMY_TURN); }
-					else {
-						updateStatusEffects();
-						calcActions();
-						switchMachineState(StateMachine.PLAYER_TURN);
-					}
-				}
-				break;
-			case StateMachine.PLAYER_WIN:
-				endFight(true);
-				break;
-			case StateMachine.ENEMY_WIN:
-				endFight(false);
-				break;
+            case StateMachine.PICK_NEXT_CHARACTER: pickNextCharacter(); break;
+            case StateMachine.CHARACTER_TURN: checkCharacterTurn(); break;
+            case StateMachine.ICONS_ANIMATION: checkFightAndIconAnimation(); break;
+            case StateMachine.AFTER_HERO_TURN: afterHeroTurn(); break;
+            case StateMachine.ICONS_POSITIONING: checkIconPositioning(); break;
+            case StateMachine.AFTER_ENEMY_TURN: afterEnemyTurn(); break;
+			case StateMachine.PLAYER_WIN: endFight(true); break;
+			case StateMachine.ENEMY_WIN: endFight(false); break;
 		}
 	}
 
-	private void updateStatusEffects () {
-			foreach (StatusEffect eff in fightScreen.playerStatusEffects) {
-				eff.updateStatus ();
-			}
-			foreach (StatusEffect eff in fightScreen.enemyStatusEffects) {
-				eff.updateStatus ();
-			}
+    private void pickNextCharacter () {
+        PLAYER_MOVE_DONE = false;
+        if (currCharacter != null) { currCharacter.representative.choose(false); }
+        characterIndex++;
+        if (characterIndex >= queue.Count) {
+            characterIndex = 0;
+        }
+        currCharacter = queue[characterIndex];
+        currCharacter.representative.choose(true);
+        switchMachineState(StateMachine.CHARACTER_TURN);
+    }
+
+    private void checkCharacterTurn () {
+        if (currCharacter.isHero()) {
+            elementsHolder.checkPlayerInput();
+            if (PLAYER_MOVE_DONE) {
+                switchMachineState(StateMachine.ICONS_ANIMATION);
+            }
+        } else { calculateEnemyTurnResult(); }
+    }
+
+    private void checkFightAndIconAnimation () {
+        if (FIGHT_ANIM_PLAYER_DONE && FIGHT_ANIM_ENEMY_DONE) {
+            switchMachineState(StateMachine.AFTER_HERO_TURN);
+        }
+    }
+
+    private void afterHeroTurn () {
+        elementsHolder.refreshSortingOrder();
+        elementsHolder.repositionMatchingElements();
+        elementsHolder.setElementsGoToCenter();
+
+        int totalHealth = 0;
+
+        foreach (EnemyHolder holder in enemies) {
+            totalHealth += holder.enemy.health;
+        }
+
+        if (totalHealth == 0) {
+            switchMachineState(StateMachine.PLAYER_WIN);
+        } else {
+            switchMachineState(StateMachine.ICONS_POSITIONING);
+        }
 	}
 
-	private void afterPlayerMove () {
-		elementsHolder.refreshSortingOrder();
-		elementsHolder.repositionMatchingElements();
-		elementsHolder.setElementsGoToCenter();
-	}
+    private void checkIconPositioning () {
+        if (elementsHolder.isAllElementsOnCells()) {
+//            if (enemy.enemy.health <= 0) { switchMachineState(StateMachine.PLAYER_WIN); }
+//            else if (Player.health <= 0) { switchMachineState(StateMachine.ENEMY_WIN); }
+            /*else*/ if (elementsHolder.checkElementsMatch()) {
+                switchMachineState(StateMachine.ICONS_ANIMATION);
+            } else {
+                if (FIGHT_ANIM_PLAYER_DONE && FIGHT_ANIM_ENEMY_DONE) {
+                    switchMachineState(StateMachine.PICK_NEXT_CHARACTER);
+                }
+            }
+        }
+    }
+
+    private void afterEnemyTurn () {
+        if (FIGHT_ANIM_PLAYER_DONE && FIGHT_ANIM_ENEMY_DONE) {
+            int totalHealth = 0;
+
+            foreach (Hero hero in heroes) {
+                totalHealth += hero.health;
+            }
+
+            if (totalHealth == 0) {
+                switchMachineState(StateMachine.ENEMY_WIN);
+            } else {
+                switchMachineState(StateMachine.PICK_NEXT_CHARACTER);
+            }
+        }    
+    }
 
 	private void rearrangeIcons () {
 		elementsHolder.rearrangeElements();
@@ -174,6 +167,7 @@ public class FightProcessor : MonoBehaviour {
 			}
 		}
 		turnResults.Add(new TurnResult(type, count, pos));
+        switchMachineState(StateMachine.AFTER_HERO_TURN);
 	}
 
 	private Vector2 getMiddlePoint (Vector2 pos1, Vector2 pos2) {
@@ -200,11 +194,10 @@ public class FightProcessor : MonoBehaviour {
         if (fightScreen.getStatusEffectByType(StatusEffectType.BLINDED, false).inProgress && (Random.value < .5f)) {
             fightScreen.fightEffectPlayer.playEffect(FightEffectType.MISS, 0);
         } else {
-            fightScreen.fightEffectPlayer.playEffect(FightEffectType.DAMAGE, Player.hitPlayer(enemy.damage));
+            fightScreen.fightEffectPlayer.playEffect(FightEffectType.DAMAGE, Player.hitPlayer(currEnemy.enemy.damage()));
         }
 		FIGHT_ANIM_PLAYER_DONE = false;
-		enemyActions--;
-		fightScreen.updateActionTexts(playerActions, enemyActions);
+        switchMachineState(StateMachine.AFTER_ENEMY_TURN);
 	}
 
 
@@ -223,7 +216,7 @@ public class FightProcessor : MonoBehaviour {
 	}
 
 	public bool canUseSupply (SupplyType supplyType) {
-		if (machineState != StateMachine.PLAYER_TURN || playerActions == 0) {
+        if (machineState != StateMachine.CHARACTER_TURN && !currCharacter.isHero()) {
 			return false;
 		}
 		if (supplyType == SupplyType.SPEED_POTION || supplyType == SupplyType.ARMOR_POTION || supplyType == SupplyType.REGENERATION_POTION) {
@@ -246,6 +239,15 @@ public class FightProcessor : MonoBehaviour {
 		return true;
 	}
 
+    private void updateStatusEffects () {
+        //          foreach (StatusEffect eff in fightScreen.playerStatusEffects) {
+        //              eff.updateStatus ();
+        //          }
+        //          foreach (StatusEffect eff in fightScreen.enemyStatusEffects) {
+        //              eff.updateStatus ();
+        //          }
+    }
+
 	private void endFight (bool playerWin) {
 		switchMachineState(StateMachine.NOT_IN_FIGHT);
 		fightScreen.finishFight(playerWin);
@@ -254,8 +256,7 @@ public class FightProcessor : MonoBehaviour {
 	private enum StateMachine {
 		NOT_IN_FIGHT,
 		ICONS_ANIMATION, ICONS_POSITIONING,
-		PLAYER_TURN, PLAYER_MOVE_DONE,
-		ENEMY_TURN, ENEMY_MOVE_DONE,
+        PICK_NEXT_CHARACTER, CHARACTER_TURN, AFTER_HERO_TURN, AFTER_ENEMY_TURN,
 		PLAYER_WIN, ENEMY_WIN
 	}
 
