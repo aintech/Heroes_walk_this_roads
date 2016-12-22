@@ -6,6 +6,8 @@ public class ElementsHolder : MonoBehaviour {
 
 	public Transform elementPrefab;
 
+    public static bool ELEMENTS_ANIM_DONE = false;
+
 	private FightScreen fightScreen;
 
 	public const int ROWS = 7, COLUMNS = 8;
@@ -43,13 +45,15 @@ public class ElementsHolder : MonoBehaviour {
 
 	public ElementsHolderAnimator holderAnimator { get; private set; }
 
+    private bool playElementsFading, checkElementsOnPositions;
+
 	public ElementsHolder init (FightScreen fightScreen) {
 		fightScreen = transform.parent.GetComponent<FightScreen>();
-		fightProcessor = fightScreen.getFightProcessor();
+        fightProcessor = fightScreen.fightProcessor;
 		Element element = null;
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLUMNS; j++) {
-				element = Instantiate<Transform>(elementPrefab).GetComponent<Element>().init();
+                element = Instantiate<Transform>(elementPrefab).GetComponent<Element>().init(this);
 				if (START_SORT_ORDER == 0) { START_SORT_ORDER = element.GetComponent<SpriteRenderer>().sortingOrder; }
 				element.transform.SetParent(transform);
 				elements[i,j] = element;
@@ -117,6 +121,42 @@ public class ElementsHolder : MonoBehaviour {
 //		}
 //	}
 	
+//    public void elementsFaded () {
+//        if (playElementsFading) {
+//            playElementsFading = false;
+//            refreshSortingOrder();
+//            repositionMatchingElements();
+//            setElementsGoToCenter();
+//            checkElementsOnPositions = true;
+//        }
+//    }
+
+    void Update () {
+        if (playElementsFading) {
+            playElementsFading = false;
+            foreach (Element element in elements) {
+                if (element.fading) {
+                    playElementsFading = true;
+                    return;
+                }
+            }
+            if (!playElementsFading) {
+                refreshSortingOrder();
+                repositionMatchingElements();
+                setElementsGoToCenter();
+                checkElementsOnPositions = true;
+            }
+        } else  if (checkElementsOnPositions) {
+            foreach (Element element in elements) {
+                if (element.isGoToTarget()) {
+                    return;
+                }
+            }
+            checkElementsOnPositions = false;
+            checkElementsMatch();
+        }
+    }
+
 	public void checkPlayerInput () {
 		if (Input.GetMouseButtonDown(0) && draggedElement == null) {
 			if (Utils.hit != null && Utils.hit.name.StartsWith("Element")) {
@@ -136,14 +176,146 @@ public class ElementsHolder : MonoBehaviour {
 		}
 	}
 
-	public bool isAllElementsOnCells () {
-		foreach (Element element in elements) {
-			if (element.isGoToTarget()) {
-				return false;
-			}
-		}
-		return true;
-	}
+    public void checkElementDrop () {
+        if (changeElement != null) {
+            Vector3 cellCenter = changeElement.cellCenter;
+            changeElement.cellCenter = draggedElement.cellCenter;
+            draggedElement.cellCenter = cellCenter;
+
+            int row = changeElement.getRow();
+            int col = changeElement.getColumn();
+            changeElement.setRowAndColumn(draggedElement.getRow(), draggedElement.getColumn());
+            draggedElement.setRowAndColumn(row, col);
+
+            elements[changeElement.getRow(), changeElement.getColumn()] = changeElement;
+            elements[draggedElement.getRow(), draggedElement.getColumn()] = draggedElement;
+
+            FightProcessor.PLAYER_CHECKED_ELEMENTS = true;
+
+            draggedElement.target = draggedElement.cellCenter;
+            draggedElement.setGoToTarget();
+            draggedElement.getRender().sortingOrder = AFTER_DRAG_ORDER;
+            changeElement = null;
+
+            checkElementsMatch();
+        }
+    }
+
+    public bool checkElementsMatch () {
+        Element element = null, next = null;
+        int step = 1;
+
+        //Проверяем ряды на совпадение
+        int compareCol = 0;
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLUMNS-2; col++) {
+                element = elements[row, col];
+                if (totalMatchHor.Contains(element)) {
+                    continue;
+                }
+
+                while (true) {
+                    compareCol = col + step;
+                    if (compareCol >= COLUMNS) {
+                        break;
+                    }
+                    next = elements[row, compareCol];
+                    if (next.elementType == element.elementType) {
+                        matchLine.Add(next);
+                        if (compareCol == (COLUMNS - 1) && (matchLine.Count >= 2)) {
+                            fightProcessor.addToTurnResult(element.elementType, matchLine.Count + 1, getMiddlePoint(matchLine));
+                            totalMatchHor.Add(element);
+                            totalMatchHor.AddRange(matchLine);
+                            matchLine.Clear();
+                        }
+                    } else {
+                        if (matchLine.Count >= 2) {
+                            fightProcessor.addToTurnResult(element.elementType, matchLine.Count + 1, getMiddlePoint(matchLine));
+                            totalMatchHor.Add(element);
+                            totalMatchHor.AddRange(matchLine);
+                            matchLine.Clear();
+                            break;
+                        } else {
+                            matchLine.Clear();
+                            break;
+                        }
+                    }
+                    step++;
+                }
+                step = 1;
+                matchLine.Clear();
+            }
+            matchLine.Clear();
+        }
+
+        //Проверяем колонны на совпадение
+        int compareRow = 0;
+        for (int row = 0; row < ROWS-2; row++) {
+            for (int col = 0; col < COLUMNS; col++) {
+                element = elements[row, col];
+                if (totalMatchVer.Contains(element)) {
+                    continue;
+                }
+
+                while (true) {
+                    compareRow = row + step;
+                    if (compareRow >= ROWS) {
+                        break;
+                    }
+                    next = elements[compareRow, col];
+                    if (next.elementType == element.elementType) {
+                        matchLine.Add(next);
+                        if (compareRow == (ROWS - 1) && (matchLine.Count >= 2)) {
+                            fightProcessor.addToTurnResult(element.elementType, matchLine.Count + 1, getMiddlePoint(matchLine));
+                            totalMatchVer.Add(element);
+                            totalMatchVer.AddRange(matchLine);
+                            matchLine.Clear();
+                        }
+                    } else {
+                        if (matchLine.Count >= 2) {
+                            fightProcessor.addToTurnResult(element.elementType, matchLine.Count + 1, getMiddlePoint(matchLine));
+                            totalMatchVer.Add(element);
+                            totalMatchVer.AddRange(matchLine);
+                            matchLine.Clear();
+                            break;
+                        } else {
+                            matchLine.Clear();
+                            break;
+                        }
+                    }
+                    step++;
+                }
+                step = 1;
+                matchLine.Clear();
+            }
+            matchLine.Clear();
+        }
+
+        allMatch.AddRange(totalMatchHor);
+        foreach (Element fi in totalMatchVer) {
+            if (!allMatch.Contains(fi)) {
+                allMatch.Add(fi);
+            }
+        }
+
+        foreach (Element fi in allMatch) {
+            fi.initFading (false);
+        }
+
+        matchLine.Clear();
+        totalMatchHor.Clear();
+        totalMatchVer.Clear();
+
+        rearrangeElements();
+
+        ELEMENTS_ANIM_DONE = (allMatch.Count == 0);
+        playElementsFading = !ELEMENTS_ANIM_DONE;
+
+        fightProcessor.playElementEffects();
+        //      fightProcessor.calculateHeroTurnResults();
+
+        return allMatch.Count > 0;
+    }
 
 	public void rearrangeElements () {
 		foreach (Element element in allMatch) {
@@ -265,31 +437,6 @@ public class ElementsHolder : MonoBehaviour {
 		}
 	}
 	
-	public void checkElementDrop () {
-		if (changeElement != null) {
-			Vector3 cellCenter = changeElement.cellCenter;
-			changeElement.cellCenter = draggedElement.cellCenter;
-			draggedElement.cellCenter = cellCenter;
-			
-			int row = changeElement.getRow();
-			int col = changeElement.getColumn();
-			changeElement.setRowAndColumn(draggedElement.getRow(), draggedElement.getColumn());
-			draggedElement.setRowAndColumn(row, col);
-			
-			elements[changeElement.getRow(), changeElement.getColumn()] = changeElement;
-			elements[draggedElement.getRow(), draggedElement.getColumn()] = draggedElement;
-			
-			FightProcessor.PLAYER_CHECKED_ELEMENTS = true;
-		}
-		
-		draggedElement.target = draggedElement.cellCenter;
-		draggedElement.setGoToTarget();
-		draggedElement.getRender().sortingOrder = AFTER_DRAG_ORDER;
-		changeElement = null;
-		
-		checkElementsMatch();
-	}
-
 	public void refreshSortingOrder () {
 		for (int row = 0; row < ROWS; row++) {
 			for (int col = 0; col < COLUMNS; col++) {
@@ -314,120 +461,6 @@ public class ElementsHolder : MonoBehaviour {
 		}
 	}
 	
-	public bool checkElementsMatch () {
-		Element element = null, next = null;
-		int step = 1;
-		
-		//Проверяем ряды на совпадение
-		int compareCol = 0;
-		for (int row = 0; row < ROWS; row++) {
-			for (int col = 0; col < COLUMNS-2; col++) {
-				element = elements[row, col];
-				if (totalMatchHor.Contains(element)) {
-					continue;
-				}
-				
-				while (true) {
-					compareCol = col + step;
-					if (compareCol >= COLUMNS) {
-						break;
-					}
-					next = elements[row, compareCol];
-					if (next.elementType == element.elementType) {
-						matchLine.Add(next);
-						if (compareCol == (COLUMNS - 1) && (matchLine.Count >= 2)) {
-							fightProcessor.addToTurnResult(element.elementType, matchLine.Count + 1, getMiddlePoint(matchLine));
-							totalMatchHor.Add(element);
-							totalMatchHor.AddRange(matchLine);
-							matchLine.Clear();
-						}
-					} else {
-						if (matchLine.Count >= 2) {
-							fightProcessor.addToTurnResult(element.elementType, matchLine.Count + 1, getMiddlePoint(matchLine));
-							totalMatchHor.Add(element);
-							totalMatchHor.AddRange(matchLine);
-							matchLine.Clear();
-							break;
-						} else {
-							matchLine.Clear();
-							break;
-						}
-					}
-					step++;
-				}
-				step = 1;
-				matchLine.Clear();
-			}
-			matchLine.Clear();
-		}
-		
-		//Проверяем колонны на совпадение
-		int compareRow = 0;
-		for (int row = 0; row < ROWS-2; row++) {
-			for (int col = 0; col < COLUMNS; col++) {
-				element = elements[row, col];
-				if (totalMatchVer.Contains(element)) {
-					continue;
-				}
-				
-				while (true) {
-					compareRow = row + step;
-					if (compareRow >= ROWS) {
-						break;
-					}
-					next = elements[compareRow, col];
-					if (next.elementType == element.elementType) {
-						matchLine.Add(next);
-						if (compareRow == (ROWS - 1) && (matchLine.Count >= 2)) {
-							fightProcessor.addToTurnResult(element.elementType, matchLine.Count + 1, getMiddlePoint(matchLine));
-							totalMatchVer.Add(element);
-							totalMatchVer.AddRange(matchLine);
-							matchLine.Clear();
-						}
-					} else {
-						if (matchLine.Count >= 2) {
-							fightProcessor.addToTurnResult(element.elementType, matchLine.Count + 1, getMiddlePoint(matchLine));
-							totalMatchVer.Add(element);
-							totalMatchVer.AddRange(matchLine);
-							matchLine.Clear();
-							break;
-						} else {
-							matchLine.Clear();
-							break;
-						}
-					}
-					step++;
-				}
-				step = 1;
-				matchLine.Clear();
-			}
-			matchLine.Clear();
-		}
-		
-		allMatch.AddRange(totalMatchHor);
-		foreach (Element fi in totalMatchVer) {
-			if (!allMatch.Contains(fi)) {
-				allMatch.Add(fi);
-			}
-		}
-		
-		foreach (Element fi in allMatch) {
-			fi.initFading (false);
-		}
-		
-		matchLine.Clear();
-		totalMatchHor.Clear();
-		totalMatchVer.Clear();
-		
-		rearrangeElements();
-		
-		FightProcessor.ELEMENTS_ANIM_DONE = (allMatch.Count == 0);
-		
-		fightProcessor.calculateHeroTurnResults();
-		
-		return allMatch.Count > 0;
-	}
-
 	private Vector2 getMiddlePoint (List<Element> elements) {
 		float x = 0, y = 0;
 		foreach (Element element in elements) {

@@ -21,7 +21,7 @@ public class ElementEffect : MonoBehaviour {
 
 	private Vector3 trailRot = Vector3.zero, initScale = new Vector3(1.5f, 1.5f, 1), scale, newPos, targetCenter;
 
-	private float closeDistance = .5f, scaleSpeed = .05f, moveSpeed = .4f, txtSpeed = .07f, maxTxtY;
+	private float closeDistance = .5f, scaleSpeed = .05f, moveSpeed = .1f, txtSpeed = .07f, maxTxtY;
 
 	private Quaternion trailQuater = new Quaternion(), idleQuater = new Quaternion();
 
@@ -116,23 +116,23 @@ public class ElementEffect : MonoBehaviour {
 	}
 
 	private void moveEffect () {
-		Debug.Log("Move element to elements pool!");
+//		Debug.Log("Move element to elements pool!");
 //		if (trans.localPosition.x >= enemyX) {
         if (Vector2.Distance(trans.position, elementsPoolTrans.position) < closeDistance) {
 			emitter.gameObject.SetActive(false);
 			BG.gameObject.SetActive(false);
 			elementTrans.gameObject.SetActive(false);
             trans.position = targetCenter;
-			newPos = hitTextHolder.localPosition;
-			maxTxtY = newPos.y + 2;
-			setHitText();
+//			newPos = hitTextHolder.localPosition;
+//			maxTxtY = newPos.y + 2;
+//			setHitText();
 //			fightInterface.updateEnemyBar();
-            elementsPool.addElements();
 			effectHit.gameObject.SetActive(true);
 			step = Step.PLAY;
 		} else {
 			elementTrans.Rotate(-Vector3.forward, 10);
-			newPos.x += moveSpeed;
+            newPos = Vector2.Lerp(elementTrans.position, elementsPoolTrans.position, moveSpeed);
+//			newPos.x += moveSpeed;
 			trans.localPosition = newPos;
 		}
 	}
@@ -153,23 +153,25 @@ public class ElementEffect : MonoBehaviour {
 //		}
 	}
 
-	private void playEffect () {
-		if (index != -1) {
-			animate(damageSprites);
-//			switch (type) {
-//				case ElementType.NORMAL_SHOT: animate(damageSprites); break;
-//				case ElementType.SPREAD_SHOT: animate(damageSprites); break;
-//				case ElementType.ARMOR_PIERCING_SHOT: animate(damageSprites); break;
-//				case ElementType.GRANADE: animate(granadeSprites); break;
-//				default: Debug.Log("ERROR"); break;
-//			}
-		}
-		newPos.y += txtSpeed;
-		if (newPos.y > maxTxtY) {
-			deactivateEffect();
-		} else {
-			hitTextHolder.localPosition = newPos;
-		}
+    private void playEffect () {
+        elementsPool.addElements(type, elementsCount);
+        deactivateEffect();
+//		if (index != -1) {
+//			animate(damageSprites);
+////			switch (type) {
+////				case ElementType.NORMAL_SHOT: animate(damageSprites); break;
+////				case ElementType.SPREAD_SHOT: animate(damageSprites); break;
+////				case ElementType.ARMOR_PIERCING_SHOT: animate(damageSprites); break;
+////				case ElementType.GRANADE: animate(granadeSprites); break;
+////				default: Debug.Log("ERROR"); break;
+////			}
+//		}
+//		newPos.y += txtSpeed;
+//		if (newPos.y > maxTxtY) {
+//			deactivateEffect();
+//		} else {
+//			hitTextHolder.localPosition = newPos;
+//		}
 	}
 
 	private void animate (Sprite[] array) {
@@ -207,7 +209,7 @@ public class ElementEffect : MonoBehaviour {
 		hitTextHolder.localPosition = Vector3.zero;
 		effectActive = false;
 		gameObject.SetActive(false);
-		fightScreen.getFightProcessor().checkEffectsActive();
+        fightScreen.fightProcessor.checkEffectsActive();
 	}
 
 	public bool isEffectActive () {

@@ -98,7 +98,7 @@ public class World : MonoBehaviour {
     }
 
     private void fillWithEnemies () {
-        enemies.Add(Instantiate<Transform>(enemyMarkerPrefab).GetComponent<EnemyMarker>().init(this, landscape, new List<EnemyType>(new EnemyType[]{EnemyType.ROGUE}), worldLocations[LocationType.ROUTINE]));
+        enemies.Add(Instantiate<Transform>(enemyMarkerPrefab).GetComponent<EnemyMarker>().init(this, landscape, new List<EnemyType>(new EnemyType[]{EnemyType.ROGUE, EnemyType.ROGUE, EnemyType.ROGUE}), worldLocations[LocationType.ROUTINE]));
 //        List<EnemyType> types;
 //        int count;
 //        foreach (Location location in worldLocations.Values) {

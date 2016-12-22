@@ -6,6 +6,6 @@ public enum ElementType {
 }
 public static class ElementDescriptor {
 	public static int getElementsCount () {
-		return 6;
+		return 4;
 	}
 }

@@ -95,9 +95,9 @@ public class Player {
 	public static int hitPlayer (int damageAmount)  {
 		int armorAmount = armorClass;
 
-		if (fightScreen.getStatusEffectByType(StatusEffectType.ARMORED, true).inProgress) {
-			armorAmount += fightScreen.getStatusEffectByType(StatusEffectType.ARMORED, true).value;
-		}
+//		if (fightScreen.getStatusEffectByType(StatusEffectType.ARMORED, true).inProgress) {
+//			armorAmount += fightScreen.getStatusEffectByType(StatusEffectType.ARMORED, true).value;
+//		}
 
 		if (damageAmount <= armorAmount) {
 			return 0;

@@ -26,7 +26,7 @@ public class ElementsHolderAnimator : MonoBehaviour {
 		foreach (Element element in elements) {
 			element.prepareFading (false);
 		}
-		FightProcessor.ELEMENTS_ANIM_DONE = false;
+        ElementsHolder.ELEMENTS_ANIM_DONE = false;
 		index = 0;
 		initNextLine ();
 		apperance = false;
@@ -37,7 +37,7 @@ public class ElementsHolderAnimator : MonoBehaviour {
 		foreach (Element element in elements) {
 			element.prepareFading (true);
 		}
-		FightProcessor.ELEMENTS_ANIM_DONE = false;
+        ElementsHolder.ELEMENTS_ANIM_DONE = false;
 		index = 0;
 		apperance = true;
 		enabled = true;
@@ -80,10 +80,10 @@ public class ElementsHolderAnimator : MonoBehaviour {
 		index++;
 		if (index > ElementsHolder.COLUMNS && index > ElementsHolder.ROWS) {
 			if (!apperance) {
-				fightScreen.showFightEndDisplay ();
+                fightScreen.fightProcessor.startTurn ();
 			}
 			apperance = enabled = false;
-			FightProcessor.ELEMENTS_ANIM_DONE = true;
+            ElementsHolder.ELEMENTS_ANIM_DONE = true;
 		}
 	}
 }

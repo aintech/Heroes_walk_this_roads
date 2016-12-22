@@ -37,7 +37,10 @@ public class Element : MonoBehaviour {
 
 	private Collider2D col;
 
-	public Element init () {
+    private ElementsHolder holder;
+
+    public Element init (ElementsHolder holder) {
+        this.holder = holder;
 		render = GetComponent<SpriteRenderer>();
 		col = GetComponent<Collider2D>();
 		trans = transform;
@@ -52,8 +55,8 @@ public class Element : MonoBehaviour {
 			case 1: initElement(ElementType.WATER); break;
 			case 2: initElement(ElementType.EARTH); break;
 			case 3: initElement(ElementType.AIR); break;
-			case 4: initElement(ElementType.LIGHT); break;
-			case 5: initElement(ElementType.DARK); break;
+//			case 4: initElement(ElementType.LIGHT); break;
+//			case 5: initElement(ElementType.DARK); break;
 			default: Debug.Log("Unknown element type");break;
 		}
 	}
@@ -96,6 +99,7 @@ public class Element : MonoBehaviour {
 				fading = false;
 				setAsEnabled ();
 				trans.rotation = new Quaternion ();
+//                holder.elementsFaded();
 			} else {
 				color.a += fadeIn? fadingSpeed: -fadingSpeed;
 				render.color = color;

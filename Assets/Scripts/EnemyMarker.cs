@@ -10,7 +10,7 @@ public class EnemyMarker : MonoBehaviour {
 
 	public List<EnemyType> enemyTypes { get; private set; }
 
-	private float waitTime, minWaitTime = 1, maxWaitTime = 7;
+//	private float waitTime, minWaitTime = 1, maxWaitTime = 7;
 
 	private bool inMotion;
 

@@ -12,19 +12,19 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 
 	private Color holderColor = new Color(1, 1, 1, 0);
 
-	private float enemyFinalX = 4.4f, enemyAppearSpeed = .2f;
+	//private float enemyFinalX = 4.4f, enemyAppearSpeed = .2f;
 
 	private Vector3 enemyPos;
 
 	public FightEffectPlayer fightEffectPlayer { get; private set; }
 
-	private ElementEffectPlayer elementEffectPlayer;
+    public ElementEffectPlayer elementEffectPlayer { get; private set; }
 
 	private FightInterface fightInterface;
 
     private List<EnemyHolder> enemies = new List<EnemyHolder>();
 
-	private FightProcessor fightProcessor;
+    public FightProcessor fightProcessor { get; private set; }
 
 	private bool fightStarted, startAnimDone, enemyDeadPlaying;
 
@@ -47,16 +47,18 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 
 	private float playerStatusStep = 1.1f, enemyStatusStep = -.9f;
 
-	private StrokeText playerActionsText, enemyActionsText;
-
 	private Button captureBtn, releaseBtn;
 
     [HideInInspector]
     public World world;
 
-    private ElementsPool elementsPool;
+    public ElementsPool elementsPool { get; private set; }
 
     private List<QueuePortrait> queuePortraits = new List<QueuePortrait>();
+
+    private SpriteRenderer backgroundRender;
+
+    private int topLayerOrder;
 
 	public FightScreen init () {
         statusScreen = Vars.gameplay.statusScreen;
@@ -84,13 +86,6 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 		elementsHolder.gameObject.SetActive(true);
 		gameObject.SetActive(false);
 
-		Transform actionsHolder = transform.Find("Actions Holder");
-
-		actionsHolder.Find("Delimiter").GetComponent<StrokeText>().init("Fight Interface", 5);
-        playerActionsText = actionsHolder.Find("Player Actions").GetComponent<StrokeText>().init("Fight Interface", 5);
-        enemyActionsText = actionsHolder.Find("Enemy Actions").GetComponent<StrokeText>().init("Fight Interface", 5);
-		actionsHolder.gameObject.SetActive(true);
-
 		Transform supplyHolder = transform.Find("Supply Holder");
 		SupplySlot slot;
 		for (int i = 0; i < supplyHolder.childCount; i++) {
@@ -103,14 +98,15 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 		captureBtn = transform.Find ("Capture Button").GetComponent<Button> ().init ();
 		releaseBtn = transform.Find ("Release Button").GetComponent<Button> ().init ();
 
-        transform.Find("Background").gameObject.SetActive(true);
+        backgroundRender = transform.Find("Background").GetComponent<SpriteRenderer>();
+        backgroundRender.gameObject.SetActive(true);
 
 		Player.fightScreen = this;
 
 		return this;
 	}
 
-	public void startFight (List<EnemyType> types) {
+    public void startFight (List<EnemyType> types) {
         initEnemies(types);
 		SupplySlot supSlot;
         foreach (SupplySlot slot in statusScreen.supplySlots) {
@@ -119,7 +115,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 				supSlot.setItem(slot.takeItem());
 				supSlot.item.transform.localScale = Vector3.one;
 			}
-		}
+        }
         itemDescriptor.setEnabled();
 		playerWin = false;
 //		enemy.initEnemy(types[0]);
@@ -151,9 +147,17 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
                 enemies.Add(Instantiate<Transform>(enemyHolderPrefab).GetComponent<EnemyHolder>().init(this));
             }
         }
+        float scrWidth = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height)).x * 2;
+        float halfScreen = scrWidth * .5f;
+        float offset = scrWidth / (float) (types.Count + 1);
+//        float offset = scrWidth / (float) (types.Count * 2);
         for (int i = 0; i < types.Count; i++) {
-            enemies[i].initEnemy(types[i]);
+            enemies[i].initEnemy(types[i], (offset * (i + 1)) - halfScreen, (i * 5 + 5));
+//            enemies[i].initEnemy(types[i], (offset * ((i * 2) + 1)) - halfScreen);
         }
+
+        topLayerOrder = (types.Count * 5);
+//        backgroundRender.sortingOrder = topLayerOrder - 1;
     }
 
 	private SupplySlot getSlot (int index) {
@@ -168,7 +172,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 		if (!fightStarted) {
 			if (!startAnimDone) {
 				animatingFightStart();
-			} else if (FightProcessor.ELEMENTS_ANIM_DONE) {
+            } else if (ElementsHolder.ELEMENTS_ANIM_DONE) {
 				fightStarted = true;
 				fightProcessor.startFight();
 			}
@@ -262,33 +266,25 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
         world.backFromFight(playerWin);
 	}
 
-	public FightProcessor getFightProcessor () {
-		return fightProcessor;
-	}
-
-	public ElementEffectPlayer getIconEffectPlayer () {
-		return elementEffectPlayer;
-	}
-
 	public void useSupply (SupplySlot slot) {
 		if (slot.item != null) {
 			SupplyData data = (SupplyData)slot.item.itemData;
 			if (fightProcessor.canUseSupply (data.type)) {
 				bool toPlayer = data.type != SupplyType.BLINDING_POWDER && data.type != SupplyType.PARALIZING_DUST;
-				StatusEffect statusEffect = getStatusEffectByType(data.type.toStatusEffectType(), toPlayer);
+//				StatusEffect statusEffect = getStatusEffectByType(data.type.toStatusEffectType(), toPlayer);
 				FightEffectType fightEffectType = data.type.toFightEffectType();
 
-				if (data.type == SupplyType.HEALTH_POTION) {
-					fightEffectPlayer.playEffect(fightEffectType, Player.heal(data.value));
-				} else if (data.type == SupplyType.PARALIZING_DUST || data.type == SupplyType.BLINDING_POWDER) {
-					fightEffectPlayer.playEffectOnEnemy (fightEffectType, 0);
-					statusEffect.addStatus (data.value, data.duration);
-				} else if (data.type == SupplyType.ARMOR_POTION || data.type == SupplyType.REGENERATION_POTION || data.type == SupplyType.SPEED_POTION) {
-					fightEffectPlayer.playEffect (fightEffectType, data.value);
-					statusEffect.addStatus (data.value, data.duration);
-				} else {
-					Debug.Log("Unknown status effect type");
-				}
+//				if (data.type == SupplyType.HEALTH_POTION) {
+//					fightEffectPlayer.playEffect(fightEffectType, Player.heal(data.value));
+//				} else if (data.type == SupplyType.PARALIZING_DUST || data.type == SupplyType.BLINDING_POWDER) {
+//					fightEffectPlayer.playEffectOnEnemy (fightEffectType, 0);
+//					statusEffect.addStatus (data.value, data.duration);
+//				} else if (data.type == SupplyType.ARMOR_POTION || data.type == SupplyType.REGENERATION_POTION || data.type == SupplyType.SPEED_POTION) {
+//					fightEffectPlayer.playEffect (fightEffectType, data.value);
+//					statusEffect.addStatus (data.value, data.duration);
+//				} else {
+//					Debug.Log("Unknown status effect type");
+//				}
 
 				Vector3 effectPos = toPlayer? playerStatusStartPosition: enemyStatusStartPosition;
 
@@ -303,7 +299,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 				if (toPlayer) { effectPos.x += activeEffects * playerStatusStep; }
 				else { effectPos.y += activeEffects * enemyStatusStep; }
 
-				statusEffect.transform.localPosition = effectPos;
+//				statusEffect.transform.localPosition = effectPos;
 
 				fightProcessor.skipMove ();
 				FightProcessor.FIGHT_ANIM_PLAYER_DONE = false;
@@ -312,20 +308,15 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 		}
 	}
 
-	public StatusEffect getStatusEffectByType (StatusEffectType type, bool toPlayer) {
-		if (type.withoutStatusHolder()) { return null; }
-		effList = toPlayer? playerStatusEffects: enemyStatusEffects;
-		foreach (StatusEffect eff in effList) {
-			if (eff.statusType == type) {
-				return eff;
-			}
-		}
-		Debug.Log ("Cant find holder of effect type: " + type);
-		return null;
-	}
-
-	public void updateActionTexts (int playerActions, int enemyActions) {
-		playerActionsText.setText(playerActions == 0? "-": playerActions.ToString());
-		enemyActionsText.setText(enemyActions == 0? "-": enemyActions.ToString());
-	}
+//	public StatusEffect getStatusEffectByType (StatusEffectType type, bool toPlayer) {
+//		if (type.withoutStatusHolder()) { return null; }
+//		effList = toPlayer? playerStatusEffects: enemyStatusEffects;
+//		foreach (StatusEffect eff in effList) {
+//			if (eff.statusType == type) {
+//				return eff;
+//			}
+//		}
+//		Debug.Log ("Cant find holder of effect type: " + type);
+//		return null;
+//	}
 }
