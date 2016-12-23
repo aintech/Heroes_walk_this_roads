@@ -1,11 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public enum HeroType {
 	ALIKA, VICTORIA, LIARA, KATE//, ROKSANA, MARIKA
 }
 
 public static class HeroDescriptor {
+
+    private static Dictionary<HeroType, HeroActionType[]> heroActionsMap;
+
 	public static string name (this HeroType type) {
 		switch (type) {
 			case HeroType.ALIKA: return "Алика";
@@ -43,4 +47,15 @@ public static class HeroDescriptor {
             default: return 1;
         }
 	}
+
+    public static HeroActionType[] heroActions (this HeroType type) {
+        if (heroActionsMap == null) {
+            heroActionsMap = new Dictionary<HeroType, HeroActionType[]>();
+            heroActionsMap.Add(HeroType.ALIKA, new HeroActionType[]{HeroActionType.ATTACK, HeroActionType.GUARD});
+            heroActionsMap.Add(HeroType.KATE, new HeroActionType[]{HeroActionType.ATTACK, HeroActionType.GUARD});
+            heroActionsMap.Add(HeroType.LIARA, new HeroActionType[]{HeroActionType.ATTACK, HeroActionType.GUARD});
+            heroActionsMap.Add(HeroType.VICTORIA, new HeroActionType[]{HeroActionType.ATTACK, HeroActionType.GUARD});
+        }
+        return heroActionsMap[type];
+    }
 }

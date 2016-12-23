@@ -17,14 +17,14 @@ public class HealerScreen : TownScreen {
     }
 
     public override void beforeShow () {
-        healCost = Player.maxHealth - Player.health;
+//        healCost = Player.maxHealth - Player.health;
         updateHealBtn();
     }
 
     private void heal () {
         Vars.gold -= healCost;
         UserInterface.updateGold();
-        Player.setHealthToMax();
+//        Player.setHealthToMax();
         updateHealBtn();
     }
 

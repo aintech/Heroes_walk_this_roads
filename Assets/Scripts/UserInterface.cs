@@ -102,22 +102,22 @@ public class UserInterface : MonoBehaviour, ButtonHolder {
     }
 
     public static void updateHealth () {
-        healthValue.text = Player.health.ToString();
-        if (Player.health == Player.maxHealth) {
-            healthValue.color = white;
-            healthMaskDelta.y = healthMaskMaxHeight;
-        } else {
-            float diff = (float)Player.health / (float)Player.maxHealth;
-            healthMaskDelta.y = Mathf.Max(.01f, diff * healthMaskMaxHeight);
-            if (diff > .6f) {
-                healthValue.color = green;
-            } else if (diff > .2f) {
-                healthValue.color = yellow;
-            } else {
-                healthValue.color = red;
-            }
-        }
-        healthMaskRect.sizeDelta = healthMaskDelta;
+//        healthValue.text = Player.health.ToString();
+//        if (Player.health == Player.maxHealth) {
+//            healthValue.color = white;
+//            healthMaskDelta.y = healthMaskMaxHeight;
+//        } else {
+//            float diff = (float)Player.health / (float)Player.maxHealth;
+//            healthMaskDelta.y = Mathf.Max(.01f, diff * healthMaskMaxHeight);
+//            if (diff > .6f) {
+//                healthValue.color = green;
+//            } else if (diff > .2f) {
+//                healthValue.color = yellow;
+//            } else {
+//                healthValue.color = red;
+//            }
+//        }
+//        healthMaskRect.sizeDelta = healthMaskDelta;
     }
 
     public static void updateRank () {

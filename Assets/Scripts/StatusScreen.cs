@@ -85,7 +85,7 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 		chooseHero(portraits[0]);
         updateAttributes();
 
-        Player.statusScreen = this;
+//        Player.statusScreen = this;
 
         gameObject.SetActive(false);
 

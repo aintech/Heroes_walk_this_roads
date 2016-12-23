@@ -15,13 +15,13 @@ public class ElementEffect : MonoBehaviour {
 
 	private ElementType type;
 
-	private int value, elementsCount;
+	private int elementsCount;
 
 	private bool effectActive;
 
 	private Vector3 trailRot = Vector3.zero, initScale = new Vector3(1.5f, 1.5f, 1), scale, newPos, targetCenter;
 
-	private float closeDistance = .5f, scaleSpeed = .05f, moveSpeed = .1f, txtSpeed = .07f, maxTxtY;
+    private float closeDistance = .5f, scaleSpeed = .05f, moveSpeed = .1f;//, txtSpeed = .07f, maxTxtY;
 
 	private Quaternion trailQuater = new Quaternion(), idleQuater = new Quaternion();
 
@@ -81,9 +81,8 @@ public class ElementEffect : MonoBehaviour {
 		}
 	}
 
-	public void activateEffect (ElementType type, int value, Vector2 pos, int elementsCount) {
+	public void activateEffect (ElementType type, Vector2 pos, int elementsCount) {
 		this.type = type;
-		this.value = value;
 		this.elementsCount = elementsCount;
 		trailRot = Vector3.zero;
 		trailQuater = idleQuater;

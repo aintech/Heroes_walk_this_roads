@@ -15,12 +15,17 @@ public class HeroPortrait : CharacterRepresentative {
 
 	private BoxCollider2D coll;
 
+    private Vector3 healthScale = Vector3.one;
+
+    private Hero hero;
+
 	public HeroPortrait init () {
 		return init (null);
 	}
 
-	public HeroPortrait init (StatusScreen statusScreen) {
+    public HeroPortrait init (StatusScreen statusScreen) {
 		this.statusScreen = statusScreen;
+        this.hero = hero;
 
 		portraitRender = transform.Find ("Portrait").GetComponent<SpriteRenderer> ();
 		backgroundRender = transform.Find ("Background").GetComponent<SpriteRenderer> ();
@@ -29,7 +34,7 @@ public class HeroPortrait : CharacterRepresentative {
 
 		coll = backgroundRender.GetComponent<BoxCollider2D> ();
 
-		Hero hero = Vars.heroes [type];
+		hero = Vars.heroes [type];
 
 		portraitRender.sprite = ImagesProvider.getHeroPortrait(type);
 		portraitRender.gameObject.SetActive (hero != null);
@@ -53,4 +58,9 @@ public class HeroPortrait : CharacterRepresentative {
 			statusScreen.chooseHero (this);
 		}
 	}
+
+    public override void onHealModified () {
+        healthScale.x = (float) hero.health / (float) hero.maxHealth;
+        healthBar.localScale = healthScale;
+    }
 }

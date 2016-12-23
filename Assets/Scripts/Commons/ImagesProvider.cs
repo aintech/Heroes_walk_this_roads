@@ -6,12 +6,14 @@ public class ImagesProvider : MonoBehaviour {
 	public Sprite[] weaponSprites, shieldSprites, helmetSprites, armorSprites, gloveSprites, amuletSprites, ringSprites, materialSprites, supplySprites,
 					enemyMarkerSprites, locationMarkerSprites,
 					heroSprites, heroPortraitSprites, heroQueueSprites,
-                    enemySprites, enemyQueueSprtes;
+                    enemySprites, enemyQueueSprtes,
+                    heroActionSprites;
 
 	public static Sprite[] weapons, shields, helmets, armors, gloves, amulets, rings, materials, supplies,
 						   enemyMarkers, locationMarkers,
 						   heroes, heroPortraits, heroQueue,
-                           enemies, enemyQueue;
+                           enemies, enemyQueue,
+                           heroActions;
 
 	public void init () {
         weapons = weaponSprites;
@@ -28,18 +30,27 @@ public class ImagesProvider : MonoBehaviour {
         heroQueue = heroQueueSprites;
         enemies = enemySprites;
         enemyQueue = enemyQueueSprtes;
+        heroActions = heroActionSprites;
 
 		enemyMarkers = enemyMarkerSprites;
         locationMarkers = locationMarkerSprites;
 	}
 
+    public static Sprite getHeroAction (HeroActionType type) {
+        switch (type) {
+            case HeroActionType.ATTACK: return heroActions[0];
+            case HeroActionType.GUARD: return heroActions[1];
+            default: Debug.Log("Unknown action type: " + type); return null;
+        }
+    }
+
 	public static Sprite getHero (HeroType type) {
 		switch (type) {
-		case HeroType.ALIKA: return heroes[0];
-		case HeroType.VICTORIA: return heroes[1];
-		case HeroType.LIARA: return heroes [2];
-		case HeroType.KATE: return heroes [3];
-		default: Debug.Log ("Unknown hero type: " + type); return null;
+    		case HeroType.ALIKA: return heroes[0];
+    		case HeroType.VICTORIA: return heroes[1];
+    		case HeroType.LIARA: return heroes [2];
+    		case HeroType.KATE: return heroes [3];
+    		default: Debug.Log ("Unknown hero type: " + type); return null;
 		}
 	}
 

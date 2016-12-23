@@ -24,7 +24,7 @@ public class ElementEffectPlayer : MonoBehaviour {
 		}
 	}
 
-	public void addEffect (ElementType type, int value, Vector2 pos, int iconsCount) {
+	public void addEffect (ElementType type, Vector2 pos, int iconsCount) {
 		ElementEffect effect = null;
 		foreach (ElementEffect other in elementEffects) {
 			if (!other.isEffectActive()) {
@@ -39,7 +39,7 @@ public class ElementEffectPlayer : MonoBehaviour {
 			elementEffects.Add(effect);
 		}
 
-		effect.activateEffect(type, value, pos, iconsCount);
+		effect.activateEffect(type, pos, iconsCount);
 
 		FightProcessor.FIGHT_ANIM_ENEMY_DONE = false;
 	}

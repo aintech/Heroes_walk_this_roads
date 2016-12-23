@@ -30,6 +30,12 @@ public class FightProcessor : MonoBehaviour {
 
     private EnemyHolder currEnemy;
 
+    [HideInInspector]
+    public HeroAction heroAction;
+
+    [HideInInspector]
+    public Character[] actionTargets;
+
 	public void init (FightScreen fightScreen, ElementsHolder elementsHolder, List<EnemyHolder> enemies) {
 		this.fightScreen = fightScreen;
 		this.elementsHolder = elementsHolder;
@@ -74,7 +80,6 @@ public class FightProcessor : MonoBehaviour {
             case StateMachine.CHARACTER_TURN: checkCharacterTurn(); break;
             case StateMachine.FIGHT_ANIMATION: checkFightAnimation(); break;
             case StateMachine.AFTER_HERO_TURN: afterHeroTurn(); break;
-//            case StateMachine.ICONS_POSITIONING: checkIconPositioning(); break;
             case StateMachine.AFTER_ENEMY_TURN: afterEnemyTurn(); break;
 			case StateMachine.PLAYER_WIN: endFight(true); break;
 			case StateMachine.ENEMY_WIN: endFight(false); break;
@@ -108,11 +113,11 @@ public class FightProcessor : MonoBehaviour {
         if (turnResults.Count == 0) { return; }
 
         foreach (TurnResult result in turnResults) {
-            int damage = Player.randomDamage;
-            if (result.count > 3) {
-                damage += Mathf.RoundToInt((float)Player.randomDamage * .5f) *  (result.count - 3);
-            }
-            fightScreen.elementEffectPlayer.addEffect(result.elementType, damage, result.position, result.count);
+//            int damage = Player.randomDamage;
+//            if (result.count > 3) {
+//                damage += Mathf.RoundToInt((float)Player.randomDamage * .5f) *  (result.count - 3);
+//            }
+            fightScreen.elementEffectPlayer.addEffect(result.elementType, result.position, result.count);
         }
         turnResults.Clear();
     }
@@ -130,26 +135,42 @@ public class FightProcessor : MonoBehaviour {
         if (currCharacter.isHero()) {
             foreach (EnemyHolder holder in enemies) {
                 holder.sendToForeground();
+                holder.enabled = true;
             }
+            fightScreen.fightInterface.setHeroActionsVisible((Hero)currCharacter);
         } else {
             currEnemy = (EnemyHolder)currCharacter.representative;
             currEnemy.setAsCurrentEnemy();
             foreach (EnemyHolder holder in enemies) {
+                holder.enabled = false;
                 if (holder != currEnemy) {
                     holder.sendToBackground();
                 }
             }
+            fightScreen.fightInterface.setHeroActionsVisible(null);
         }
+
 
         switchMachineState(StateMachine.CHARACTER_TURN);
     }
 
     private void checkCharacterTurn () {
-        if (currCharacter.isHero()) {
-//            elementsHolder.checkPlayerInput();
-//            if (PLAYER_MOVE_DONE) {
-//                switchMachineState(StateMachine.ICONS_ANIMATION);
-//            }
+        if (currCharacter.isHero()) { 
+            if (heroAction != null && actionTargets != null) {
+                switch (heroAction.actionType) {
+                    case HeroActionType.ATTACK:
+                        actionTargets[0].hit(currCharacter.randomDamage());
+                        break;
+                    case HeroActionType.GUARD: Debug.Log("Guard!"); break;
+                }
+                heroAction = null;
+                actionTargets = null;
+                switchMachineState(StateMachine.FIGHT_ANIMATION);
+    //            elementsHolder.checkPlayerInput();
+    //            if (PLAYER_MOVE_DONE) {
+    //                switchMachineState(StateMachine.ICONS_ANIMATION);
+    //            }
+            }
         } else { calculateEnemyTurnResult(); }
     }
 
@@ -225,16 +246,17 @@ public class FightProcessor : MonoBehaviour {
 		return new Vector2(x, y);
 	}
 
-	private void calculateEnemyTurnResult () {
+    private void calculateEnemyTurnResult () {
+        Hero target = heroes[UnityEngine.Random.Range(0, heroes.Count)];
+        fightScreen.fightEffectPlayer.playEffect(FightEffectType.DAMAGE, target.hit(currEnemy.enemy.randomDamage()));
 //        if (fightScreen.getStatusEffectByType(StatusEffectType.BLINDED, false).inProgress && (Random.value < .5f)) {
 //            fightScreen.fightEffectPlayer.playEffect(FightEffectType.MISS, 0);
 //        } else {
-            fightScreen.fightEffectPlayer.playEffect(FightEffectType.DAMAGE, Player.hitPlayer(currEnemy.enemy.damage()));
+//            fightScreen.fightEffectPlayer.playEffect(FightEffectType.DAMAGE, Player.hitPlayer(currEnemy.enemy.damage()));
 //        }
 		FIGHT_ANIM_PLAYER_DONE = false;
         switchMachineState(StateMachine.AFTER_ENEMY_TURN);
 	}
-
 
 	public void checkEffectsActive () {
         if (!fightScreen.elementEffectPlayer.isPlayingEffect()) {

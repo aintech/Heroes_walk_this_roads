@@ -20,7 +20,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 
     public ElementEffectPlayer elementEffectPlayer { get; private set; }
 
-	private FightInterface fightInterface;
+    public FightInterface fightInterface { get; private set; }
 
     private List<EnemyHolder> enemies = new List<EnemyHolder>();
 
@@ -101,7 +101,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
         backgroundRender = transform.Find("Background").GetComponent<SpriteRenderer>();
         backgroundRender.gameObject.SetActive(true);
 
-		Player.fightScreen = this;
+//		Player.fightScreen = this;
 
 		return this;
 	}
@@ -118,6 +118,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
         }
         itemDescriptor.setEnabled();
 		playerWin = false;
+        fightInterface.updateHeroActions();
 //		enemy.initEnemy(types[0]);
 		holderColor = new Color(1, 1, 1, 0);
 		iconsHolderRender.color = holderColor;
@@ -137,6 +138,8 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 
 		captureBtn.setVisible (false);
 		releaseBtn.setVisible (false);
+
+        fightInterface.setHeroActionsVisible(null);
 
 		gameObject.SetActive(true);
 	}

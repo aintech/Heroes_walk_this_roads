@@ -1,9 +1,12 @@
 fileFormatVersion: 2
-guid: 69adab02edcaa724b9107a6e0a48f749
-timeCreated: 1482474051
+guid: 4e139adba71390d4a97c59bcd01b49ce
+timeCreated: 1482474615
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: HeroActions_Border
+    21300002: HeroActions_Attack
+    21300004: HeroActions_Guard
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -38,7 +41,7 @@ TextureImporter:
   rGBM: 0
   compressionQuality: 50
   allowsAlphaSplitting: 0
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -51,7 +54,46 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: HeroActions_Border
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 34
+        width: 132
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: HeroActions_Attack
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 33
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: HeroActions_Guard
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 33
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
     outline: []
   spritePackingTag: 
   userData: 

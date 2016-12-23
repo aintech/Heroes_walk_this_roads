@@ -70,15 +70,15 @@ public class StatusEffect : MonoBehaviour {
 	}
 
 	private void applyEffect () {
-		switch (statusType) {
-			case StatusEffectType.REGENERATION:
-				if (asPlayer) {
-					Player.heal (value);
-				} else {
-                    enemy.enemy.heal (value);
-				}
-				break;
-		}
+//		switch (statusType) {
+//			case StatusEffectType.REGENERATION:
+//				if (asPlayer) {
+//					Player.heal (value);
+//				} else {
+//                    enemy.enemy.heal (value);
+//				}
+//				break;
+//		}
 	}
 
 	private void hideEffect () {

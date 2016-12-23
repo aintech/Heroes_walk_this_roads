@@ -31,7 +31,7 @@ public class Gameplay : MonoBehaviour {
 			Vars.heroes.Add(hType, new Hero().init(hType));
 		}
 
-        Player.init();
+//        Player.init();
 
         Camera.main.GetComponent<Utils>().init();
 

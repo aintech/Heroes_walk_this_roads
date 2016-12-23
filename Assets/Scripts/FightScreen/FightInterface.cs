@@ -4,76 +4,89 @@ using System.Collections.Generic;
 
 public class FightInterface : MonoBehaviour {
 
-//	private Transform enemyHealthBar, playerHealthBar;
+    public Transform heroActionPrefab;
 
-//	private EnemyHolder enemy;
-
-//	private Vector3 enemyBarScale, playerBarScale;
-
-//	private Vector3 armorScaleOne = new Vector3(.13f, .13f, 1), armorScaleDouble = new Vector3(.1f, .1f, 1);
-
-//	private float enemyMax;
-
-//	private StrokeText enemyArmorValue;
+    private Transform emptyHolder;
 
 	private FightScreen fightScreen;
 
 	private List<HeroPortrait> portraits = new List<HeroPortrait>();
 
+    private Transform actionsHolder;
+
+    private Dictionary<Hero, Transform> heroActionHolders = new Dictionary<Hero, Transform>();
+
+    private Dictionary<Hero, HeroAction[]> heroActions = new Dictionary<Hero, HeroAction[]>();
+
 	public FightInterface init (FightScreen fightScreen) {
 		this.fightScreen = fightScreen;
-//		enemyHealthBar = transform.Find("Enemy Health Bar").Find("Bar");
-//		playerHealthBar = transform.Find("Player Health Bar").Find("Bar");
-//		enemyArmorValue = transform.Find("Enemy Armor Value").GetComponent<StrokeText>().init("default", 5);
-//		enemyBarScale = enemyHealthBar.localScale;
-//		playerBarScale = playerHealthBar.localScale;
-//		Player.fightInterface = this;
-
-//		Transform statusEffectHolder = transform.Find("Player Statuses");
-//		for (int i = 0; i < statusEffectHolder.childCount; i++) {
-//			fightScreen.playerStatusEffects.Add(statusEffectHolder.GetChild(i).GetComponent<StatusEffect>().init());
-//		}
-//		statusEffectHolder = transform.Find("Enemy Statuses");
-//		for (int i = 0; i < statusEffectHolder.childCount; i++) {
-//			fightScreen.enemyStatusEffects.Add(statusEffectHolder.GetChild(i).GetComponent<StatusEffect>().init());
-//		}
 
 		Transform portraitsHolder = transform.Find("Portraits");
 		for (int i = 0; i < portraitsHolder.childCount; i++) {
 			portraits.Add(portraitsHolder.GetChild(i).GetComponent<HeroPortrait>().init());
 		}
 
+        actionsHolder = transform.Find("Actions Holder");
+        emptyHolder = actionsHolder.Find("Empty Holder");
+
+        updateHeroActions();
+
 		gameObject.SetActive(true);
 
 		return this;
 	}
 
-//	public void setEnemy (EnemyHolder enemy) {
-//		this.enemy = enemy;
-//        enemyMax = enemy.enemy.health;
-//		updateEnemyBar();
-//		updateEnemyArmor();
-//		updatePlayerBar();
-//	}
-//
-//	public void updateEnemyBar () {
-//        enemyBarScale.y = Mathf.Max(1, enemy.enemy.health) / enemyMax;
-//		enemyHealthBar.localScale = enemyBarScale;
-//	}
-//
-//	public void updatePlayerBar () {
-//		playerBarScale.y = (float)Mathf.Max(1, Player.health) / (float)Player.maxHealth;
-//		playerHealthBar.localScale = playerBarScale;
-//	}
-//
-//	public void updateEnemyArmor () {
-//        enemyArmorValue.setText(enemy.enemy.armorClass.ToString());
-//        enemyArmorValue.transform.localScale = enemy.enemy.armorClass < 10? armorScaleOne: armorScaleDouble;
-//	}
+    public void updateHeroActions () {
+        Transform holder;
+        HeroActionType[] actionTypes;
+        HeroAction[] actions;
+        foreach (Hero hero in Vars.heroes.Values) {
+            if (!heroActions.ContainsKey(hero)) {
+                holder = Instantiate<Transform>(emptyHolder);
+                holder.name = hero.type.ToString() + " Actions Holder";
+                holder.SetParent(actionsHolder);
+                holder.localPosition = Vector3.zero;
+
+                heroActionHolders.Add(hero, holder);
+
+                actionTypes = hero.type.heroActions();
+                actions = new HeroAction[actionTypes.Length];
+
+                for (int i = 0; i < actions.Length; i++) {
+                    actions[i] = Instantiate<Transform>(heroActionPrefab).GetComponent<HeroAction>().init(this, hero, actionTypes[i], holder, i);
+                }
+
+                heroActions.Add(hero, actions);
+            }
+        }
+    }
+
+    public void setHeroActionsVisible (Hero hero) {
+        foreach (KeyValuePair<Hero, Transform> pair in heroActionHolders) {
+            pair.Value.gameObject.SetActive(hero != null && pair.Key == hero);
+        }
+//        if(hero != null) {
+//            heroActions[hero][0].setChosen(true);
+//        }
+    }
 
     public void updateHeroRepresentatives () {
         foreach (HeroPortrait port in portraits) {
             port.updateRepresentative();
         }
+    }
+
+    public void chooseAction (HeroAction action) {
+        foreach(HeroAction act in heroActions[action.hero]) {
+            if (act != action) { act.setChosen(false); }
+        }
+        fightScreen.fightProcessor.heroAction = action;
+        switch (action.actionType) {
+            case HeroActionType.GUARD: chooseTargets(new Character[]{action.hero}); break;
+        }
+    }
+
+    public void chooseTargets (Character[] targets) {
+        fightScreen.fightProcessor.actionTargets = targets;
     }
 }
