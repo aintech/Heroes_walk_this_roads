@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class FightInterface : MonoBehaviour {
 
-    public Transform heroActionPrefab;
+    public Transform heroActionPrefab, queuePortraitPrefab;
 
     private Transform emptyHolder;
 
@@ -16,7 +16,13 @@ public class FightInterface : MonoBehaviour {
 
     private Dictionary<Hero, Transform> heroActionHolders = new Dictionary<Hero, Transform>();
 
-    private Dictionary<Hero, HeroAction[]> heroActions = new Dictionary<Hero, HeroAction[]>();
+	private Dictionary<Hero, HeroAction[]> heroActions = new Dictionary<Hero, HeroAction[]>();
+
+	private List<QueuePortrait> queue = new List<QueuePortrait>();
+
+	private List<QueuePortrait> queuePool = new List<QueuePortrait>();
+
+	private Transform queueHolder;
 
 	public FightInterface init (FightScreen fightScreen) {
 		this.fightScreen = fightScreen;
@@ -28,6 +34,8 @@ public class FightInterface : MonoBehaviour {
 
         actionsHolder = transform.Find("Actions Holder");
         emptyHolder = actionsHolder.Find("Empty Holder");
+
+		queueHolder = transform.Find("Queue").Find("Queue Holder");
 
         updateHeroActions();
 
@@ -61,13 +69,28 @@ public class FightInterface : MonoBehaviour {
         }
     }
 
+	public void prepareQueue (List<Character> characters) {
+		int diff = characters.Count - queuePool.Count;
+		if (diff > 0) {
+			QueuePortrait port;
+			for (int i = 0; i < diff; i++) {
+				port = Instantiate<Transform>(queuePortraitPrefab).GetComponent<QueuePortrait>().init(queueHolder);
+				queuePool.Add(port);
+			}
+		}
+		queue.Clear();
+		for (int i = 0; i < characters.Count; i++) {
+			queue.Add(queuePool[i].setCharacter(characters[i], i));
+		}
+	}
+
     public void setHeroActionsVisible (Hero hero) {
         foreach (KeyValuePair<Hero, Transform> pair in heroActionHolders) {
             pair.Value.gameObject.SetActive(hero != null && pair.Key == hero);
         }
-//        if(hero != null) {
-//            heroActions[hero][0].setChosen(true);
-//        }
+        if(hero != null) {
+            heroActions[hero][0].setChosen(true);
+        }
     }
 
     public void updateHeroRepresentatives () {

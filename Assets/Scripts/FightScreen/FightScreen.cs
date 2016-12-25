@@ -134,7 +134,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 //		}
 
         fightInterface.updateHeroRepresentatives();
-        fightProcessor.prepare(types);
+        fightProcessor.prepareQueue(types);
 
 		captureBtn.setVisible (false);
 		releaseBtn.setVisible (false);

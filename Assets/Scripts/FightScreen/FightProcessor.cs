@@ -20,7 +20,7 @@ public class FightProcessor : MonoBehaviour {
 
 	private FightScreen fightScreen;
 
-    private List<Character> queue;
+	private List<Character> queue;
 
     private Character currCharacter;
 
@@ -42,26 +42,30 @@ public class FightProcessor : MonoBehaviour {
 		this.enemies = enemies;
 	}
 
-    public void prepare (List<EnemyType> enemyTypes) {
-        queue = new List<Character>();
+    public void prepareQueue (List<EnemyType> enemyTypes) {
+		queue = new List<Character>();
         foreach (Hero hero in Vars.heroes.Values) {
-            queue.Add(hero);
+			queue.Add(hero);
         }
         foreach (EnemyHolder enemyHolder in enemies) {
-            queue.Add(enemyHolder.enemy);
+			queue.Add(enemyHolder.enemy);
         }
-
-        Character temp;
-        for (int write = 0; write < queue.Count; write++) {
-            for (int sort = 0; sort < queue.Count-1; sort++) {
-                if (queue[sort].initiative > queue[sort+1].initiative || (queue[sort].initiative == queue[sort+1].initiative && !queue[sort].isHero() && queue[sort+1].isHero())) {
-                    temp = queue[sort+1];
-                    queue[sort+1] = queue[sort];
-                    queue[sort] = temp;
-                }
-            }
-        }
+		redefineQueue();
+		fightScreen.fightInterface.prepareQueue(queue);
     }
+
+	private void redefineQueue () {
+		Character temp;
+		for (int write = 0; write < queue.Count; write++) {
+			for (int sort = 0; sort < queue.Count-1; sort++) {
+				if (queue[sort].initiative > queue[sort+1].initiative || (queue[sort].initiative == queue[sort+1].initiative && !queue[sort].isHero() && queue[sort+1].isHero())) {
+					temp = queue[sort+1];
+					queue[sort+1] = queue[sort];
+					queue[sort] = temp;
+				}
+			}
+		}
+	}
 
     public void startFight () {
         characterIndex = -1;
@@ -124,12 +128,20 @@ public class FightProcessor : MonoBehaviour {
 
     private void pickNextCharacter () {
         PLAYER_MOVE_DONE = false;
-        if (currCharacter != null) { currCharacter.representative.choose(false); }
-        characterIndex++;
-        if (characterIndex >= queue.Count) {
-            characterIndex = 0;
-        }
-        currCharacter = queue[characterIndex];
+        if (currCharacter != null) {
+			currCharacter.representative.choose(false);
+			Character ch = queue[0];
+			queue.RemoveAt(0);
+			queue.Add(ch);
+//			queue.Add(queue.re
+		}
+//        characterIndex++;
+//
+//        if (queue.Count == 0) {
+//			startNextTurn();
+//        }
+
+        currCharacter = queue[0];
         currCharacter.representative.choose(true);
 
         if (currCharacter.isHero()) {
@@ -150,9 +162,14 @@ public class FightProcessor : MonoBehaviour {
             fightScreen.fightInterface.setHeroActionsVisible(null);
         }
 
+		fightScreen.fightInterface.prepareQueue(queue);
 
         switchMachineState(StateMachine.CHARACTER_TURN);
     }
+
+//	private void startNextTurn () {
+//		characterIndex = 0;
+//	}
 
     private void checkCharacterTurn () {
         if (currCharacter.isHero()) { 

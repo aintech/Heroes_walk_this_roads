@@ -20,7 +20,7 @@ public class EnemyHolder : CharacterRepresentative {
 
     private string backgroundLayerName = "Fight Screen", foregroundLayerName = "Fight Screen Foreground";
 
-    private BoxCollider2D coll;
+	private PolygonCollider2D coll;
 
     private GameObject stroke;
 
@@ -69,7 +69,7 @@ public class EnemyHolder : CharacterRepresentative {
         if (coll != null) {
             Destroy(coll);
         }
-        coll = gameObject.AddComponent<BoxCollider2D>();
+		coll = gameObject.AddComponent<PolygonCollider2D>();
 
         sendToBackground();
 

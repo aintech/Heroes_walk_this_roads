@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e7be655b3b23b104d92a6dde128b2e54
-timeCreated: 1482329725
+timeCreated: 1482603799
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -119,8 +119,8 @@ TextureImporter:
       name: FightInterface_PortraitHealthBar
       rect:
         serializedVersion: 2
-        x: 1539
-        y: 409
+        x: 1567
+        y: 498
         width: 20
         height: 120
       alignment: 7

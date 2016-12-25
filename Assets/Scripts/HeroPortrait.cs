@@ -60,7 +60,7 @@ public class HeroPortrait : CharacterRepresentative {
 	}
 
     public override void onHealModified () {
-        healthScale.x = (float) hero.health / (float) hero.maxHealth;
+		healthScale.y = (float) hero.health / (float) hero.maxHealth;
         healthBar.localScale = healthScale;
     }
 }
