@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Gameplay : MonoBehaviour {
     
@@ -31,8 +32,6 @@ public class Gameplay : MonoBehaviour {
 			Vars.heroes.Add(hType, new Hero().init(hType));
 		}
 
-//        Player.init();
-
         Camera.main.GetComponent<Utils>().init();
 
         Transform commons = GameObject.Find("Commons").transform;
@@ -57,6 +56,15 @@ public class Gameplay : MonoBehaviour {
     public void startGame () {
         statusScreen.inventory.fillWithRandomItems(50, "Player Item");
         statusScreen.inventory.calculateFreeVolume();
+        giveItemsToHeroes();
         town.walkInTown(LocationType.ROUTINE);
+    }
+
+    private void giveItemsToHeroes () {
+        foreach (KeyValuePair<HeroType, Hero> pair in Vars.heroes) {
+            Item weapon = Instantiate<Transform>(ItemFactory.itemPrefab).GetComponent<Item>().init(ItemFactory.createWeaponData(WeaponType.NOBLE_SWORD));
+            weapon.gameObject.SetActive(false);
+            pair.Value.equipWeapon((WeaponData)weapon.itemData);
+        }
     }
 }

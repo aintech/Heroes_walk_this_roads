@@ -2,6 +2,6 @@
 using System.Collections;
 
 public abstract class CharacterRepresentative : MonoBehaviour {
-    public abstract void choose (bool asActive);
+    public abstract void setChosen (bool asChosen);
     public abstract void onHealModified ();
 }

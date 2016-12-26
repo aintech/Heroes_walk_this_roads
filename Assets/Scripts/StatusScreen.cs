@@ -24,6 +24,8 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 
 	public Hero chosenHero { get; private set; }
 
+    private HeroType lastSelected = HeroType.ALIKA;
+
 	public StatusScreen init (ItemDescriptor itemDescriptor) {
 		this.itemDescriptor = itemDescriptor;
         itemDescriptor.statusScreen = this;
@@ -82,25 +84,10 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 			portraits.Add(portraitsHolder.GetChild(i).GetComponent<HeroPortrait>().init(this));
 		}
 
-		chooseHero(portraits[0]);
-        updateAttributes();
-
-//        Player.statusScreen = this;
-
         gameObject.SetActive(false);
 
 		return this;
 	}
-
-    public void updateAttributes () {
-		healthValue.setText(chosenHero.health.ToString());// + (Player.health < Player.maxHealth? "/" + Player.maxHealth.ToString(): "");
-		experienceValue.setText(((int)chosenHero.experience).ToString() + " %");
-		damageValue.setText(chosenHero.damage().ToString());
-		armorValue.setText(chosenHero.armorClass.ToString());
-		strengthValue.setText(chosenHero.strength.ToString());
-		enduranceValue.setText(chosenHero.endurance.ToString());
-		agilityValue.setText(chosenHero.agility.ToString());
-    }
 
     public EquipmentSlot getEquipmentSlot (ItemType type) {
         foreach (EquipmentSlot slot in equipmentSlots) {
@@ -125,12 +112,12 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
             port.updateRepresentative();
         }
 
-//		UserInterface.showInterface = false;
         itemDescriptor.setEnabled();
 
 		inventory.setContainerScreen(this, 6);
 		inventory.setInventoryToBegin ();
 
+        chooseHero(lastSelected);
         updateAttributes();
 
 		transform.position = Vector3.zero;
@@ -143,6 +130,16 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 
 		gameObject.SetActive(true);
 	}
+
+    public void updateAttributes () {
+        healthValue.setText(chosenHero.health.ToString());// + (Player.health < Player.maxHealth? "/" + Player.maxHealth.ToString(): "");
+        experienceValue.setText(((int)chosenHero.experience).ToString() + " %");
+        damageValue.setText(chosenHero.damage().ToString());
+        armorValue.setText(chosenHero.armorClass.ToString());
+        strengthValue.setText(chosenHero.strength.ToString());
+        enduranceValue.setText(chosenHero.endurance.ToString());
+        agilityValue.setText(chosenHero.agility.ToString());
+    }
 
 	public void close (bool byInputProcessor) {
 		hideItemInfo();
@@ -249,14 +246,14 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 		}
 	}
 
-	public void chooseHero (HeroPortrait HeroPortrait) {
+	public void chooseHero (HeroType type) {
 		foreach (EquipmentSlot slot in equipmentSlots) {
 			slot.hideItem();
 		}
 		foreach (HeroPortrait portrait in portraits) {
-			portrait.choose(portrait == HeroPortrait);
+            portrait.setChosen(portrait.type == type);
 		}
-		chosenHero = Vars.heroes[HeroPortrait.type];
+		chosenHero = Vars.heroes[type];
 
 		if (chosenHero.weapon != null) { getEquipmentSlot(ItemType.WEAPON).setItem(chosenHero.weapon.item); }
 		if (chosenHero.armor != null) { getEquipmentSlot(ItemType.ARMOR).setItem(chosenHero.armor.item); }
@@ -269,6 +266,7 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 
 		playerRender.sprite = ImagesProvider.getHero(chosenHero.type);
 
+        lastSelected = type;
 		updateAttributes();
 	}
 

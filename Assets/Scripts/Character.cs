@@ -24,6 +24,9 @@ public abstract class Character {
 
 	public Dictionary<StatusEffectType, StatusEffect> statusEffects = new Dictionary<StatusEffectType, StatusEffect>();
 
+    [HideInInspector]
+    public bool moveDone;
+
 	public void innerInit (int strength, int endurance, int agility) {
 		this.strength = strength;
 		this.endurance = endurance;

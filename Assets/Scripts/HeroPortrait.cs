@@ -49,13 +49,13 @@ public class HeroPortrait : CharacterRepresentative {
         Vars.heroes[type].representative = this;
     }
 
-	public override void choose (bool asActive) {
-		backgroundRender.sprite = asActive ? activeBG : normalBG;
+	public override void setChosen (bool asChosen) {
+        backgroundRender.sprite = asChosen ? activeBG : normalBG;
 	}
 
 	void Update () {
 		if (Input.GetMouseButtonDown (0) && Utils.hit != null && Utils.hit == coll) {
-			statusScreen.chooseHero (this);
+            statusScreen.chooseHero (type);
 		}
 	}
 

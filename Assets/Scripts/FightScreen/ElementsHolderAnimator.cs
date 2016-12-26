@@ -80,7 +80,7 @@ public class ElementsHolderAnimator : MonoBehaviour {
 		index++;
 		if (index > ElementsHolder.COLUMNS && index > ElementsHolder.ROWS) {
 			if (!apperance) {
-                fightScreen.fightProcessor.startTurn ();
+                fightScreen.fightProcessor.startFightPart ();
 			}
 			apperance = enabled = false;
             ElementsHolder.ELEMENTS_ANIM_DONE = true;

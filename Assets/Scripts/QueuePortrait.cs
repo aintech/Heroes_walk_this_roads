@@ -33,11 +33,13 @@ public class QueuePortrait : MonoBehaviour {
 		newPosition.y = yOffset * index;
 		transform.localPosition = newPosition;
 		setAsActive(index == 0);
+        setAsEnable(!character.moveDone);
+        gameObject.SetActive(true);
 		return this;
 	}
 
-	public void disable (bool dis) {
-		portraitRender.color = dis? new Color32(255, 255, 255, 100): new Color32(255, 255, 255, 255);
+	public void setAsEnable (bool enable) {
+        portraitRender.color = enable? new Color32(255, 255, 255, 255): new Color32(255, 255, 255, 100);
 	}
 
 	public void setAsActive (bool asActive) {

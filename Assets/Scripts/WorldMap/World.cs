@@ -98,23 +98,23 @@ public class World : MonoBehaviour {
     }
 
     private void fillWithEnemies () {
-        enemies.Add(Instantiate<Transform>(enemyMarkerPrefab).GetComponent<EnemyMarker>().init(this, landscape, new List<EnemyType>(new EnemyType[]{EnemyType.ROGUE, EnemyType.ROGUE, EnemyType.ROGUE}), worldLocations[LocationType.ROUTINE]));
-//        List<EnemyType> types;
-//        int count;
-//        foreach (Location location in worldLocations.Values) {
-//            if (location.type.isEnemyCamp()) {
-//                EnemyType[] enemyTypes = location.type.spawn();
-//                types = new List<EnemyType>();
-//                count = UnityEngine.Random.Range(1, 4);
-//                for (int i = 0; i < count; i++) {
-//                    types.Add(enemyTypes[UnityEngine.Random.Range(0, enemyTypes.Length)]);
-//                }
-//                for (int i = 0; i < 5; i++) {
-//                    EnemyMarker marker = Instantiate<Transform>(enemyMarkerPrefab).GetComponent<EnemyMarker>().init(this, landscape, types, location);
-//                    enemies.Add(marker);
-//                }
-//            }
-//        }
+//        enemies.Add(Instantiate<Transform>(enemyMarkerPrefab).GetComponent<EnemyMarker>().init(this, landscape, new List<EnemyType>(new EnemyType[]{EnemyType.ROGUE, EnemyType.ROGUE, EnemyType.ROGUE}), worldLocations[LocationType.ROUTINE]));
+        List<EnemyType> types;
+        int count;
+        foreach (Location location in worldLocations.Values) {
+            if (location.type.isEnemyCamp()) {
+                EnemyType[] enemyTypes = location.type.spawn();
+                types = new List<EnemyType>();
+                count = UnityEngine.Random.Range(1, 4);
+                for (int i = 0; i < count; i++) {
+                    types.Add(enemyTypes[UnityEngine.Random.Range(0, enemyTypes.Length)]);
+                }
+                for (int i = 0; i < 5; i++) {
+                    EnemyMarker marker = Instantiate<Transform>(enemyMarkerPrefab).GetComponent<EnemyMarker>().init(this, landscape, types, location);
+                    enemies.Add(marker);
+                }
+            }
+        }
     }
 
     public void showWorld (LocationType type) {

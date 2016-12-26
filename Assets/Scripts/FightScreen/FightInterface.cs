@@ -69,7 +69,10 @@ public class FightInterface : MonoBehaviour {
         }
     }
 
-	public void prepareQueue (List<Character> characters) {
+	public void updateQueue (List<Character> characters) {
+        foreach (QueuePortrait qp in queuePool) {
+            qp.gameObject.SetActive(false);
+        }
 		int diff = characters.Count - queuePool.Count;
 		if (diff > 0) {
 			QueuePortrait port;

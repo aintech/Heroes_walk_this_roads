@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class EnemyHolder : CharacterRepresentative {
 
-    public Enemy enemy { get; private set; }
+    public Enemy character { get; private set; }
 
 	private SpriteRenderer enemyRender, barRender, barBGRender, barHolderRender;
 
@@ -52,8 +52,8 @@ public class EnemyHolder : CharacterRepresentative {
 
     public Enemy initEnemy (EnemyType enemyType, float xPosition, int order) {
         initPosition.x = xPosition;
-        enemy = new Enemy().init(enemyType);
-        enemy.representative = this;
+        character = new Enemy().init(enemyType);
+        character.representative = this;
         updateSprite();
         transform.position = initPosition;
 
@@ -71,15 +71,17 @@ public class EnemyHolder : CharacterRepresentative {
         }
 		coll = gameObject.AddComponent<PolygonCollider2D>();
 
+        onHealModified();
+
         sendToBackground();
 
-        return enemy;
+        return character;
 	}
 
     void Update () {
         if (Input.GetMouseButtonDown(0) && Utils.hit != null && Utils.hit == coll) {
             if (fightScreen.fightProcessor.heroAction != null) {
-                fightScreen.fightProcessor.actionTargets = new Character[]{enemy};
+                fightScreen.fightProcessor.actionTargets = new Character[]{character};
             }
         }
         if (Utils.hit != null && Utils.hit == coll) {
@@ -97,13 +99,8 @@ public class EnemyHolder : CharacterRepresentative {
     }
 
 	private void updateSprite () {
-        enemyRender.sprite = ImagesProvider.getEnemy(enemy.type);// Imager.getEnemy(enemy.type, (float) enemy.health / (float) enemy.maxHealth);
+        enemyRender.sprite = ImagesProvider.getEnemy(character.type);// Imager.getEnemy(enemy.type, (float) enemy.health / (float) enemy.maxHealth);
 	}
-
-    public void setAsActive (bool asActive) {
-        enabled = asActive;
-        if (coll != null) { coll.enabled = asActive; }
-    }
 
     public void sendToBackground () {
         setAsActive(false);
@@ -142,8 +139,13 @@ public class EnemyHolder : CharacterRepresentative {
     }
 
     public override void onHealModified () {
-        healthScale.x = (float)enemy.health / (float) enemy.maxHealth;
-        healthBar.localScale = healthScale;
+        if (character.health <= 0) {
+            fightScreen.fightProcessor.removeFromQueue(character);
+            gameObject.SetActive(false);
+        } else {
+            healthScale.x = (float)character.health / (float) character.maxHealth;
+            healthBar.localScale = healthScale;
+        }
     }
 
 	public void playHit () {
@@ -152,11 +154,12 @@ public class EnemyHolder : CharacterRepresentative {
 //		setSprite();
 	}
 
-    public override void choose (bool asActive) {
+    public override void setChosen (bool asChosen) {
 //        throw new System.NotImplementedException ();
     }
 
-	public void destroyEnemy () {
-		gameObject.SetActive(false);
-	}
+    public void setAsActive (bool asActive) {
+        enabled = asActive;
+        if (coll != null) { coll.enabled = asActive; }
+    }
 }

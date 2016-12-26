@@ -220,8 +220,9 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 		foreach (StatusEffect eff in enemyStatusEffects) { eff.endEffect(); }
 
 		itemDescriptor.setDisabled();
-		elementsHolder.holderAnimator.playElementsDisapperance ();
-		elementsHolder.setActive(false);
+        showFightEndDisplay();
+//		elementsHolder.holderAnimator.playElementsDisapperance ();
+//		elementsHolder.setActive(false);
 	}
 
 	public void showFightEndDisplay () {
@@ -229,7 +230,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 //		foreach (StasisChamber chamber in chambersHolder.chambers) {
 //			if (chamber.isEmpty) { emptyChamber = true; break; }
 //		}
-		captureBtn.setText(emptyChamber? "В стазис камеру": "Нет свободных камер");
+        captureBtn.setText("Захватить");//emptyChamber? "В стазис камеру": "Нет свободных камер");
 		captureBtn.setActive (emptyChamber);
 
 		captureBtn.setVisible (true);
