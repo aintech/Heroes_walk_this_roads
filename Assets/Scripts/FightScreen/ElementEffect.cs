@@ -7,7 +7,7 @@ public class ElementEffect : MonoBehaviour {
 
 	public Sprite[] damageSprites;
 
-	private static float enemyX = 4.2f;
+//	private static float enemyX = 4.2f;
 
 	private SpriteRenderer element, effectHit;
 

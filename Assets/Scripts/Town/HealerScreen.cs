@@ -5,7 +5,7 @@ public class HealerScreen : TownScreen {
 
     private Button healBtn;
 
-    private int healCost;
+    private int healCost = 0;
 
     public override TownScreen init (Town town) {
         this.town = town;

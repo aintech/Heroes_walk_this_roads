@@ -50,8 +50,8 @@ public static class SupplyDescription {
 			case SupplyType.ARMOR_POTION: return StatusEffectType.ARMORED;
 			case SupplyType.REGENERATION_POTION: return StatusEffectType.REGENERATION;
 			case SupplyType.SPEED_POTION: return StatusEffectType.SPEED;
-			case SupplyType.HEALTH_POTION: return StatusEffectType.HEAL;
-			default: Debug.Log ("Unmapped supply type: " + type); return StatusEffectType.NONE;
+//			case SupplyType.HEALTH_POTION: return StatusEffectType.HEAL;
+            default: Debug.Log ("Unmapped supply type: " + type); return StatusEffectType.ARMORED;
 		}
 	}
 
@@ -63,7 +63,7 @@ public static class SupplyDescription {
 			case SupplyType.REGENERATION_POTION: return FightEffectType.REGENERATION;
 			case SupplyType.SPEED_POTION: return FightEffectType.SPEED;
 			case SupplyType.HEALTH_POTION: return FightEffectType.HEAL;
-			default: Debug.Log("Unknown supply type: " + type); return FightEffectType.NONE;
+            default: Debug.Log("Unknown supply type: " + type); return FightEffectType.DAMAGE;
 		}
 	}
 }

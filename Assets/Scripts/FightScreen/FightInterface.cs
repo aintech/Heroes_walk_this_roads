@@ -10,7 +10,7 @@ public class FightInterface : MonoBehaviour {
 
 	private FightScreen fightScreen;
 
-	private List<HeroPortrait> portraits = new List<HeroPortrait>();
+    public List<HeroPortrait> portraits { get; private set; }
 
     private Transform actionsHolder;
 
@@ -28,6 +28,7 @@ public class FightInterface : MonoBehaviour {
 		this.fightScreen = fightScreen;
 
 		Transform portraitsHolder = transform.Find("Portraits");
+        portraits = new List<HeroPortrait>();
 		for (int i = 0; i < portraitsHolder.childCount; i++) {
 			portraits.Add(portraitsHolder.GetChild(i).GetComponent<HeroPortrait>().init());
 		}
@@ -99,6 +100,7 @@ public class FightInterface : MonoBehaviour {
     public void updateHeroRepresentatives () {
         foreach (HeroPortrait port in portraits) {
             port.updateRepresentative();
+            port.onHealModified();
         }
     }
 

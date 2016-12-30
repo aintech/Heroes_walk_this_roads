@@ -50,4 +50,9 @@ public class ElementsPool : MonoBehaviour {
 		earthCountText.setText(earthCount == 0? "": earthCount.ToString());
 		waterCountText.setText(waterCount == 0? "": waterCount.ToString());
 	}
+
+    public void clear () {
+        fireCount = airCount = waterCount = earthCount = 0;
+        updateCounters();
+    }
 }

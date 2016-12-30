@@ -68,7 +68,7 @@ public class MessageContainer {
 			switch (portraitName) {
 //				case "ALIKA": portrait = Imager.getPortrait(CharacterType.ALIKA); break;
 //				case "ROKOT": portrait = Imager.getPortrait(CharacterType.ROKOT); break;
-				default: Debug.Log("Unknown portrait: " + portraitName); break;
+                default: portrait = null; Debug.Log("Unknown portrait: " + portraitName); break;
 			}
 		}
 

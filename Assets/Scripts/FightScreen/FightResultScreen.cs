@@ -114,7 +114,7 @@ public class FightResultScreen : MonoBehaviour, ButtonHolder {
 //		background.gameObject.SetActive(false);
 //		foreground.gameObject.SetActive(false);
 		playAnim = true;
-        render.sprite = Imager.getEnemy(enemy.character.type, 0);
+        render.sprite = Imager.getEnemy(enemy.enemy.type, 0);
 		captureBtn.setVisible(false);
 		releaseBtn.setVisible(false);
 		chambersAvailable.setText("");

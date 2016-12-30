@@ -9,7 +9,7 @@ public class HeroPortrait : CharacterRepresentative {
 
 	private StatusScreen statusScreen;
 
-	private SpriteRenderer portraitRender, backgroundRender;
+	private SpriteRenderer portraitRender, backgroundRender, healthRender;
 
 	private Transform healthBar;
 
@@ -19,22 +19,32 @@ public class HeroPortrait : CharacterRepresentative {
 
     private Hero hero;
 
+    private Color32 full = new Color32(0, 255, 0, 255), wounded = new Color32(255, 255, 0, 255), critical = new Color32(255, 0, 0, 255);
+
+    private Color32 normalColor = new Color32(255, 255, 255, 255), transparColor = new Color32(255, 255, 255, 100);
+
+    public HeroPortraitAnimator animator { get; private set; }
+
 	public HeroPortrait init () {
 		return init (null);
 	}
 
     public HeroPortrait init (StatusScreen statusScreen) {
 		this.statusScreen = statusScreen;
-        this.hero = hero;
+        innerInit();
+
+        animator = GetComponent<HeroPortraitAnimator>().init();
 
 		portraitRender = transform.Find ("Portrait").GetComponent<SpriteRenderer> ();
 		backgroundRender = transform.Find ("Background").GetComponent<SpriteRenderer> ();
 
 		healthBar = transform.Find ("Health Bar");
+        healthRender = healthBar.GetComponent<SpriteRenderer>();
 
 		coll = backgroundRender.GetComponent<BoxCollider2D> ();
 
 		hero = Vars.heroes [type];
+        character = hero;
 
 		portraitRender.sprite = ImagesProvider.getHeroPortrait(type);
 		portraitRender.gameObject.SetActive (hero != null);
@@ -46,7 +56,8 @@ public class HeroPortrait : CharacterRepresentative {
 	}
 
     public void updateRepresentative () {
-        Vars.heroes[type].representative = this;
+        Vars.heroes[type].refreshRepresentative(this);
+        setAsActive(hero.health > 0);
     }
 
 	public override void setChosen (bool asChosen) {
@@ -60,7 +71,16 @@ public class HeroPortrait : CharacterRepresentative {
 	}
 
     public override void onHealModified () {
-		healthScale.y = (float) hero.health / (float) hero.maxHealth;
+        if (hero.health <= 0) {
+            healthScale.y = 0;
+        } else {
+		    healthScale.y = (float) hero.health / (float) hero.maxHealth;
+        }
+        healthRender.color = hero.health == hero.maxHealth? full: ((float)hero.health / (float)hero.maxHealth) <= .25f? critical: wounded;
         healthBar.localScale = healthScale;
+    }
+
+    public void setAsActive (bool asActive) {
+        portraitRender.color = asActive? normalColor: transparColor;
     }
 }

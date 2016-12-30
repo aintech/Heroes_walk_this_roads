@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: c466716c67d607e4abe5dc284be4bf61
-timeCreated: 1479132747
+timeCreated: 1483004821
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -62,10 +62,10 @@ TextureImporter:
       name: StatusEffects_Paralized
       rect:
         serializedVersion: 2
-        x: 7
-        y: 18
-        width: 110
-        height: 90
+        x: 42
+        y: 8
+        width: 31
+        height: 31
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -75,10 +75,10 @@ TextureImporter:
       name: StatusEffects_Blinded
       rect:
         serializedVersion: 2
-        x: 131
-        y: 18
-        width: 110
-        height: 90
+        x: 5
+        y: 8
+        width: 31
+        height: 31
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -88,10 +88,10 @@ TextureImporter:
       name: StatusEffects_Poisoned
       rect:
         serializedVersion: 2
-        x: 7
-        y: 131
-        width: 110
-        height: 91
+        x: 201
+        y: 8
+        width: 31
+        height: 31
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -101,10 +101,10 @@ TextureImporter:
       name: StatusEffects_Regeneration
       rect:
         serializedVersion: 2
-        x: 131
-        y: 131
-        width: 110
-        height: 91
+        x: 122
+        y: 8
+        width: 31
+        height: 31
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -114,10 +114,10 @@ TextureImporter:
       name: StatusEffects_Armored
       rect:
         serializedVersion: 2
-        x: 7
-        y: 240
-        width: 110
-        height: 90
+        x: 163
+        y: 8
+        width: 31
+        height: 31
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -127,10 +127,10 @@ TextureImporter:
       name: StatusEffects_Speed
       rect:
         serializedVersion: 2
-        x: 131
-        y: 240
-        width: 110
-        height: 90
+        x: 81
+        y: 8
+        width: 31
+        height: 31
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

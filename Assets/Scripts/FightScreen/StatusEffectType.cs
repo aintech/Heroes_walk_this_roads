@@ -2,7 +2,7 @@
 using System.Collections;
 
 public enum StatusEffectType {
-	NONE, BLINDED, PARALIZED, REGENERATION, ARMORED, HEAL, SPEED
+	BLINDED, PARALIZED, REGENERATION, ARMORED, SPEED
 }
 
 public static class StatusEffectDescriptor {
@@ -13,14 +13,14 @@ public static class StatusEffectDescriptor {
 			case StatusEffectType.REGENERATION: return "Регенерация";
 			case StatusEffectType.ARMORED: return "Защита";
 			case StatusEffectType.SPEED: return "Ускорение";
-			case StatusEffectType.HEAL: return "Лечение";
+//			case StatusEffectType.HEAL: return "Лечение";
 			default: Debug.Log("Unknown status effect type: " + type); return "";
 		}
 	}
 
-	public static bool withoutStatusHolder (this StatusEffectType type) {
-		return type == StatusEffectType.HEAL || type == StatusEffectType.NONE;
-	}
+//	public static bool withoutStatusHolder (this StatusEffectType type) {
+//		return type == StatusEffectType.HEAL || type == StatusEffectType.NONE;
+//	}
 
 	public static bool isStatusActiveOnNextTurn (this StatusEffectType type) {
 		return type == StatusEffectType.BLINDED || type == StatusEffectType.PARALIZED;

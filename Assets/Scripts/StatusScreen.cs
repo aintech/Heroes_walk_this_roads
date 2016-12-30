@@ -110,6 +110,7 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 
         foreach (HeroPortrait port in portraits) {
             port.updateRepresentative();
+            port.onHealModified();
         }
 
         itemDescriptor.setEnabled();

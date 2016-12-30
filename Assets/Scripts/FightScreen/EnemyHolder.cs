@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class EnemyHolder : CharacterRepresentative {
 
-    public Enemy character { get; private set; }
+    public Enemy enemy { get; private set; }
 
 	private SpriteRenderer enemyRender, barRender, barBGRender, barHolderRender;
 
@@ -26,8 +26,12 @@ public class EnemyHolder : CharacterRepresentative {
 
     private bool stroked, chosen;
 
-    public EnemyHolder init (FightScreen fightScreen) {
+    public EnemyHolder init (FightScreen fightScreen, Transform holder) {
 		this.fightScreen = fightScreen;
+        innerInit();
+
+        transform.SetParent(holder);
+
         enemyRender = GetComponent<SpriteRenderer>();
 
         Transform healthBarHolder = transform.Find("Health Bar");
@@ -52,8 +56,9 @@ public class EnemyHolder : CharacterRepresentative {
 
     public Enemy initEnemy (EnemyType enemyType, float xPosition, int order) {
         initPosition.x = xPosition;
-        character = new Enemy().init(enemyType);
-        character.representative = this;
+        enemy = new Enemy().init(enemyType);
+        character = enemy;
+        character.refreshRepresentative(this);
         updateSprite();
         transform.position = initPosition;
 
@@ -75,7 +80,7 @@ public class EnemyHolder : CharacterRepresentative {
 
         sendToBackground();
 
-        return character;
+        return enemy;
 	}
 
     void Update () {
@@ -99,7 +104,7 @@ public class EnemyHolder : CharacterRepresentative {
     }
 
 	private void updateSprite () {
-        enemyRender.sprite = ImagesProvider.getEnemy(character.type);// Imager.getEnemy(enemy.type, (float) enemy.health / (float) enemy.maxHealth);
+        enemyRender.sprite = ImagesProvider.getEnemy(enemy.type);// Imager.getEnemy(enemy.type, (float) enemy.health / (float) enemy.maxHealth);
 	}
 
     public void sendToBackground () {

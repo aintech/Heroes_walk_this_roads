@@ -36,12 +36,6 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 
 	private ItemDescriptor itemDescriptor;
 
-    public List<StatusEffect> playerStatusEffects { get; private set; }
-
-    public List<StatusEffect> enemyStatusEffects { get; private set; }
-
-	private List<StatusEffect> effList;
-
 	private Vector3 playerStatusStartPosition = new Vector3(6.8f, 0, 0),
 					enemyStatusStartPosition = new Vector3(6.9f, 7.5f, 0);
 
@@ -60,12 +54,11 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 
     private int topLayerOrder;
 
+    private Transform enemyHolders;
+
 	public FightScreen init () {
         statusScreen = Vars.gameplay.statusScreen;
         itemDescriptor = Vars.gameplay.itemDescriptor;
-
-        playerStatusEffects = new List<StatusEffect>();
-        enemyStatusEffects = new List<StatusEffect>();
 
 		fightProcessor = GetComponent<FightProcessor>();
 		itemDescriptor.fightScreen = this;
@@ -74,11 +67,9 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 		fightEffectPlayer = transform.Find("Fight Effect Player").GetComponent<FightEffectPlayer>().init();
 		elementEffectPlayer = transform.Find("ElementEffectPlayer").GetComponent<ElementEffectPlayer>();
 		fightInterface = transform.Find("Fight Interface").GetComponent<FightInterface>().init(this);
-//		enemy = transform.Find("Enemy").GetComponent<EnemyHolder>();
-//		enemyPos = enemy.transform.localPosition;
-//		enemy.init(this);
 
         elementsPool = transform.Find("Elements Pool").GetComponent<ElementsPool>().init();
+        enemyHolders = transform.Find("Enemy Holders");
 
         elementEffectPlayer.init(this, elementsPool);
 		fightProcessor.init(this, elementsHolder, enemies);
@@ -101,8 +92,6 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
         backgroundRender = transform.Find("Background").GetComponent<SpriteRenderer>();
         backgroundRender.gameObject.SetActive(true);
 
-//		Player.fightScreen = this;
-
 		return this;
 	}
 
@@ -119,19 +108,14 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
         itemDescriptor.setEnabled();
 		playerWin = false;
         fightInterface.updateHeroActions();
-//		enemy.initEnemy(types[0]);
+
 		holderColor = new Color(1, 1, 1, 0);
 		iconsHolderRender.color = holderColor;
+
 		elementsHolder.initializeElements();
-//		enemy.transform.localPosition = new Vector2(10, enemyPos.y);
-//		enemyPos = enemy.transform.localPosition;
-//		fightInterface.setEnemy(enemy);
 		elementsHolder.setActive(true);
 
 		fightStarted = startAnimDone = false;
-//		foreach (StatusEffect eff in enemyStatusEffects) {
-//			eff.initEnemy (enemy);
-//		}
 
         fightInterface.updateHeroRepresentatives();
         fightProcessor.prepareQueue(types);
@@ -147,19 +131,20 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
     private void initEnemies (List<EnemyType> types) {
         if (types.Count > enemies.Count) {
             while (enemies.Count < types.Count) {
-                enemies.Add(Instantiate<Transform>(enemyHolderPrefab).GetComponent<EnemyHolder>().init(this));
+                enemies.Add(Instantiate<Transform>(enemyHolderPrefab).GetComponent<EnemyHolder>().init(this, enemyHolders));
             }
         }
         float scrWidth = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height)).x * 2;
         float halfScreen = scrWidth * .5f;
         float offset = scrWidth / (float) (types.Count + 1);
+        int sortingOrderStep = 10;
 //        float offset = scrWidth / (float) (types.Count * 2);
         for (int i = 0; i < types.Count; i++) {
-            enemies[i].initEnemy(types[i], (offset * (i + 1)) - halfScreen, (i * 5 + 5));
+            enemies[i].initEnemy(types[i], (offset * (i + 1)) - halfScreen, (i * sortingOrderStep + sortingOrderStep));
 //            enemies[i].initEnemy(types[i], (offset * ((i * 2) + 1)) - halfScreen);
         }
 
-        topLayerOrder = (types.Count * 5);
+        topLayerOrder = (types.Count * sortingOrderStep);
 //        backgroundRender.sortingOrder = topLayerOrder - 1;
     }
 
@@ -175,7 +160,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 		if (!fightStarted) {
 			if (!startAnimDone) {
 				animatingFightStart();
-            } else if (ElementsHolder.ELEMENTS_ANIM_DONE) {
+            } else {// if (ElementsHolder.ELEMENTS_ANIM_DONE) {
 				fightStarted = true;
 				fightProcessor.startFight();
 			}
@@ -205,6 +190,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 
 	public void finishFight (bool playerWin) {
 		this.playerWin = playerWin;
+        elementsPool.clear();
 //		ENEMY_DEAD_ANIM_DONE = !playerWin;
 
 //		if (playerWin) {
@@ -216,11 +202,15 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 //			showFightResultScreen();
 //		}
 
-		foreach (StatusEffect eff in playerStatusEffects) { eff.endEffect(); }
-		foreach (StatusEffect eff in enemyStatusEffects) { eff.endEffect(); }
+        foreach (EnemyHolder enem in enemies) { enem.character.clearStatuses(); }
+        foreach (HeroPortrait port in fightInterface.portraits) { port.character.clearStatuses(); }
 
 		itemDescriptor.setDisabled();
-        showFightEndDisplay();
+        if (playerWin) {
+            showFightEndDisplay();
+        } else {
+            closeFightScreen();
+        }
 //		elementsHolder.holderAnimator.playElementsDisapperance ();
 //		elementsHolder.setActive(false);
 	}
@@ -271,45 +261,45 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 	}
 
 	public void useSupply (SupplySlot slot) {
-		if (slot.item != null) {
-			SupplyData data = (SupplyData)slot.item.itemData;
-			if (fightProcessor.canUseSupply (data.type)) {
-				bool toPlayer = data.type != SupplyType.BLINDING_POWDER && data.type != SupplyType.PARALIZING_DUST;
-//				StatusEffect statusEffect = getStatusEffectByType(data.type.toStatusEffectType(), toPlayer);
-				FightEffectType fightEffectType = data.type.toFightEffectType();
-
-//				if (data.type == SupplyType.HEALTH_POTION) {
-//					fightEffectPlayer.playEffect(fightEffectType, Player.heal(data.value));
-//				} else if (data.type == SupplyType.PARALIZING_DUST || data.type == SupplyType.BLINDING_POWDER) {
-//					fightEffectPlayer.playEffectOnEnemy (fightEffectType, 0);
-//					statusEffect.addStatus (data.value, data.duration);
-//				} else if (data.type == SupplyType.ARMOR_POTION || data.type == SupplyType.REGENERATION_POTION || data.type == SupplyType.SPEED_POTION) {
-//					fightEffectPlayer.playEffect (fightEffectType, data.value);
-//					statusEffect.addStatus (data.value, data.duration);
-//				} else {
-//					Debug.Log("Unknown status effect type");
+//		if (slot.item != null) {
+//			SupplyData data = (SupplyData)slot.item.itemData;
+//			if (fightProcessor.canUseSupply (data.type)) {
+//				bool toPlayer = data.type != SupplyType.BLINDING_POWDER && data.type != SupplyType.PARALIZING_DUST;
+////				StatusEffect statusEffect = getStatusEffectByType(data.type.toStatusEffectType(), toPlayer);
+//				FightEffectType fightEffectType = data.type.toFightEffectType();
+//
+////				if (data.type == SupplyType.HEALTH_POTION) {
+////					fightEffectPlayer.playEffect(fightEffectType, Player.heal(data.value));
+////				} else if (data.type == SupplyType.PARALIZING_DUST || data.type == SupplyType.BLINDING_POWDER) {
+////					fightEffectPlayer.playEffectOnEnemy (fightEffectType, 0);
+////					statusEffect.addStatus (data.value, data.duration);
+////				} else if (data.type == SupplyType.ARMOR_POTION || data.type == SupplyType.REGENERATION_POTION || data.type == SupplyType.SPEED_POTION) {
+////					fightEffectPlayer.playEffect (fightEffectType, data.value);
+////					statusEffect.addStatus (data.value, data.duration);
+////				} else {
+////					Debug.Log("Unknown status effect type");
+////				}
+//
+//				Vector3 effectPos = toPlayer? playerStatusStartPosition: enemyStatusStartPosition;
+//
+//				int activeEffects = -1;//вычитаем добавляемый эффект
+//
+//				effList = toPlayer? playerStatusEffects: enemyStatusEffects;
+//
+//				for (int i = 0; i < effList.Count; i++) {
+//					if (effList[i].isFired) { activeEffects++; }
 //				}
-
-				Vector3 effectPos = toPlayer? playerStatusStartPosition: enemyStatusStartPosition;
-
-				int activeEffects = -1;//вычитаем добавляемый эффект
-
-				effList = toPlayer? playerStatusEffects: enemyStatusEffects;
-
-				for (int i = 0; i < effList.Count; i++) {
-					if (effList[i].isFired) { activeEffects++; }
-				}
-
-				if (toPlayer) { effectPos.x += activeEffects * playerStatusStep; }
-				else { effectPos.y += activeEffects * enemyStatusStep; }
-
-//				statusEffect.transform.localPosition = effectPos;
-
-				fightProcessor.skipMove ();
-				FightProcessor.FIGHT_ANIM_PLAYER_DONE = false;
-				slot.takeItem ().dispose ();
-			}
-		}
+//
+//				if (toPlayer) { effectPos.x += activeEffects * playerStatusStep; }
+//				else { effectPos.y += activeEffects * enemyStatusStep; }
+//
+////				statusEffect.transform.localPosition = effectPos;
+//
+//				fightProcessor.skipMove ();
+//				FightProcessor.FIGHT_ANIM_PLAYER_DONE = false;
+//				slot.takeItem ().dispose ();
+//			}
+//		}
 	}
 
 //	public StatusEffect getStatusEffectByType (StatusEffectType type, bool toPlayer) {

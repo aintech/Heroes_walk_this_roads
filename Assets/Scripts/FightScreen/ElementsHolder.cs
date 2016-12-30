@@ -111,7 +111,7 @@ public class ElementsHolder : MonoBehaviour {
 				element.gameObject.SetActive(false);
 			}
 		}
-		holderAnimator.playElementsApperance ();
+//		holderAnimator.playElementsApperance ();
 	}
 
 //	public void startElementsDrop () {

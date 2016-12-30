@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -20,12 +21,14 @@ public abstract class Character {
 
 	public int armorClass { get; protected set; }
 
-    public CharacterRepresentative representative;
+    public CharacterRepresentative representative { get; private set; }
 
 	public Dictionary<StatusEffectType, StatusEffect> statusEffects = new Dictionary<StatusEffectType, StatusEffect>();
 
     [HideInInspector]
     public bool moveDone;
+
+    public bool alive { get; private set; }
 
 	public void innerInit (int strength, int endurance, int agility) {
 		this.strength = strength;
@@ -33,6 +36,14 @@ public abstract class Character {
 		this.agility = agility;
 
 		health = maxHealth = initHealth + endurance * healthPerEndurance;
+
+        alive = true;
+
+        Array statusTypes = Enum.GetValues(typeof (StatusEffectType));
+
+        foreach (StatusEffectType type in statusTypes) {
+            statusEffects.Add(type, new StatusEffect().init(type, this));
+        }
 	}
 
 	public abstract int damage ();
@@ -53,6 +64,13 @@ public abstract class Character {
 			return 0;
 		} else {
 			health -= (damageAmount - armorAmount);
+            if (health <= 0) {
+                health = 0;
+                alive = false;
+                foreach (StatusEffect status in statusEffects.Values) {
+                    status.endEffect();
+                }
+            }
 			representative.onHealModified();
 			return damageAmount - armorAmount;
 		}
@@ -71,9 +89,40 @@ public abstract class Character {
 		}
 	}
 
+    public void reveal (bool toFullHealth) {
+        alive = true;
+        if (toFullHealth) { setHealthToMax(); }
+        else { health = 1; }
+    }
+
 	public void setHealthToMax () {
 		health = maxHealth;
 	}
+
+    public void refreshRepresentative (CharacterRepresentative representative) {
+        this.representative = representative;
+        representative.statuses.Clear();
+        foreach (StatusEffect eff in statusEffects.Values) {
+            if (representative.statusHolders.ContainsKey(eff.type)) {
+                representative.statusHolders[eff.type].setStatusEffect(eff);
+            }
+            representative.statuses.Add(eff);
+        }
+    }
+
+    public void addStatus (StatusEffectType type, int value, int duration) {
+        statusEffects[type].addStatus(value, duration);
+    }
+
+    public void refreshStatuses () {
+        foreach (StatusEffect status in statusEffects.Values) { status.updateStatus(); }
+    }
+
+    public void clearStatuses () {
+        foreach (StatusEffect eff in statusEffects.Values) {
+            eff.endEffect();
+        }
+    }
 
     public abstract bool isHero();
 

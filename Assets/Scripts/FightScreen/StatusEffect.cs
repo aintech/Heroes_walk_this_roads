@@ -1,59 +1,47 @@
 ﻿using UnityEngine;
+using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 
-public class StatusEffect : MonoBehaviour {
+public class StatusEffect {
 
-	public StatusEffectType statusType;
-
-	public bool asPlayer;
+    public StatusEffectType type { get; private set; }
 
 	public int value { get; private set; }
 
 	public int duration { get; private set; }
 
-	private StrokeText turnsText;
-
-	private EnemyHolder enemy;
-
 	public bool inProgress { get; private set; }
 
 	public bool isFired { get; private set; }
 
-	private SpriteRenderer render;
+    public StatusEffectHolder holder;
 
-	private Color32 disabledColor = new Color32(255, 255, 255, 120), enabledColor = new Color32(255, 255, 255, 255);
+    public int addingTime { get; private set; }
 
-	public StatusEffect init () {
+    private Character owner;
+
+    public StatusEffect init (StatusEffectType type, Character owner) {
+        this.type = type;
+        this.owner = owner;
 		inProgress = false;
-
-        render = GetComponent<SpriteRenderer>();
-
-        turnsText = transform.Find("Turns").GetComponent<StrokeText>().init(render.sortingLayerName, render.sortingOrder + 1);
-
-		gameObject.SetActive(false);
-
+        addingTime = int.MaxValue;
 		return this;
-	}
-
-	public void initEnemy (EnemyHolder enemy) {
-		this.enemy = enemy;
 	}
 
 	public void addStatus (int value, int duration) {
 		this.value = value;
 		this.duration = duration;
-
-		render.color = disabledColor;
-		turnsText.setText (duration.ToString ());
-		turnsText.gameObject.SetActive (true);
-		gameObject.SetActive(true);
 		isFired = true;
+        addingTime = (int)Time.time;
+        owner.representative.repositionStatuses();
+        if (holder != null) { holder.show(); }
 	}
 
 	public void updateStatus () {
 		if (isFired && !inProgress) {
 			inProgress = true;
-			render.color = enabledColor;
+            if (holder != null) { holder.setAsEnabled(); }
 		}
 		if (!inProgress) {
 			return;
@@ -62,11 +50,11 @@ public class StatusEffect : MonoBehaviour {
 		if (duration >= 0) {
 			applyEffect ();
 		}
-		if (duration == 1) { turnsText.gameObject.SetActive (false); }
-		else if (duration == 0 && !statusType.isStatusActiveOnNextTurn()) { endEffect (); }
-		else if (duration < 0 && statusType.isStatusActiveOnNextTurn()) { endEffect(); }
+//		if (duration == 1) { turnsText.gameObject.SetActive (false); } else
+		if (duration == 0 && !type.isStatusActiveOnNextTurn()) { endEffect (); }
+		else if (duration < 0 && type.isStatusActiveOnNextTurn()) { endEffect(); }
 
-		turnsText.setText (duration.ToString ());
+//		turnsText.setText (duration.ToString ());
 	}
 
 	private void applyEffect () {
@@ -81,13 +69,11 @@ public class StatusEffect : MonoBehaviour {
 //		}
 	}
 
-	private void hideEffect () {
-		gameObject.SetActive (false);
-	}
-
 	public void endEffect () {
 		inProgress = false;
 		isFired = false;
-		gameObject.SetActive (false);
+        holder.hide();
+        addingTime = int.MaxValue;
+        owner.representative.repositionStatuses();
 	}
 }

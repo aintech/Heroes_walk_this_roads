@@ -100,13 +100,13 @@ public class World : MonoBehaviour {
     private void fillWithEnemies () {
 //        enemies.Add(Instantiate<Transform>(enemyMarkerPrefab).GetComponent<EnemyMarker>().init(this, landscape, new List<EnemyType>(new EnemyType[]{EnemyType.ROGUE, EnemyType.ROGUE, EnemyType.ROGUE}), worldLocations[LocationType.ROUTINE]));
         List<EnemyType> types;
-        int count;
+        int enemiesInPack;
         foreach (Location location in worldLocations.Values) {
             if (location.type.isEnemyCamp()) {
                 EnemyType[] enemyTypes = location.type.spawn();
                 types = new List<EnemyType>();
-                count = UnityEngine.Random.Range(1, 4);
-                for (int i = 0; i < count; i++) {
+                enemiesInPack = UnityEngine.Random.Range(1, 3);
+                for (int i = 0; i < enemiesInPack; i++) {
                     types.Add(enemyTypes[UnityEngine.Random.Range(0, enemyTypes.Length)]);
                 }
                 for (int i = 0; i < 5; i++) {
@@ -203,14 +203,21 @@ public class World : MonoBehaviour {
         }
     }
 
-    public void backFromFight (bool winner) {
-        if (fightEnemy != null) {
-            fightEnemy.disable();
-            fightEnemy = null;
-        }
-        if (fightLocation != null) {
-            fightLocation.ruin();
-            fightLocation = null;
+    public void backFromFight (bool playerWin) {
+        if (playerWin) {
+            if (fightEnemy != null) {
+                fightEnemy.disable();
+                fightEnemy = null;
+            }
+            if (fightLocation != null) {
+                fightLocation.ruin();
+                fightLocation = null;
+            }
+        } else {
+            foreach (KeyValuePair<HeroType, Hero> pair in Vars.heroes) {
+                pair.Value.setHealthToMax();
+            }
+            visitLocation(LocationType.ROUTINE);
         }
         enabled = true;
         checkEnemyCollision();

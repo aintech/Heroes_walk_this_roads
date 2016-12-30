@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -25,8 +26,6 @@ public class FightProcessor : MonoBehaviour {
 	private List<Character> queue;
 
     private Character currCharacter;
-
-    private int characterIndex;
 
     private EnemyHolder currEnemy;
 
@@ -65,6 +64,7 @@ public class FightProcessor : MonoBehaviour {
 				}
 			}
 		}
+        queue.Reverse();
 	}
 
     public void removeFromQueue (Character character) {
@@ -75,11 +75,44 @@ public class FightProcessor : MonoBehaviour {
     }
 
     public void startFight () {
-        characterIndex = -1;
 		updateStatusEffects();
         heroes = new List<Hero>(Vars.heroes.Values);
         startNextTurn();
+
+//        switchMachineState(StateMachine.BEFORE_FIGHT_START);
 	}
+
+	void Update () {
+//        Debug.Log(machineState);
+		switch (machineState) {
+            case StateMachine.NOT_IN_FIGHT: break;
+//            case StateMachine.BEFORE_FIGHT_START: checkForStart(); break;
+			case StateMachine.CHECKING_ELEMENTS_POOL_ACTIONS: checkPlayerChoosenElements (); break;
+            case StateMachine.AFTER_ELEMENTS_CHECKED: afterElementsChecked(); break;
+            case StateMachine.PICK_NEXT_CHARACTER: pickNextCharacter(); break;
+            case StateMachine.CHARACTER_TURN: checkCharacterTurn(); break;
+            case StateMachine.FIGHT_ANIMATION: checkFightAnimation(); break;
+            case StateMachine.AFTER_HERO_TURN: afterHeroTurn(); break;
+            case StateMachine.AFTER_ENEMY_TURN: afterEnemyTurn(); break;
+			case StateMachine.PLAYER_WIN: endFight(true); break;
+			case StateMachine.ENEMY_WIN: endFight(false); break;
+		}
+	}
+
+//    private void checkForStart () {
+//        if (ElementsHolder.ELEMENTS_ANIM_DONE) {
+//            currCharacter = null;
+//            foreach(Character ch in queue) {
+//                ch.moveDone = false;
+//            }
+//            fightScreen.fightInterface.updateQueue(queue);
+//            foreach(EnemyHolder en in enemies) {
+//                en.sendToBackground();
+//            }
+//
+//            switchMachineState(StateMachine.CHECKING_ELEMENTS_POOL_ACTIONS);
+//        }
+//    }
 
     private void startNextTurn () {
         currCharacter = null;
@@ -97,22 +130,6 @@ public class FightProcessor : MonoBehaviour {
 
         switchMachineState(StateMachine.CHECKING_ELEMENTS_POOL_ACTIONS);
     }
-
-	void Update () {
-//        Debug.Log(machineState);
-		switch (machineState) {
-			case StateMachine.NOT_IN_FIGHT: break;
-			case StateMachine.CHECKING_ELEMENTS_POOL_ACTIONS: checkPlayerChoosenElements (); break;
-            case StateMachine.AFTER_ELEMENTS_CHECKED: afterElementsChecked(); break;
-            case StateMachine.PICK_NEXT_CHARACTER: pickNextCharacter(); break;
-            case StateMachine.CHARACTER_TURN: checkCharacterTurn(); break;
-            case StateMachine.FIGHT_ANIMATION: checkFightAnimation(); break;
-            case StateMachine.AFTER_HERO_TURN: afterHeroTurn(); break;
-            case StateMachine.AFTER_ENEMY_TURN: afterEnemyTurn(); break;
-			case StateMachine.PLAYER_WIN: endFight(true); break;
-			case StateMachine.ENEMY_WIN: endFight(false); break;
-		}
-	}
 
 	private void checkPlayerChoosenElements () {
 		elementsHolder.checkPlayerInput();
@@ -151,6 +168,7 @@ public class FightProcessor : MonoBehaviour {
     }
 
     private void pickNextCharacter () {
+        actionTargets = null;
         PLAYER_MOVE_DONE = false;
         if (currCharacter != null) {
             currCharacter.representative.setChosen(false);
@@ -161,6 +179,7 @@ public class FightProcessor : MonoBehaviour {
 		}
 
         currCharacter = queue[0];
+        currCharacter.refreshStatuses();
         if (currCharacter.moveDone) {
             startNextTurn();
         } else {
@@ -197,7 +216,7 @@ public class FightProcessor : MonoBehaviour {
                     case HeroActionType.ATTACK:
                         actionTargets[0].hit(currCharacter.randomDamage());
                         break;
-                    case HeroActionType.GUARD: Debug.Log("Guard!"); break;
+                    case HeroActionType.GUARD: break;
                 }
                 heroAction = null;
                 actionTargets = null;
@@ -265,8 +284,23 @@ public class FightProcessor : MonoBehaviour {
 	}
 
     private void calculateEnemyTurnResult () {
-        Hero target = heroes[UnityEngine.Random.Range(0, heroes.Count)];
+        Hero target = heroes[0];// heroes[UnityEngine.Random.Range(0, heroes.Count)];
         fightScreen.fightEffectPlayer.playEffect(FightEffectType.DAMAGE, target.hit(currEnemy.character.randomDamage()));
+        ((HeroPortrait)target.representative).animator.playAnimation(HeroPortraitAnimator.AnimationType.DAMAGE);
+
+        if (target.alive) {
+            foreach(StatusEffect stat in target.statusEffects.Values) {
+                if (!stat.isFired || !stat.inProgress) {
+                    target.addStatus(stat.type, 5, 5);
+                    break;
+                    //                target.addStatus((StatusEffectType)Enum.GetValues(typeof (StatusEffectType)).GetValue(UnityEngine.Random.Range(0, Enum.GetValues(typeof (StatusEffectType)).Length - 1)), 5, 5);
+                }
+            }
+        } else {
+            ((HeroPortrait)target.representative).setAsActive(false);
+            removeFromQueue(target);
+        }
+
 //        if (fightScreen.getStatusEffectByType(StatusEffectType.BLINDED, false).inProgress && (Random.value < .5f)) {
 //            fightScreen.fightEffectPlayer.playEffect(FightEffectType.MISS, 0);
 //        } else {
@@ -291,26 +325,26 @@ public class FightProcessor : MonoBehaviour {
 	}
 
 	public bool canUseSupply (SupplyType supplyType) {
-        if (machineState != StateMachine.CHARACTER_TURN && !currCharacter.isHero()) {
-			return false;
-		}
-		if (supplyType == SupplyType.SPEED_POTION || supplyType == SupplyType.ARMOR_POTION || supplyType == SupplyType.REGENERATION_POTION) {
-			StatusEffectType type = supplyType.toStatusEffectType ();
-			foreach (StatusEffect eff in fightScreen.playerStatusEffects) {
-				if (eff.statusType == type && eff.isFired) {
-					Messenger.showMessage("Персонаж уже находится под действием эффекта '" + eff.statusType.name() + "'");
-					return false;
-				}
-			}
-		} else if (supplyType == SupplyType.BLINDING_POWDER || supplyType == SupplyType.PARALIZING_DUST) {
-			StatusEffectType type = supplyType.toStatusEffectType ();
-			foreach (StatusEffect eff in fightScreen.enemyStatusEffects) {
-				if (eff.statusType == type && eff.isFired) {
-					Messenger.showMessage("Противник уже находится под действием эффекта '" + eff.statusType.name() + "'");
-					return false;
-				}
-			}
-		}
+//        if (machineState != StateMachine.CHARACTER_TURN && !currCharacter.isHero()) {
+//			return false;
+//		}
+//		if (supplyType == SupplyType.SPEED_POTION || supplyType == SupplyType.ARMOR_POTION || supplyType == SupplyType.REGENERATION_POTION) {
+//			StatusEffectType type = supplyType.toStatusEffectType ();
+//			foreach (StatusEffect eff in fightScreen.playerStatusEffects) {
+//				if (eff.statusType == type && eff.isFired) {
+//					Messenger.showMessage("Персонаж уже находится под действием эффекта '" + eff.statusType.name() + "'");
+//					return false;
+//				}
+//			}
+//		} else if (supplyType == SupplyType.BLINDING_POWDER || supplyType == SupplyType.PARALIZING_DUST) {
+//			StatusEffectType type = supplyType.toStatusEffectType ();
+//			foreach (StatusEffect eff in fightScreen.enemyStatusEffects) {
+//				if (eff.statusType == type && eff.isFired) {
+//					Messenger.showMessage("Противник уже находится под действием эффекта '" + eff.statusType.name() + "'");
+//					return false;
+//				}
+//			}
+//		}
 		return true;
 	}
 
@@ -330,6 +364,7 @@ public class FightProcessor : MonoBehaviour {
 
 	private enum StateMachine {
 		NOT_IN_FIGHT,
+        BEFORE_FIGHT_START,
 		CHECKING_ELEMENTS_POOL_ACTIONS, AFTER_ELEMENTS_CHECKED,
 		FIGHT_ANIMATION,
         PICK_NEXT_CHARACTER, CHARACTER_TURN, AFTER_HERO_TURN, AFTER_ENEMY_TURN,
