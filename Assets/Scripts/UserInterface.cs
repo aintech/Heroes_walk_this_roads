@@ -3,6 +3,8 @@ using System.Collections;
 
 public class UserInterface : MonoBehaviour, ButtonHolder {
     
+	public static UserInterface instance { get; private set; }
+
     private static int day = 0;
 
     private static Color32  white = new Color32(255, 255, 255, 255),
@@ -35,10 +37,11 @@ public class UserInterface : MonoBehaviour, ButtonHolder {
     private static bool canOpenStatusScreen;
 
     public UserInterface init () {
+		instance = this;
         Transform maskCanvas = transform.Find("MaskCanvas");
         maskCanvas.gameObject.SetActive(true);
 
-        statusScreen = Vars.gameplay.statusScreen;
+		statusScreen = StatusScreen.instance;
 
         rankMaskRect = maskCanvas.Find("RankMask").GetComponent<RectTransform>();
         healthMaskRect = maskCanvas.Find("HealthMask").GetComponent<RectTransform>();

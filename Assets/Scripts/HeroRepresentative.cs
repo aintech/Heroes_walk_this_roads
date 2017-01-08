@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HeroPortrait : CharacterRepresentative {
+public class HeroRepresentative : CharacterRepresentative {
 
 	public Sprite normalBG, activeBG, noHeroBG;
 
@@ -13,8 +13,6 @@ public class HeroPortrait : CharacterRepresentative {
 
 	private Transform healthBar;
 
-	private BoxCollider2D coll;
-
     private Vector3 healthScale = Vector3.one;
 
     private Hero hero;
@@ -23,17 +21,15 @@ public class HeroPortrait : CharacterRepresentative {
 
     private Color32 normalColor = new Color32(255, 255, 255, 255), transparColor = new Color32(255, 255, 255, 100);
 
-    public HeroPortraitAnimator animator { get; private set; }
+    public HeroRepresentativeAnimator animator { get; private set; }
 
-	public HeroPortrait init () {
-		return init (null);
-	}
+	public HeroRepresentative init () {
+		statusScreen = StatusScreen.instance;
+		hoverBorder = transform.Find("Hover Border").gameObject;
 
-    public HeroPortrait init (StatusScreen statusScreen) {
-		this.statusScreen = statusScreen;
-        innerInit();
+		innerInit();
 
-        animator = GetComponent<HeroPortraitAnimator>().init();
+        animator = GetComponent<HeroRepresentativeAnimator>().init();
 
 		portraitRender = transform.Find ("Portrait").GetComponent<SpriteRenderer> ();
 		backgroundRender = transform.Find ("Background").GetComponent<SpriteRenderer> ();
@@ -46,7 +42,7 @@ public class HeroPortrait : CharacterRepresentative {
 		hero = Vars.heroes [type];
         character = hero;
 
-		portraitRender.sprite = ImagesProvider.getHeroPortrait(type);
+		portraitRender.sprite = ImagesProvider.getHeroRepresentative(type);
 		portraitRender.gameObject.SetActive (hero != null);
 		healthBar.gameObject.SetActive (hero != null);
 		coll.enabled = hero != null && statusScreen != null;
@@ -64,11 +60,11 @@ public class HeroPortrait : CharacterRepresentative {
         backgroundRender.sprite = asChosen ? activeBG : normalBG;
 	}
 
-	void Update () {
-		if (Input.GetMouseButtonDown (0) && Utils.hit != null && Utils.hit == coll) {
-            statusScreen.chooseHero (type);
-		}
-	}
+//	void Update () {
+//		if (Input.GetMouseButtonDown (0) && Utils.hit != null && Utils.hit == coll) {
+//            statusScreen.chooseHero (type);
+//		}
+//	}
 
     public override void onHealModified () {
         if (hero.health <= 0) {

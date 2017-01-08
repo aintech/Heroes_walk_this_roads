@@ -5,13 +5,13 @@ public class ImagesProvider : MonoBehaviour {
 
 	public Sprite[] weaponSprites, shieldSprites, helmetSprites, armorSprites, gloveSprites, amuletSprites, ringSprites, materialSprites, supplySprites,
 					enemyMarkerSprites, locationMarkerSprites,
-					heroSprites, heroPortraitSprites, heroQueueSprites,
+					heroSprites, heroRepresentativeSprites, heroQueueSprites,
                     enemySprites, enemyQueueSprtes,
                     heroActionSprites;
 
 	public static Sprite[] weapons, shields, helmets, armors, gloves, amulets, rings, materials, supplies,
 						   enemyMarkers, locationMarkers,
-						   heroes, heroPortraits, heroQueue,
+						   heroes, heroRepresentatives, heroQueue,
                            enemies, enemyQueue,
                            heroActions;
 
@@ -26,7 +26,7 @@ public class ImagesProvider : MonoBehaviour {
 		materials = materialSprites;
 		supplies = supplySprites;
 		heroes = heroSprites;
-		heroPortraits = heroPortraitSprites;
+		heroRepresentatives = heroRepresentativeSprites;
         heroQueue = heroQueueSprites;
         enemies = enemySprites;
         enemyQueue = enemyQueueSprtes;
@@ -40,6 +40,7 @@ public class ImagesProvider : MonoBehaviour {
         switch (type) {
             case HeroActionType.ATTACK: return heroActions[0];
             case HeroActionType.GUARD: return heroActions[1];
+			case HeroActionType.HEAL: return heroActions[2];
             default: Debug.Log("Unknown action type: " + type); return null;
         }
     }
@@ -54,12 +55,12 @@ public class ImagesProvider : MonoBehaviour {
 		}
 	}
 
-	public static Sprite getHeroPortrait (HeroType type) {
+	public static Sprite getHeroRepresentative (HeroType type) {
 		switch (type) {
-			case HeroType.ALIKA: return heroPortraits[0];
-			case HeroType.VICTORIA: return heroPortraits[1];
-			case HeroType.LIARA: return heroPortraits [2];
-			case HeroType.KATE: return heroPortraits [3];
+			case HeroType.ALIKA: return heroRepresentatives[0];
+			case HeroType.VICTORIA: return heroRepresentatives[1];
+			case HeroType.LIARA: return heroRepresentatives [2];
+			case HeroType.KATE: return heroRepresentatives [3];
 			default: Debug.Log ("Unknown hero type: " + type); return null;
 		}
 	}

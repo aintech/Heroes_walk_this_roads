@@ -5,13 +5,9 @@ public class MarketScreen : TownScreen {
 
     private Market buy, sell;
 
-    private ItemDescriptor itemDescriptor;
-
     public override TownScreen init (Town town) {
         this.town = town;
         innerInit(Town.ScreenType.MARKET);
-
-        itemDescriptor = Vars.gameplay.itemDescriptor;
 
         QuantityPopup popup = GameObject.Find("Commons").transform.Find("Quantity Popup").GetComponent<QuantityPopup>();
 
@@ -32,13 +28,13 @@ public class MarketScreen : TownScreen {
         sell.inventory.setInventoryToBegin ();
 
         buy.inventory.sortInventory();
-        sell.inventory.setItemsFromOtherInventory(Vars.gameplay.statusScreen.inventory);
+		sell.inventory.setItemsFromOtherInventory(StatusScreen.instance.inventory);
 
         InputProcessor.add(this);
 
         gameObject.SetActive (true);
 
-		itemDescriptor.setEnabled();
+		ItemDescriptor.instance.setEnabled();
 
         Messenger.showMessage("Правая кнопка мыши - купить или продать предмет.");
     }
@@ -46,8 +42,8 @@ public class MarketScreen : TownScreen {
     public override void beforeClose () {
         buy.hide();
         sell.hide();
-        Vars.gameplay.statusScreen.inventory.setItemsFromOtherInventory(sell.inventory);
-        itemDescriptor.setDisabled();
+		StatusScreen.instance.inventory.setItemsFromOtherInventory(sell.inventory);
+		ItemDescriptor.instance.setDisabled();
         UserInterface.setEquipmentBtnActive(true);
     }
 

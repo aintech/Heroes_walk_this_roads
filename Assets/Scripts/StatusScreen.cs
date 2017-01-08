@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class StatusScreen : InventoryContainedScreen, Closeable {
 
-	private ItemDescriptor itemDescriptor;
+	public static StatusScreen instance { get; private set; }
 
     private SpriteRenderer playerRender;
 
@@ -16,7 +16,7 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 
     public List<SupplySlot> supplySlots { get; private set; }
 
-	private List<HeroPortrait> portraits = new List<HeroPortrait>();
+	private List<HeroRepresentative> portraits = new List<HeroRepresentative>();
 
     private StrokeText healthValue, experienceValue, damageValue, armorValue, strengthValue, enduranceValue, agilityValue;
 
@@ -26,9 +26,9 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 
     private HeroType lastSelected = HeroType.ALIKA;
 
-	public StatusScreen init (ItemDescriptor itemDescriptor) {
-		this.itemDescriptor = itemDescriptor;
-        itemDescriptor.statusScreen = this;
+	public StatusScreen init () {
+		instance = this;
+		ItemDescriptor.instance.statusScreen = this;
 
 		innerInit(transform.Find("Inventory").GetComponent<Inventory>().init(Inventory.InventoryType.INVENTORY), "Inventory");
 
@@ -81,7 +81,7 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 		Transform portraitsHolder = transform.Find("Portraits");
 		portraitsHolder.gameObject.SetActive(true);
 		for (int i = 0; i < portraitsHolder.childCount; i++) {
-			portraits.Add(portraitsHolder.GetChild(i).GetComponent<HeroPortrait>().init(this));
+			portraits.Add(portraitsHolder.GetChild(i).GetComponent<HeroRepresentative>().init());
 		}
 
         gameObject.SetActive(false);
@@ -108,12 +108,12 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 	public void showScreen () {
 		if (gameObject.activeInHierarchy) { return; }
 
-        foreach (HeroPortrait port in portraits) {
+        foreach (HeroRepresentative port in portraits) {
             port.updateRepresentative();
             port.onHealModified();
         }
 
-        itemDescriptor.setEnabled();
+		ItemDescriptor.instance.setEnabled();
 
 		inventory.setContainerScreen(this, 6);
 		inventory.setInventoryToBegin ();
@@ -149,7 +149,7 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
         Gameplay.topHideable.setVisible(true);
 //		UserInterface.showInterface = true;
         UserInterface.updateStatusBtnText(false);
-		itemDescriptor.setDisabled();
+		ItemDescriptor.instance.setDisabled();
 
 		if (!byInputProcessor) { InputProcessor.removeLast(); }
 	}
@@ -251,7 +251,7 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 		foreach (EquipmentSlot slot in equipmentSlots) {
 			slot.hideItem();
 		}
-		foreach (HeroPortrait portrait in portraits) {
+		foreach (HeroRepresentative portrait in portraits) {
             portrait.setChosen(portrait.type == type);
 		}
 		chosenHero = Vars.heroes[type];

@@ -28,7 +28,6 @@ public class StatusEffectHolder : MonoBehaviour {
     }
 
     public void show () {
-        Debug.Log("Show");
         render.color = disabledColor;
         gameObject.SetActive(true);
     }
@@ -38,7 +37,6 @@ public class StatusEffectHolder : MonoBehaviour {
     }
 
     public void hide () {
-        Debug.Log("Hiding: " + name);
         gameObject.SetActive(false);
     }
 }

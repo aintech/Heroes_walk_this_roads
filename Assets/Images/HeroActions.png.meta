@@ -1,12 +1,13 @@
 fileFormatVersion: 2
 guid: 4e139adba71390d4a97c59bcd01b49ce
-timeCreated: 1482474615
+timeCreated: 1483170461
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: HeroActions_Border
     21300002: HeroActions_Attack
     21300004: HeroActions_Guard
+    21300006: HeroActions_Heal
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -59,10 +60,10 @@ TextureImporter:
       name: HeroActions_Border
       rect:
         serializedVersion: 2
-        x: 36
-        y: 34
-        width: 132
-        height: 130
+        x: 35
+        y: 32
+        width: 134
+        height: 134
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -89,6 +90,19 @@ TextureImporter:
         y: 33
         width: 132
         height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: HeroActions_Heal
+      rect:
+        serializedVersion: 2
+        x: 595
+        y: 32
+        width: 131
+        height: 133
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

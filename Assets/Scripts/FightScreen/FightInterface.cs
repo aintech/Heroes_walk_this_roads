@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 public class FightInterface : MonoBehaviour {
 
+	public static FightInterface instance { get; private set; }
+
     public Transform heroActionPrefab, queuePortraitPrefab;
 
     private Transform emptyHolder;
 
-	private FightScreen fightScreen;
-
-    public List<HeroPortrait> portraits { get; private set; }
+    public List<HeroRepresentative> portraits { get; private set; }
 
     private Transform actionsHolder;
 
@@ -24,13 +24,13 @@ public class FightInterface : MonoBehaviour {
 
 	private Transform queueHolder;
 
-	public FightInterface init (FightScreen fightScreen) {
-		this.fightScreen = fightScreen;
+	public FightInterface init () {
+		instance = this;
 
 		Transform portraitsHolder = transform.Find("Portraits");
-        portraits = new List<HeroPortrait>();
+        portraits = new List<HeroRepresentative>();
 		for (int i = 0; i < portraitsHolder.childCount; i++) {
-			portraits.Add(portraitsHolder.GetChild(i).GetComponent<HeroPortrait>().init());
+			portraits.Add(portraitsHolder.GetChild(i).GetComponent<HeroRepresentative>().init());
 		}
 
         actionsHolder = transform.Find("Actions Holder");
@@ -92,13 +92,16 @@ public class FightInterface : MonoBehaviour {
         foreach (KeyValuePair<Hero, Transform> pair in heroActionHolders) {
             pair.Value.gameObject.SetActive(hero != null && pair.Key == hero);
         }
-        if(hero != null) {
+		if(hero != null) {
+			foreach(HeroAction act in heroActions[hero]) {
+				act.checkElementsIsEnouth();
+			}
             heroActions[hero][0].setChosen(true);
         }
     }
 
     public void updateHeroRepresentatives () {
-        foreach (HeroPortrait port in portraits) {
+        foreach (HeroRepresentative port in portraits) {
             port.updateRepresentative();
             port.onHealModified();
         }
@@ -108,13 +111,13 @@ public class FightInterface : MonoBehaviour {
         foreach(HeroAction act in heroActions[action.hero]) {
             if (act != action) { act.setChosen(false); }
         }
-        fightScreen.fightProcessor.heroAction = action;
-        switch (action.actionType) {
-            case HeroActionType.GUARD: chooseTargets(new Character[]{action.hero}); break;
+		FightProcessor.instance.heroAction = action;
+		switch (action.targetType) {
+			case TargetType.SELF: chooseTargets(new Character[]{action.hero}); break;
         }
     }
 
     public void chooseTargets (Character[] targets) {
-        fightScreen.fightProcessor.actionTargets = targets;
+		FightProcessor.instance.actionTargets = targets;
     }
 }

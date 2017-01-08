@@ -28,6 +28,9 @@ public abstract class Character {
     [HideInInspector]
     public bool moveDone;
 
+	[HideInInspector]
+	public bool guarded;
+
     public bool alive { get; private set; }
 
 	public void innerInit (int strength, int endurance, int agility) {
@@ -54,7 +57,7 @@ public abstract class Character {
 	}
 
 	public int hit (int damageAmount)  {
-		int armorAmount = armorClass;
+		int armorAmount = armorClass + (armorClass > 0? (guarded? Mathf.RoundToInt(damageAmount * .5f): 0): 0);
 
 //		if (statusEffects[StatusEffectType.ARMORED].inProgress) {
 //			armorAmount += statusEffects[StatusEffectType.ARMORED].value;

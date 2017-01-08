@@ -3,6 +3,8 @@ using System.Collections;
 
 public class ItemDescriptor : MonoBehaviour {
 
+	public static ItemDescriptor instance { get; private set; }
+
 	private const float fontLengthMulty = 4.9f;
 
 	private Transform 	trans,
@@ -40,11 +42,12 @@ public class ItemDescriptor : MonoBehaviour {
 
     private Market buyMarket, sellMarket;
 
-	public FightScreen fightScreen;
-
+	[HideInInspector]
     public StatusScreen statusScreen;
 
 	public ItemDescriptor init () {
+		instance = this;
+
 		trans = transform.Find ("Descriptor");
 		qualityPre = trans.Find ("Quality Pre");
 		qualityBG = trans.Find("Quality Background");
@@ -161,7 +164,7 @@ public class ItemDescriptor : MonoBehaviour {
                     break;
             }
         } else {
-            inventoryType = fightScreen.gameObject.activeInHierarchy? Type.FIGHT: Type.NONE;
+			inventoryType = FightScreen.instance.gameObject.activeInHierarchy? Type.FIGHT: Type.NONE;
         }
 
 		for (int i = 0; i < trans.childCount; i++) {
@@ -185,7 +188,7 @@ public class ItemDescriptor : MonoBehaviour {
                 break;
             case Type.FIGHT:
                 if (holder != null && holder is SupplySlot) {
-                    fightScreen.useSupply((SupplySlot)holder);
+					FightScreen.instance.useSupply((SupplySlot)holder);
                 }
                 break;
             case Type.INVENTORY:

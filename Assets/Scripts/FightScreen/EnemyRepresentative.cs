@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class EnemyHolder : CharacterRepresentative {
+public class EnemyRepresentative : CharacterRepresentative {
 
     public Enemy enemy { get; private set; }
 
@@ -12,23 +12,17 @@ public class EnemyHolder : CharacterRepresentative {
 
     private Transform healthBar, barHolder;
 
-	private FightScreen fightScreen;
-
-    private Vector3 initPosition = Vector3.zero, healthScale = Vector3.one;
+	private Vector3 initPosition = new Vector3(0, 0, 1), healthScale = Vector3.one;
 
     private Vector3 smallScale = new Vector3(.7f, .7f, 1);
 
     private string backgroundLayerName = "Fight Screen", foregroundLayerName = "Fight Screen Foreground";
 
-	private PolygonCollider2D coll;
-
-    private GameObject stroke;
-
     private bool stroked, chosen;
 
-    public EnemyHolder init (FightScreen fightScreen, Transform holder) {
-		this.fightScreen = fightScreen;
-        innerInit();
+	public EnemyRepresentative init (Transform holder) {
+		hoverBorder = transform.Find("Stroke").gameObject;
+		innerInit();
 
         transform.SetParent(holder);
 
@@ -42,12 +36,9 @@ public class EnemyHolder : CharacterRepresentative {
         barHolderRender = barHolder.GetComponent<SpriteRenderer>();
         barBGRender = healthBarHolder.Find("Background").GetComponent<SpriteRenderer>();
 
-        stroke = transform.Find("Stroke").gameObject;
-        topStroke = stroke.transform.Find("Top").GetComponent<SpriteRenderer>();
-        leftStroke = stroke.transform.Find("Left").GetComponent<SpriteRenderer>();
-        rightStroke = stroke.transform.Find("Right").GetComponent<SpriteRenderer>();
-
-        stroke.SetActive(false);
+		topStroke = hoverBorder.transform.Find("Top").GetComponent<SpriteRenderer>();
+		leftStroke = hoverBorder.transform.Find("Left").GetComponent<SpriteRenderer>();
+		rightStroke = hoverBorder.transform.Find("Right").GetComponent<SpriteRenderer>();
 
         setAsActive(false);
 
@@ -83,24 +74,9 @@ public class EnemyHolder : CharacterRepresentative {
         return enemy;
 	}
 
-    void Update () {
-        if (Input.GetMouseButtonDown(0) && Utils.hit != null && Utils.hit == coll) {
-            if (fightScreen.fightProcessor.heroAction != null) {
-                fightScreen.fightProcessor.actionTargets = new Character[]{character};
-            }
-        }
-        if (Utils.hit != null && Utils.hit == coll) {
-            if (!stroked) {
-                setStroked(true);
-            }
-        } else if (stroked) {
-            setStroked(false);
-        }
-    }
-
     private void setStroked (bool stroked) {
         this.stroked = stroked;
-        stroke.SetActive(stroked);
+		hoverBorder.SetActive(stroked);
     }
 
 	private void updateSprite () {
@@ -145,7 +121,7 @@ public class EnemyHolder : CharacterRepresentative {
 
     public override void onHealModified () {
         if (character.health <= 0) {
-            fightScreen.fightProcessor.removeFromQueue(character);
+			removeFromQueue();
             gameObject.SetActive(false);
         } else {
             healthScale.x = (float)character.health / (float) character.maxHealth;

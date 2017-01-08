@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class World : MonoBehaviour {
 
+	public static World instance { get; private set; }
+
     public Transform locationPrefab, enemyMarkerPrefab;
 
     private const float TILE_SIDE = 64;
@@ -33,8 +35,6 @@ public class World : MonoBehaviour {
 
     private List<EnemyMarker> enemies = new List<EnemyMarker>();
 
-    private FightScreen fightScreen;
-
     private EnemyMarker fightEnemy;
 
     private Location fightLocation;
@@ -42,9 +42,9 @@ public class World : MonoBehaviour {
     [HideInInspector]
     public Town town;
 
-    public World init (FightScreen fightScreen) {
-        this.fightScreen = fightScreen;
-        this.fightScreen.world = this;
+    public World init () {
+		instance = this;
+		FightScreen.instance.world = this;
 
         worldContainer = transform.Find("World Container");
         hero = worldContainer.Find("Hero");
@@ -98,23 +98,12 @@ public class World : MonoBehaviour {
     }
 
     private void fillWithEnemies () {
+		foreach (Location location in worldLocations.Values) {
+			if (location.type.isEnemyCamp()) {
+				enemies.AddRange(location.spawn(landscape, enemyMarkerPrefab));
+			}
+		}
 //        enemies.Add(Instantiate<Transform>(enemyMarkerPrefab).GetComponent<EnemyMarker>().init(this, landscape, new List<EnemyType>(new EnemyType[]{EnemyType.ROGUE, EnemyType.ROGUE, EnemyType.ROGUE}), worldLocations[LocationType.ROUTINE]));
-        List<EnemyType> types;
-        int enemiesInPack;
-        foreach (Location location in worldLocations.Values) {
-            if (location.type.isEnemyCamp()) {
-                EnemyType[] enemyTypes = location.type.spawn();
-                types = new List<EnemyType>();
-                enemiesInPack = UnityEngine.Random.Range(1, 3);
-                for (int i = 0; i < enemiesInPack; i++) {
-                    types.Add(enemyTypes[UnityEngine.Random.Range(0, enemyTypes.Length)]);
-                }
-                for (int i = 0; i < 5; i++) {
-                    EnemyMarker marker = Instantiate<Transform>(enemyMarkerPrefab).GetComponent<EnemyMarker>().init(this, landscape, types, location);
-                    enemies.Add(marker);
-                }
-            }
-        }
     }
 
     public void showWorld (LocationType type) {
@@ -196,7 +185,7 @@ public class World : MonoBehaviour {
         foreach (EnemyMarker enemy in enemies) {
             if (enemy.alive && enemy.position.isSame(currPoint)) {
                 fightEnemy = enemy;
-                fightScreen.startFight(enemy.enemyTypes);
+				FightScreen.instance.startFight(enemy.enemyTypes);
                 enabled = false;
                 return;
             }
@@ -229,7 +218,7 @@ public class World : MonoBehaviour {
             gameObject.SetActive(false);
         } else if (type.isEnemyCamp()) {
             fightLocation = worldLocations[type];
-            fightScreen.startFight(type.boss());
+			FightScreen.instance.startFight(type.boss());
             enabled = false;
         }
     }

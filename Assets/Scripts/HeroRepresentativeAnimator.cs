@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class HeroPortraitAnimator : MonoBehaviour {
+public class HeroRepresentativeAnimator : MonoBehaviour {
 
     public Texture2D damageSheet;
 
@@ -24,7 +24,7 @@ public class HeroPortraitAnimator : MonoBehaviour {
 
     private bool inPlaying;
 
-    public HeroPortraitAnimator init () {
+    public HeroRepresentativeAnimator init () {
         if (damage.Count == 0) {
             loadSpriteSheets();
         }

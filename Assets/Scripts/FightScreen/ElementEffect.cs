@@ -208,7 +208,7 @@ public class ElementEffect : MonoBehaviour {
 		hitTextHolder.localPosition = Vector3.zero;
 		effectActive = false;
 		gameObject.SetActive(false);
-        fightScreen.fightProcessor.checkEffectsActive();
+		FightProcessor.instance.checkEffectsActive();
 	}
 
 	public bool isEffectActive () {

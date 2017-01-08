@@ -24,8 +24,8 @@ public class EnemyMarker : MonoBehaviour {
 
     private Location location;
 
-    public EnemyMarker init (World world, Transform landscape, List<EnemyType> enemyTypes, Location location) {
-        this.world = world;
+    public EnemyMarker init (Transform landscape, List<EnemyType> enemyTypes, Location location) {
+		world = World.instance;
 		trans = transform;
         image = GetComponent<SpriteRenderer>();
         trans.SetParent(landscape);

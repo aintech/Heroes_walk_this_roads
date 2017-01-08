@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e7be655b3b23b104d92a6dde128b2e54
-timeCreated: 1482847670
+timeCreated: 1483171401
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -70,9 +70,9 @@ TextureImporter:
         x: 0
         y: 0
         width: 1600
-        height: 60
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        height: 155
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -80,9 +80,9 @@ TextureImporter:
       name: HealthBar_Holders
       rect:
         serializedVersion: 2
-        x: 22
-        y: 104
-        width: 699
+        x: 21
+        y: 220
+        width: 700
         height: 105
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -94,7 +94,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 130
-        y: 341
+        y: 457
         width: 482
         height: 43
       alignment: 5
@@ -107,7 +107,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 126
-        y: 252
+        y: 368
         width: 491
         height: 55
       alignment: 0
@@ -119,8 +119,8 @@ TextureImporter:
       name: FightInterface_PortraitHealthBar
       rect:
         serializedVersion: 2
-        x: 48
-        y: 248
+        x: 34
+        y: 370
         width: 20
         height: 120
       alignment: 7
@@ -133,7 +133,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1021
-        y: 130
+        y: 263
         width: 305
         height: 305
       alignment: 0
@@ -159,7 +159,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 38
-        y: 428
+        y: 544
         width: 112
         height: 111
       alignment: 0
@@ -172,24 +172,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 193
-        y: 428
+        y: 544
         width: 112
         height: 111
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: FightInterface_QueueDelimiter
-      rect:
-        serializedVersion: 2
-        x: 358
-        y: 460
-        width: 136
-        height: 57
-      alignment: 5
-      pivot: {x: 1, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0

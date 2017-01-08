@@ -7,13 +7,9 @@ public static class Vars {
 
     public static bool EROTIC = false;
 
-    public static Gameplay gameplay;
-
     public static int gold;
 
 	public static int freeSortingOrder = 0;
-
-	public static UserInterface userInterface;
 
 	public static Story.Chapter chapter = Story.Chapter.NONE;
 

@@ -4,7 +4,9 @@ using System.Collections.Generic;
 
 public class FightScreen : MonoBehaviour, ButtonHolder {
 
-    public Transform queuePortraitPrefab, enemyHolderPrefab;
+	public static FightScreen instance { get; private set; }
+
+    public Transform queuePortraitPrefab, enemyRepresentativePrefab;
 
 	private ElementsHolder elementsHolder;
 
@@ -20,21 +22,13 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 
     public ElementEffectPlayer elementEffectPlayer { get; private set; }
 
-    public FightInterface fightInterface { get; private set; }
-
-    private List<EnemyHolder> enemies = new List<EnemyHolder>();
-
-    public FightProcessor fightProcessor { get; private set; }
+    private List<EnemyRepresentative> enemies = new List<EnemyRepresentative>();
 
 	private bool fightStarted, startAnimDone, enemyDeadPlaying;
 
 	private bool playerWin;
 
-    private StatusScreen statusScreen;
-
 	private List<SupplySlot> supplySlots = new List<SupplySlot>();
-
-	private ItemDescriptor itemDescriptor;
 
 	private Vector3 playerStatusStartPosition = new Vector3(6.8f, 0, 0),
 					enemyStatusStartPosition = new Vector3(6.9f, 7.5f, 0);
@@ -54,25 +48,23 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 
     private int topLayerOrder;
 
-    private Transform enemyHolders;
+    private Transform EnemyRepresentatives;
 
 	public FightScreen init () {
-        statusScreen = Vars.gameplay.statusScreen;
-        itemDescriptor = Vars.gameplay.itemDescriptor;
+		instance = this;
 
-		fightProcessor = GetComponent<FightProcessor>();
-		itemDescriptor.fightScreen = this;
-		elementsHolder = transform.Find ("Elements Holder").GetComponent<ElementsHolder> ().init (this);;
+		elementsHolder = transform.Find ("Elements Holder").GetComponent<ElementsHolder> ().init();;
 		iconsHolderRender = elementsHolder.GetComponent<SpriteRenderer>();
 		fightEffectPlayer = transform.Find("Fight Effect Player").GetComponent<FightEffectPlayer>().init();
 		elementEffectPlayer = transform.Find("ElementEffectPlayer").GetComponent<ElementEffectPlayer>();
-		fightInterface = transform.Find("Fight Interface").GetComponent<FightInterface>().init(this);
+		transform.Find("Fight Interface").GetComponent<FightInterface>().init();
 
         elementsPool = transform.Find("Elements Pool").GetComponent<ElementsPool>().init();
-        enemyHolders = transform.Find("Enemy Holders");
+        EnemyRepresentatives = transform.Find("Enemy Holders");
 
         elementEffectPlayer.init(this, elementsPool);
-		fightProcessor.init(this, elementsHolder, enemies);
+
+		GetComponent<FightProcessor>().init(elementsHolder, enemies);
 
 		elementsHolder.gameObject.SetActive(true);
 		gameObject.SetActive(false);
@@ -98,16 +90,16 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
     public void startFight (List<EnemyType> types) {
         initEnemies(types);
 		SupplySlot supSlot;
-        foreach (SupplySlot slot in statusScreen.supplySlots) {
+		foreach (SupplySlot slot in StatusScreen.instance.supplySlots) {
 			if (slot.item != null) {
 				supSlot = getSlot (slot.index);
 				supSlot.setItem(slot.takeItem());
 				supSlot.item.transform.localScale = Vector3.one;
 			}
         }
-        itemDescriptor.setEnabled();
+		ItemDescriptor.instance.setEnabled();
 		playerWin = false;
-        fightInterface.updateHeroActions();
+		FightInterface.instance.updateHeroActions();
 
 		holderColor = new Color(1, 1, 1, 0);
 		iconsHolderRender.color = holderColor;
@@ -117,13 +109,13 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 
 		fightStarted = startAnimDone = false;
 
-        fightInterface.updateHeroRepresentatives();
-        fightProcessor.prepareQueue(types);
+		FightInterface.instance.updateHeroRepresentatives();
+		FightProcessor.instance.prepareQueue(types);
 
 		captureBtn.setVisible (false);
 		releaseBtn.setVisible (false);
 
-        fightInterface.setHeroActionsVisible(null);
+		FightInterface.instance.setHeroActionsVisible(null);
 
 		gameObject.SetActive(true);
 	}
@@ -131,7 +123,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
     private void initEnemies (List<EnemyType> types) {
         if (types.Count > enemies.Count) {
             while (enemies.Count < types.Count) {
-                enemies.Add(Instantiate<Transform>(enemyHolderPrefab).GetComponent<EnemyHolder>().init(this, enemyHolders));
+                enemies.Add(Instantiate<Transform>(enemyRepresentativePrefab).GetComponent<EnemyRepresentative>().init(EnemyRepresentatives));
             }
         }
         float scrWidth = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height)).x * 2;
@@ -162,7 +154,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 				animatingFightStart();
             } else {// if (ElementsHolder.ELEMENTS_ANIM_DONE) {
 				fightStarted = true;
-				fightProcessor.startFight();
+				FightProcessor.instance.startFight();
 			}
 		}
 	}
@@ -202,10 +194,10 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 //			showFightResultScreen();
 //		}
 
-        foreach (EnemyHolder enem in enemies) { enem.character.clearStatuses(); }
-        foreach (HeroPortrait port in fightInterface.portraits) { port.character.clearStatuses(); }
+        foreach (EnemyRepresentative enem in enemies) { enem.character.clearStatuses(); }
+		foreach (HeroRepresentative port in FightInterface.instance.portraits) { port.character.clearStatuses(); }
 
-		itemDescriptor.setDisabled();
+		ItemDescriptor.instance.setDisabled();
         if (playerWin) {
             showFightEndDisplay();
         } else {
@@ -252,7 +244,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 		SupplySlot supSlot;
 		foreach (SupplySlot slot in supplySlots) {
 			if (slot.item != null) {
-                supSlot = statusScreen.getSupplySlot (slot.index);
+				supSlot = StatusScreen.instance.getSupplySlot (slot.index);
 				supSlot.setItem(slot.takeItem());
 				supSlot.item.transform.localScale = Vector3.one;
 			}

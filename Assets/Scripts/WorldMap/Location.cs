@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Location : MonoBehaviour{
 
@@ -20,6 +21,21 @@ public class Location : MonoBehaviour{
         transform.localPosition = new Vector3(position.x * cellSize, position.y * cellSize, 0);
         return this;
     }
+
+	public List<EnemyMarker> spawn (Transform landscape, Transform enemyMarkerPrefab) {
+		List<EnemyMarker> markers = new List<EnemyMarker>();
+		EnemyType[] enemyTypes = type.spawn();
+		List<EnemyType> types = new List<EnemyType>();
+		int enemiesInPack = UnityEngine.Random.Range(1, 3);
+		for (int i = 0; i < enemiesInPack; i++) {
+			types.Add(enemyTypes[UnityEngine.Random.Range(0, enemyTypes.Length)]);
+		}
+		for (int i = 0; i < 5; i++) {
+			EnemyMarker marker = Instantiate<Transform>(enemyMarkerPrefab).GetComponent<EnemyMarker>().init(landscape, types, this);
+			markers.Add(marker);
+		}
+		return markers;
+	}
 
     public void ruin () {
         isRuined = true;

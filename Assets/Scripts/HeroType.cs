@@ -51,10 +51,10 @@ public static class HeroDescriptor {
     public static HeroActionType[] heroActions (this HeroType type) {
         if (heroActionsMap == null) {
             heroActionsMap = new Dictionary<HeroType, HeroActionType[]>();
-            heroActionsMap.Add(HeroType.ALIKA, new HeroActionType[]{HeroActionType.ATTACK, HeroActionType.GUARD});
-            heroActionsMap.Add(HeroType.KATE, new HeroActionType[]{HeroActionType.ATTACK, HeroActionType.GUARD});
-            heroActionsMap.Add(HeroType.LIARA, new HeroActionType[]{HeroActionType.ATTACK, HeroActionType.GUARD});
-            heroActionsMap.Add(HeroType.VICTORIA, new HeroActionType[]{HeroActionType.ATTACK, HeroActionType.GUARD});
+			heroActionsMap.Add(HeroType.ALIKA, new HeroActionType[]{HeroActionType.ATTACK, HeroActionType.GUARD, HeroActionType.HEAL});
+			heroActionsMap.Add(HeroType.KATE, new HeroActionType[]{HeroActionType.ATTACK, HeroActionType.GUARD, HeroActionType.HEAL});
+			heroActionsMap.Add(HeroType.LIARA, new HeroActionType[]{HeroActionType.ATTACK, HeroActionType.GUARD, HeroActionType.HEAL});
+			heroActionsMap.Add(HeroType.VICTORIA, new HeroActionType[]{HeroActionType.ATTACK, HeroActionType.GUARD, HeroActionType.HEAL});
         }
         return heroActionsMap[type];
     }

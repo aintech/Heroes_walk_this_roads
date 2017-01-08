@@ -3,8 +3,6 @@ using System.Collections;
 
 public class ElementsHolderAnimator : MonoBehaviour {
 
-	private FightScreen fightScreen;
-
 	private Element[,] elements;
 
 	private const float nextPeriod = .1f;
@@ -15,8 +13,7 @@ public class ElementsHolderAnimator : MonoBehaviour {
 
 	private bool apperance;
 
-	public ElementsHolderAnimator init (FightScreen fightScreen, Element[,] elements) {
-		this.fightScreen = fightScreen;
+	public ElementsHolderAnimator init (Element[,] elements) {
 		this.elements = elements;
 		enabled = false;
 		return this;
@@ -80,7 +77,7 @@ public class ElementsHolderAnimator : MonoBehaviour {
 		index++;
 		if (index > ElementsHolder.COLUMNS && index > ElementsHolder.ROWS) {
 			if (!apperance) {
-                fightScreen.fightProcessor.startFightPart ();
+				FightProcessor.instance.startFightPart ();
 			}
 			apperance = enabled = false;
             ElementsHolder.ELEMENTS_ANIM_DONE = true;

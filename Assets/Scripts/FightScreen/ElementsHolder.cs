@@ -8,8 +8,6 @@ public class ElementsHolder : MonoBehaviour {
 
     public static bool ELEMENTS_ANIM_DONE = false;
 
-	private FightScreen fightScreen;
-
 	public const int ROWS = 7, COLUMNS = 8;
 	
 	private const float CELL_STEP = 1.05f;//расстояние между центрами ячеек
@@ -41,15 +39,11 @@ public class ElementsHolder : MonoBehaviour {
 
 	private Vector2 initPos, holdOffset, dir, newPos;
 
-	private FightProcessor fightProcessor;
-
 	public ElementsHolderAnimator holderAnimator { get; private set; }
 
     private bool playElementsFading, checkElementsOnPositions;
 
-	public ElementsHolder init (FightScreen fightScreen) {
-		fightScreen = transform.parent.GetComponent<FightScreen>();
-        fightProcessor = fightScreen.fightProcessor;
+	public ElementsHolder init () {
 		Element element = null;
 		for (int i = 0; i < ROWS; i++) {
 			for (int j = 0; j < COLUMNS; j++) {
@@ -66,7 +60,7 @@ public class ElementsHolder : MonoBehaviour {
 		START_Y = (ROWS / 2) * CELL_STEP;
 		MAX_X = (COLUMNS / 2) * CELL_STEP - HALF_CELL_STEP;
 		MAX_Y = (ROWS / 2) * CELL_STEP;
-		holderAnimator = GetComponent<ElementsHolderAnimator> ().init (fightScreen, elements);
+		holderAnimator = GetComponent<ElementsHolderAnimator> ().init(elements);
 		return this;
 	}
 
@@ -223,14 +217,14 @@ public class ElementsHolder : MonoBehaviour {
                     if (next.elementType == element.elementType) {
                         matchLine.Add(next);
                         if (compareCol == (COLUMNS - 1) && (matchLine.Count >= 2)) {
-                            fightProcessor.addToTurnResult(element.elementType, matchLine.Count + 1, getMiddlePoint(matchLine));
+							FightProcessor.instance.addToTurnResult(element.elementType, matchLine.Count + 1, getMiddlePoint(matchLine));
                             totalMatchHor.Add(element);
                             totalMatchHor.AddRange(matchLine);
                             matchLine.Clear();
                         }
                     } else {
                         if (matchLine.Count >= 2) {
-                            fightProcessor.addToTurnResult(element.elementType, matchLine.Count + 1, getMiddlePoint(matchLine));
+							FightProcessor.instance.addToTurnResult(element.elementType, matchLine.Count + 1, getMiddlePoint(matchLine));
                             totalMatchHor.Add(element);
                             totalMatchHor.AddRange(matchLine);
                             matchLine.Clear();
@@ -266,14 +260,14 @@ public class ElementsHolder : MonoBehaviour {
                     if (next.elementType == element.elementType) {
                         matchLine.Add(next);
                         if (compareRow == (ROWS - 1) && (matchLine.Count >= 2)) {
-                            fightProcessor.addToTurnResult(element.elementType, matchLine.Count + 1, getMiddlePoint(matchLine));
+							FightProcessor.instance.addToTurnResult(element.elementType, matchLine.Count + 1, getMiddlePoint(matchLine));
                             totalMatchVer.Add(element);
                             totalMatchVer.AddRange(matchLine);
                             matchLine.Clear();
                         }
                     } else {
                         if (matchLine.Count >= 2) {
-                            fightProcessor.addToTurnResult(element.elementType, matchLine.Count + 1, getMiddlePoint(matchLine));
+							FightProcessor.instance.addToTurnResult(element.elementType, matchLine.Count + 1, getMiddlePoint(matchLine));
                             totalMatchVer.Add(element);
                             totalMatchVer.AddRange(matchLine);
                             matchLine.Clear();
@@ -311,7 +305,7 @@ public class ElementsHolder : MonoBehaviour {
         ELEMENTS_ANIM_DONE = (allMatch.Count == 0);
         playElementsFading = !ELEMENTS_ANIM_DONE;
 
-        fightProcessor.playElementEffects();
+		FightProcessor.instance.playElementEffects();
         //      fightProcessor.calculateHeroTurnResults();
 
         return allMatch.Count > 0;

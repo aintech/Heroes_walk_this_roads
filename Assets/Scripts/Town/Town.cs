@@ -30,7 +30,7 @@ public class Town : MonoBehaviour {
 
     public void walkInTown (LocationType type) {
         if (checkStoryline()) {
-            Vars.gameplay.story.playNextChapter();
+			Gameplay.instance.story.playNextChapter();
         } else {
             showScreen(ScreenType.MAIN);
             gameObject.SetActive(true);
