@@ -34,7 +34,8 @@ public class Gameplay : MonoBehaviour {
         Transform commons = GameObject.Find("Commons").transform;
         quantityPopup = commons.Find("Quantity Popup").GetComponent<QuantityPopup>().init();
         commons.Find("Images Provider").GetComponent<ImagesProvider>().init();
-		commons.Find("Item Descriptor").GetComponent<ItemDescriptor>().init();
+//        commons.Find("Item Descriptor").GetComponent<ItemDescriptor>().init();
+        commons.Find("Item Descriptor 2").GetComponent<ItemDescriptor2>().init();
 
 		GameObject.Find("Status Screen").GetComponent<StatusScreen>().init();
 		GameObject.FindGameObjectWithTag("UserInterface").GetComponent<UserInterface>().init();

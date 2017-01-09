@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public class Item : MonoBehaviour {
-	
+public class Item : MonoBehaviour, Describeable {
+
 	private SpriteRenderer render;
 
 	public TextMesh quantityText { get; private set; }
@@ -34,7 +35,7 @@ public class Item : MonoBehaviour {
 
 	public string itemName { get { return itemData.name; } private set {;} }
 
-	public string description { get { return itemData.description; } private set {;} }
+    private List<string> descript;
 
 	public Item init (ItemData itemData, int index) {
 		this.index = index;
@@ -54,6 +55,8 @@ public class Item : MonoBehaviour {
 
 		updateQuantityText();
 
+        int descriptionLines = 0;
+
 		switch (itemData.itemType) {
     		case ItemType.WEAPON: render.sprite = ImagesProvider.getWeapon(((WeaponData)itemData).type); break;
     		case ItemType.SHIELD: render.sprite = ImagesProvider.getShield(((ShieldData)itemData).type); break;
@@ -66,8 +69,47 @@ public class Item : MonoBehaviour {
 			case ItemType.SUPPLY: render.sprite = ImagesProvider.getSupply(((SupplyData)itemData).type); break;
 			default: Debug.Log("Unknown item type: " + itemData.itemType); break;
 		}
+
+        fillDescription();
+
 		return this;
 	}
+
+    private void fillDescription () {
+        descript = new List<string>();
+
+        descript.Add((itemData.quality != ItemQuality.COMMON? itemData.quality.richName() + " ": "") + itemData.name);
+
+        switch (itemData.itemType) {
+            case ItemType.WEAPON:
+                descript.Add("Урон: <color=orange>" + ((WeaponData)itemData).damage + "</color>");
+                break;
+            case ItemType.ARMOR:
+            case ItemType.SHIELD:
+            case ItemType.GLOVE:
+            case ItemType.HELMET:
+                descript.Add("Защита: <color=orange>" + ((ArmorModifier)itemData).armorClass() + "</color>");
+                break;
+            case ItemType.AMULET:
+            case ItemType.RING:
+            case ItemType.MATERIAL:
+                break;
+            case ItemType.SUPPLY:
+                SupplyData sud = (SupplyData)itemData;
+                string val = "";
+                switch (sud.type) {
+                    case SupplyType.HEALTH_POTION: val = "Восстанавливает <color=white>" + sud.value + "</color> HP"; break;
+                    case SupplyType.BLINDING_POWDER: val = StatusEffectType.BLINDED.name() + " на <color=white>" + sud.duration + "</color> ходов"; break;
+                    case SupplyType.PARALIZING_DUST: val = StatusEffectType.PARALIZED.name() + " на <color=white>" + sud.duration + "</color> ходов"; break;
+                    case SupplyType.SPEED_POTION: val = "Дополнительно <color=white>" + sud.value + "</color> действий на <color=white>" + sud.duration + "</color> ходов"; break;
+                    case SupplyType.REGENERATION_POTION: val = "Восстановление по <color=white>" + sud.value + "</color> HP в течении <color=white>" + sud.duration + "</color> ходов"; break;
+                    case SupplyType.ARMOR_POTION: val = "Повышение защиты на <color=white>" + sud.value + "</color> в течении <color=white>" + sud.duration + "</color> ходов"; break;
+                    default: Debug.Log("Unknown supply type: " + sud.type); val = ""; break;
+                }
+                descript.Add("Эффект: <color=orange>" + val + "</color>");
+                break;
+        }
+    }
 
 	public void changeSortOrder (int newOrder) {
 		render.sortingOrder = newOrder;
@@ -88,6 +130,10 @@ public class Item : MonoBehaviour {
 			Debug.Log("Dont know where return item: " + itemName);
 		}
 	}
+
+    public List<string> description () {
+        return descript;
+    }
 
 	public void dispose () {
 		Utils.disposeItem(this);

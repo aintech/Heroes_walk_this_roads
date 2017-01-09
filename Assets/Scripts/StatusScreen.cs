@@ -28,7 +28,7 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 
 	public StatusScreen init () {
 		instance = this;
-		ItemDescriptor.instance.statusScreen = this;
+		ItemDescriptor2.instance.statusScreen = this;
 
 		innerInit(transform.Find("Inventory").GetComponent<Inventory>().init(Inventory.InventoryType.INVENTORY), "Inventory");
 
@@ -113,7 +113,7 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
             port.onHealModified();
         }
 
-		ItemDescriptor.instance.setEnabled();
+		ItemDescriptor2.instance.setEnabled();
 
 		inventory.setContainerScreen(this, 6);
 		inventory.setInventoryToBegin ();
@@ -149,7 +149,7 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
         Gameplay.topHideable.setVisible(true);
 //		UserInterface.showInterface = true;
         UserInterface.updateStatusBtnText(false);
-		ItemDescriptor.instance.setDisabled();
+		ItemDescriptor2.instance.setDisabled();
 
 		if (!byInputProcessor) { InputProcessor.removeLast(); }
 	}

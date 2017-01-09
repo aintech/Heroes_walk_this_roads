@@ -97,7 +97,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 				supSlot.item.transform.localScale = Vector3.one;
 			}
         }
-		ItemDescriptor.instance.setEnabled();
+		ItemDescriptor2.instance.setEnabled();
 		playerWin = false;
 		FightInterface.instance.updateHeroActions();
 
@@ -197,7 +197,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
         foreach (EnemyRepresentative enem in enemies) { enem.character.clearStatuses(); }
 		foreach (HeroRepresentative port in FightInterface.instance.portraits) { port.character.clearStatuses(); }
 
-		ItemDescriptor.instance.setDisabled();
+		ItemDescriptor2.instance.setDisabled();
         if (playerWin) {
             showFightEndDisplay();
         } else {

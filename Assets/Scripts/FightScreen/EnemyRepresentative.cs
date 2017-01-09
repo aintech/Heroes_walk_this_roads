@@ -12,9 +12,9 @@ public class EnemyRepresentative : CharacterRepresentative {
 
     private Transform healthBar, barHolder;
 
-	private Vector3 initPosition = new Vector3(0, 0, 1), healthScale = Vector3.one;
+	private Vector3 initPosition = new Vector3(0, -3.5f, 1), healthScale = Vector3.one;
 
-    private Vector3 smallScale = new Vector3(.7f, .7f, 1);
+    private Vector3 smallScale = new Vector3(.6f, .6f, 1), normalScale = new Vector3(.7f, .7f, 1);
 
     private string backgroundLayerName = "Fight Screen", foregroundLayerName = "Fight Screen Foreground";
 
@@ -116,7 +116,7 @@ public class EnemyRepresentative : CharacterRepresentative {
 
         barHolder.gameObject.gameObject.SetActive(true);
 
-        transform.localScale = Vector3.one;
+        transform.localScale = normalScale;
     }
 
     public override void onHealModified () {

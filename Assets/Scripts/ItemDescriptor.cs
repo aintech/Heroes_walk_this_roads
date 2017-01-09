@@ -113,33 +113,33 @@ public class ItemDescriptor : MonoBehaviour {
 	}
 
 	void Update () {
-		if (Input.GetMouseButtonDown(1)) {
-			passRightClick();
-		} else {
-			if (onScreen) {
-				if (Utils.hit == null) {
-					hide ();
-				} else if (Utils.hit != null) {
-					tempHolder = Utils.hit.GetComponent<ItemHolder> ();
-					if (tempHolder == null || tempHolder.item == null) {
-						hide ();
-					} else if (tempHolder != holder || tempHolder.item != item) {
-						showDescription (tempHolder);
-					}
-				}
-				pos = Utils.mousePos;
-				if (pos.y < minY + spaceOffset.y) { pos.y = minY + spaceOffset.y; }
-				if (pos.x > maxX + spaceOffset.x) { pos.x = maxX + spaceOffset.x; }
-				trans.localPosition = pos;
-			} else {
-				if (Utils.hit != null) {
-					holder = Utils.hit.GetComponent<ItemHolder>();
-					if (holder != null && holder.item != null) {
-						showDescription(holder);
-					}
-				}
-			}
-		}
+//		if (Input.GetMouseButtonDown(1)) {
+//			passRightClick();
+//		} else {
+//			if (onScreen) {
+//				if (Utils.hit == null) {
+//					hide ();
+//				} else if (Utils.hit != null) {
+//					tempHolder = Utils.hit.GetComponent<ItemHolder> ();
+//					if (tempHolder == null || tempHolder.item == null) {
+//						hide ();
+//					} else if (tempHolder != holder || tempHolder.item != item) {
+//						showDescription (tempHolder);
+//					}
+//				}
+//				pos = Utils.mousePos;
+//				if (pos.y < minY + spaceOffset.y) { pos.y = minY + spaceOffset.y; }
+//				if (pos.x > maxX + spaceOffset.x) { pos.x = maxX + spaceOffset.x; }
+//				trans.localPosition = pos;
+//			} else {
+//				if (Utils.hit != null) {
+//					holder = Utils.hit.GetComponent<ItemHolder>();
+//					if (holder != null && holder.item != null) {
+//						showDescription(holder);
+//					}
+//				}
+//			}
+//		}
 	}
 
 	private float calcMeshLength (MeshRenderer mesh) {
@@ -247,7 +247,7 @@ public class ItemDescriptor : MonoBehaviour {
 			qualityBG.gameObject.SetActive (true);
 			qualityValue.gameObject.SetActive (true);
 
-			qualityValue.text = item.quality.getName();
+            qualityValue.text = item.quality.name();
 			scale.x = calcMeshLength(qualityRender);// qualityValue.text.Length + 1;
 			qualityBG.localScale = scale;
 			qualityValue.color = (data.quality == ItemQuality.ARTEFACT? artefactColor:
