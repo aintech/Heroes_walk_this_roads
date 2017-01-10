@@ -468,27 +468,27 @@ public class ElementsHolder : MonoBehaviour {
 
 	private ElementType getRandomType (ElementType[] exclusion) {
 		ElementType elementType = ElementType.FIRE;
-		int rand = Random.Range(0, ElementDescriptor.getElementsCount());
+        int rand = Random.Range(0, ElementDescriptor.elementsCount);
 		if (exclusion == null) {
 			switch (rand) {
 				case 0: elementType = ElementType.FIRE; break;
 				case 1: elementType = ElementType.WATER; break;
 				case 2: elementType = ElementType.EARTH; break;
 				case 3: elementType = ElementType.AIR; break;
-				case 4: elementType = ElementType.LIGHT; break;
-				case 5: elementType = ElementType.DARK; break;
+//				case 4: elementType = ElementType.LIGHT; break;
+//				case 5: elementType = ElementType.DARK; break;
 				default: Debug.Log("Unknown element type");break;
 			}
 		} else {
 			while (elementType == exclusion[0] || elementType == exclusion[1]) {
-				rand = Random.Range(0, ElementDescriptor.getElementsCount());
+                rand = Random.Range(0, ElementDescriptor.elementsCount);
 				switch (rand) {
 					case 0: elementType = ElementType.FIRE; break;
 					case 1: elementType = ElementType.WATER; break;
 					case 2: elementType = ElementType.EARTH; break;
 					case 3: elementType = ElementType.AIR; break;
-					case 4: elementType = ElementType.LIGHT; break;
-					case 5: elementType = ElementType.DARK; break;
+//					case 4: elementType = ElementType.LIGHT; break;
+//					case 5: elementType = ElementType.DARK; break;
 					default: Debug.Log("Unknown element type");break;
 				}
 			}

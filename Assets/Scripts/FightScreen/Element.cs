@@ -49,7 +49,7 @@ public class Element : MonoBehaviour {
 	}
 
 	public void initRandomElement () {
-		int rand = Random.Range(0, ElementDescriptor.getElementsCount());
+        int rand = Random.Range(0, ElementDescriptor.elementsCount);
 		switch (rand) {
 			case 0: initElement(ElementType.FIRE); break;
 			case 1: initElement(ElementType.WATER); break;
@@ -57,7 +57,7 @@ public class Element : MonoBehaviour {
 			case 3: initElement(ElementType.AIR); break;
 //			case 4: initElement(ElementType.LIGHT); break;
 //			case 5: initElement(ElementType.DARK); break;
-			default: Debug.Log("Unknown element type");break;
+//			default: Debug.Log("Unknown element type");break;
 		}
 	}
 
@@ -149,8 +149,8 @@ public class Element : MonoBehaviour {
 			case ElementType.WATER: render.sprite = waterElement; break;
 			case ElementType.EARTH: render.sprite = earthElement; break;
 			case ElementType.AIR: render.sprite = airElement; break;
-			case ElementType.LIGHT: render.sprite = lightElement; break;
-			case ElementType.DARK: render.sprite = darkElement; break;
+//			case ElementType.LIGHT: render.sprite = lightElement; break;
+//			case ElementType.DARK: render.sprite = darkElement; break;
 			default: Debug.Log("Unknown element type"); break;
 		}
 	}

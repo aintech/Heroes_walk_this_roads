@@ -31,15 +31,11 @@ public class DescriptionLine : MonoBehaviour {
 
     public float setText (string text) {
         valueText.text = text;
-        scale.x = calcMeshLength();
+        scale.x = Utils.calcMeshLength(mesh, fontLengthMulty);
         background.localScale = scale;
         gameObject.SetActive(true);
 
         return mesh.bounds.size.x;
-    }
-
-    private float calcMeshLength () {
-        return mesh.bounds.size.x * fontLengthMulty;
     }
 
     public void hide () {

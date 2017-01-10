@@ -194,8 +194,8 @@ public class ElementEffect : MonoBehaviour {
 			case ElementType.WATER: element.sprite = waterElement; break;
 			case ElementType.EARTH: element.sprite = earthElement; break;
 			case ElementType.AIR: element.sprite = airElement; break;
-			case ElementType.LIGHT: element.sprite = lightElement; break;
-			case ElementType.DARK: element.sprite = darkElement; break;
+//			case ElementType.LIGHT: element.sprite = lightElement; break;
+//			case ElementType.DARK: element.sprite = darkElement; break;
 			default: Debug.Log("ERROR"); break;
 		}
 	}

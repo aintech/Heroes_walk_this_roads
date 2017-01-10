@@ -37,7 +37,7 @@ public class HeroRepresentative : CharacterRepresentative {
 		healthBar = transform.Find ("Health Bar");
         healthRender = healthBar.GetComponent<SpriteRenderer>();
 
-		coll = backgroundRender.GetComponent<BoxCollider2D> ();
+		coll = GetComponent<BoxCollider2D> ();
 
 		hero = Vars.heroes [type];
         character = hero;
@@ -48,32 +48,32 @@ public class HeroRepresentative : CharacterRepresentative {
 		coll.enabled = hero != null && statusScreen != null;
 		backgroundRender.sprite = hero == null ? noHeroBG : normalBG;
 
+        fillDescription();
+
 		return this;
 	}
 
     public void updateRepresentative () {
         Vars.heroes[type].refreshRepresentative(this);
         setAsActive(hero.health > 0);
+        updateDamageDescription();
     }
 
 	public override void setChosen (bool asChosen) {
         backgroundRender.sprite = asChosen ? activeBG : normalBG;
 	}
 
-//	void Update () {
-//		if (Input.GetMouseButtonDown (0) && Utils.hit != null && Utils.hit == coll) {
-//            statusScreen.chooseHero (type);
-//		}
-//	}
-
     public override void onHealModified () {
         if (hero.health <= 0) {
+            setAsActive(false);
+            removeFromQueue();
             healthScale.y = 0;
         } else {
 		    healthScale.y = (float) hero.health / (float) hero.maxHealth;
         }
         healthRender.color = hero.health == hero.maxHealth? full: ((float)hero.health / (float)hero.maxHealth) <= .25f? critical: wounded;
         healthBar.localScale = healthScale;
+        updateHealthDescription();
     }
 
     public void setAsActive (bool asActive) {

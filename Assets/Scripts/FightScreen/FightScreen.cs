@@ -33,8 +33,6 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 	private Vector3 playerStatusStartPosition = new Vector3(6.8f, 0, 0),
 					enemyStatusStartPosition = new Vector3(6.9f, 7.5f, 0);
 
-	private float playerStatusStep = 1.1f, enemyStatusStep = -.9f;
-
 	private Button captureBtn, releaseBtn;
 
     [HideInInspector]
@@ -76,7 +74,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 			slot.init();
 			supplySlots.Add(slot);
 		}
-		supplyHolder.gameObject.SetActive(true);
+        supplyHolder.gameObject.SetActive(false);
 
 		captureBtn = transform.Find ("Capture Button").GetComponent<Button> ().init ();
 		releaseBtn = transform.Find ("Release Button").GetComponent<Button> ().init ();
@@ -97,7 +95,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 				supSlot.item.transform.localScale = Vector3.one;
 			}
         }
-		ItemDescriptor2.instance.setEnabled();
+		ItemDescriptor.instance.setEnabled();
 		playerWin = false;
 		FightInterface.instance.updateHeroActions();
 
@@ -197,7 +195,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
         foreach (EnemyRepresentative enem in enemies) { enem.character.clearStatuses(); }
 		foreach (HeroRepresentative port in FightInterface.instance.portraits) { port.character.clearStatuses(); }
 
-		ItemDescriptor2.instance.setDisabled();
+		ItemDescriptor.instance.setDisabled();
         if (playerWin) {
             showFightEndDisplay();
         } else {

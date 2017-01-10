@@ -95,6 +95,7 @@ public class FightInterface : MonoBehaviour {
 		if(hero != null) {
 			foreach(HeroAction act in heroActions[hero]) {
 				act.checkElementsIsEnouth();
+                act.refillDescription();
 			}
             heroActions[hero][0].setChosen(true);
         }

@@ -67,4 +67,8 @@ public class Utils : MonoBehaviour {
 		disposedItems.Remove(returnedItem);
 		return returnedItem;
 	}
+
+    public static float calcMeshLength (MeshRenderer mesh, float multyplier) {
+        return mesh.bounds.size.x * multyplier;
+    }
 }

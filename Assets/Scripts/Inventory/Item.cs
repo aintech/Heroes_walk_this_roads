@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Item : MonoBehaviour, Describeable {
+public class Item : Describeable {
 
 	private SpriteRenderer render;
 
@@ -35,8 +35,6 @@ public class Item : MonoBehaviour, Describeable {
 
 	public string itemName { get { return itemData.name; } private set {;} }
 
-    private List<string> descript;
-
 	public Item init (ItemData itemData, int index) {
 		this.index = index;
 		return init(itemData);
@@ -54,8 +52,6 @@ public class Item : MonoBehaviour, Describeable {
 		quantityRender.sortingOrder = 3;
 
 		updateQuantityText();
-
-        int descriptionLines = 0;
 
 		switch (itemData.itemType) {
     		case ItemType.WEAPON: render.sprite = ImagesProvider.getWeapon(((WeaponData)itemData).type); break;
@@ -75,20 +71,20 @@ public class Item : MonoBehaviour, Describeable {
 		return this;
 	}
 
-    private void fillDescription () {
-        descript = new List<string>();
+    override protected void fillDescription () {
+        descrId = Vars.describeableId++;
 
-        descript.Add((itemData.quality != ItemQuality.COMMON? itemData.quality.richName() + " ": "") + itemData.name);
+        descr.Add((itemData.quality != ItemQuality.COMMON? itemData.quality.richName() + " ": "") + itemData.name);
 
         switch (itemData.itemType) {
             case ItemType.WEAPON:
-                descript.Add("Урон: <color=orange>" + ((WeaponData)itemData).damage + "</color>");
+                descr.Add("Урон: <color=orange>" + ((WeaponData)itemData).damage + "</color>");
                 break;
             case ItemType.ARMOR:
             case ItemType.SHIELD:
             case ItemType.GLOVE:
             case ItemType.HELMET:
-                descript.Add("Защита: <color=orange>" + ((ArmorModifier)itemData).armorClass() + "</color>");
+                descr.Add("Защита: <color=orange>" + ((ArmorModifier)itemData).armorClass() + "</color>");
                 break;
             case ItemType.AMULET:
             case ItemType.RING:
@@ -106,7 +102,7 @@ public class Item : MonoBehaviour, Describeable {
                     case SupplyType.ARMOR_POTION: val = "Повышение защиты на <color=white>" + sud.value + "</color> в течении <color=white>" + sud.duration + "</color> ходов"; break;
                     default: Debug.Log("Unknown supply type: " + sud.type); val = ""; break;
                 }
-                descript.Add("Эффект: <color=orange>" + val + "</color>");
+                descr.Add("Эффект: <color=orange>" + val + "</color>");
                 break;
         }
     }
@@ -130,10 +126,6 @@ public class Item : MonoBehaviour, Describeable {
 			Debug.Log("Dont know where return item: " + itemName);
 		}
 	}
-
-    public List<string> description () {
-        return descript;
-    }
 
 	public void dispose () {
 		Utils.disposeItem(this);

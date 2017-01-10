@@ -57,7 +57,7 @@ public abstract class Character {
 	}
 
 	public int hit (int damageAmount)  {
-		int armorAmount = armorClass + (armorClass > 0? (guarded? Mathf.RoundToInt(damageAmount * .5f): 0): 0);
+        int armorAmount = armorClass + (armorClass > 0? (guarded? Mathf.RoundToInt(damageAmount * (HeroActionType.GUARD.value() * .01f)): 0): 0);
 
 //		if (statusEffects[StatusEffectType.ARMORED].inProgress) {
 //			armorAmount += statusEffects[StatusEffectType.ARMORED].value;
@@ -119,6 +119,7 @@ public abstract class Character {
 
     public void refreshStatuses () {
         foreach (StatusEffect status in statusEffects.Values) { status.updateStatus(); }
+        if (representative != null) { representative.updateStatusEffects(); }
     }
 
     public void clearStatuses () {

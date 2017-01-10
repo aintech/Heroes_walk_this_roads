@@ -28,7 +28,7 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 
 	public StatusScreen init () {
 		instance = this;
-		ItemDescriptor2.instance.statusScreen = this;
+		ItemDescriptor.instance.statusScreen = this;
 
 		innerInit(transform.Find("Inventory").GetComponent<Inventory>().init(Inventory.InventoryType.INVENTORY), "Inventory");
 
@@ -113,7 +113,7 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
             port.onHealModified();
         }
 
-		ItemDescriptor2.instance.setEnabled();
+		ItemDescriptor.instance.setEnabled();
 
 		inventory.setContainerScreen(this, 6);
 		inventory.setInventoryToBegin ();
@@ -149,7 +149,7 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
         Gameplay.topHideable.setVisible(true);
 //		UserInterface.showInterface = true;
         UserInterface.updateStatusBtnText(false);
-		ItemDescriptor2.instance.setDisabled();
+		ItemDescriptor.instance.setDisabled();
 
 		if (!byInputProcessor) { InputProcessor.removeLast(); }
 	}
@@ -202,7 +202,21 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 				}
 				setItemToSlot (slot);
 			}
-		} else if (draggedItem.cell == null && draggedItem.slot == null) {
+        } else if (Utils.hit != null && Utils.hit.GetComponent<HeroRepresentative>() != null) {
+            HeroRepresentative hero = Utils.hit.GetComponent<HeroRepresentative>();
+            if (draggedItem.type == ItemType.SUPPLY) {
+                SupplyData supply = (SupplyData)draggedItem.itemData;
+                if (supply.type == SupplyType.HEALTH_POTION && hero.character.health < hero.character.maxHealth) {
+                    hero.character.heal(supply.value);
+                    supply.item.dispose();
+                    draggedItem = null;
+                } else {
+                    draggedItem.returnToParent();
+                }
+            } else {
+                draggedItem.returnToParent();
+            }
+        } else if (draggedItem.cell == null && draggedItem.slot == null) {
 			if (inventory.gameObject.activeInHierarchy) {
 				inventory.addItemToCell (draggedItem, null);
 			}

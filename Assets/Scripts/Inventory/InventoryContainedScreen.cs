@@ -70,8 +70,11 @@ public abstract class InventoryContainedScreen : MonoBehaviour, ButtonHolder {
 	
 	private void dropItem () {
 		checkItemDrop ();
-		draggedItem.changeSortOrder(dragOrder - 1);
-		if(chosenItem != null) chosenItemBorder.position = chosenItem.transform.position;
+        if (draggedItem != null) { draggedItem.changeSortOrder(dragOrder - 1); }
+        else { hideItemInfo(); }
+
+        if (chosenItem != null) { chosenItemBorder.position = chosenItem.transform.position; }
+
 		draggedItem = null;
 		afterItemDrop ();
 	}

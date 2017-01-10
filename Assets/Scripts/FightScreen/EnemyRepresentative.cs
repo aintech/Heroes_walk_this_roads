@@ -67,6 +67,8 @@ public class EnemyRepresentative : CharacterRepresentative {
         }
 		coll = gameObject.AddComponent<PolygonCollider2D>();
 
+        fillDescription();
+
         onHealModified();
 
         sendToBackground();
@@ -127,6 +129,7 @@ public class EnemyRepresentative : CharacterRepresentative {
             healthScale.x = (float)character.health / (float) character.maxHealth;
             healthBar.localScale = healthScale;
         }
+        updateHealthDescription();
     }
 
 	public void playHit () {

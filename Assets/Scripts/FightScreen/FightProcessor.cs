@@ -228,7 +228,7 @@ public class FightProcessor : MonoBehaviour {
 						currCharacter.guarded = true;
 						break;
 					case HeroActionType.HEAL:
-						actionTargets[0].heal(50);
+                        actionTargets[0].heal(HeroActionType.HEAL.value());
 						break;
 					default: Debug.Log("Action: " + heroAction.actionType); break;
                 }
@@ -310,10 +310,11 @@ public class FightProcessor : MonoBehaviour {
                     //                target.addStatus((StatusEffectType)Enum.GetValues(typeof (StatusEffectType)).GetValue(UnityEngine.Random.Range(0, Enum.GetValues(typeof (StatusEffectType)).Length - 1)), 5, 5);
                 }
             }
-        } else {
-            ((HeroRepresentative)target.representative).setAsActive(false);
-            removeFromQueue(target);
         }
+//        else {
+//            ((HeroRepresentative)target.representative).setAsActive(false);
+//            removeFromQueue(target);
+//        }
 
 //        if (fightScreen.getStatusEffectByType(StatusEffectType.BLINDED, false).inProgress && (Random.value < .5f)) {
 //            fightScreen.fightEffectPlayer.playEffect(FightEffectType.MISS, 0);

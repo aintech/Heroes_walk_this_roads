@@ -34,7 +34,7 @@ public class MarketScreen : TownScreen {
 
         gameObject.SetActive (true);
 
-		ItemDescriptor2.instance.setEnabled();
+		ItemDescriptor.instance.setEnabled();
 
         Messenger.showMessage("Правая кнопка мыши - купить или продать предмет.");
     }
@@ -43,7 +43,7 @@ public class MarketScreen : TownScreen {
         buy.hide();
         sell.hide();
 		StatusScreen.instance.inventory.setItemsFromOtherInventory(sell.inventory);
-		ItemDescriptor2.instance.setDisabled();
+		ItemDescriptor.instance.setDisabled();
         UserInterface.setEquipmentBtnActive(true);
     }
 
