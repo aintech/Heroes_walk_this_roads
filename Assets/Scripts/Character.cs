@@ -29,7 +29,7 @@ public abstract class Character {
     public bool moveDone;
 
 	[HideInInspector]
-	public bool guarded;
+	public bool guardAbilityON;
 
     public bool alive { get; private set; }
 
@@ -56,17 +56,48 @@ public abstract class Character {
 		return (int)UnityEngine.Random.Range(dmg - (Mathf.RoundToInt(dmg * .2f)), dmg + (Mathf.RoundToInt(dmg * .2f)));
 	}
 
-	public int hit (int damageAmount)  {
-        int armorAmount = armorClass + (armorClass > 0? (guarded? Mathf.RoundToInt(damageAmount * (HeroActionType.GUARD.value() * .01f)): 0): 0);
+    public int hit (int damageAmount)  {
+        int armorAmount = armorClass;// + (armorClass > 0? (guarded? Mathf.RoundToInt(damageAmount * (HeroActionType.GUARD.value() * .01f)): 0): 0);
+        int amount = damageAmount;
+        if (isHero()) {
+            if (statusEffects[StatusEffectType.HERO_HEAVY_GUARD].inProgress && armorAmount > 0) {
+                armorAmount += Mathf.RoundToInt((float)armorAmount * .5f);
+            } else if (statusEffects[StatusEffectType.HERO_INVULNERABILITY_SPHERE].inProgress) {
+                statusEffects[StatusEffectType.HERO_INVULNERABILITY_SPHERE].endEffect();
+                return 0;
+            } else if (statusEffects[StatusEffectType.HERO_DODGE].inProgress) {
+                if (UnityEngine.Random.value <= .25f) {
+                    return 0;
+                }
+            } else if (statusEffects[StatusEffectType.HERO_SACRIFICE].inProgress) {
+                Hero sacrHero = null;
+                foreach (Hero hero in Vars.heroes.Values) {
+                    if (hero.alive && hero.type != ((Hero)this).type) {
+                        if (sacrHero == null) {
+                            sacrHero = hero;
+                        } else if (sacrHero.health < hero.health) {
+                            sacrHero = hero;
+                        }
+                    }
+                }
+                if (sacrHero == null) {
+                    statusEffects[StatusEffectType.HERO_SACRIFICE].endEffect();
+                    hit(damageAmount);
+                } else {
+                    sacrHero.hit(Mathf.RoundToInt((float)damageAmount * .75f));
+                    amount = Mathf.RoundToInt((float)damageAmount * .25f);
+                }
+            }
+        }
 
 //		if (statusEffects[StatusEffectType.ARMORED].inProgress) {
 //			armorAmount += statusEffects[StatusEffectType.ARMORED].value;
 //		}
 
-		if (damageAmount <= armorAmount) {
+		if (amount <= armorAmount) {
 			return 0;
 		} else {
-			health -= (damageAmount - armorAmount);
+			health -= (amount - armorAmount);
             if (health <= 0) {
                 health = 0;
                 alive = false;
@@ -75,7 +106,7 @@ public abstract class Character {
                 }
             }
 			representative.onHealModified();
-			return damageAmount - armorAmount;
+			return amount - armorAmount;
 		}
 	}
 

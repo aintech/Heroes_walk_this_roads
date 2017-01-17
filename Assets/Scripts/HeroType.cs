@@ -3,7 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 
 public enum HeroType {
-	ALIKA, VICTORIA, LIARA, KATE//, ROKSANA, MARIKA
+	ALIKA,//Fighter
+    VICTORIA,//Healer
+    LIARA,//Mage
+    KATE//Thief
+    //, ROKSANA, MARIKA
 }
 
 public static class HeroDescriptor {
@@ -40,10 +44,10 @@ public static class HeroDescriptor {
 
 	public static int agility (this HeroType type) {
         switch (type) {
-            case HeroType.KATE: return 10;
-            case HeroType.LIARA: return 11;
-            case HeroType.VICTORIA: return 12;
-            case HeroType.ALIKA: return 13;
+            case HeroType.KATE: return 15;
+            case HeroType.LIARA: return 10;
+            case HeroType.VICTORIA: return 10;
+            case HeroType.ALIKA: return 12;
             default: return 1;
         }
 	}
@@ -51,10 +55,10 @@ public static class HeroDescriptor {
     public static HeroActionType[] heroActions (this HeroType type) {
         if (heroActionsMap == null) {
             heroActionsMap = new Dictionary<HeroType, HeroActionType[]>();
-			heroActionsMap.Add(HeroType.ALIKA, new HeroActionType[]{HeroActionType.ATTACK, HeroActionType.GUARD, HeroActionType.HEAL});
-			heroActionsMap.Add(HeroType.KATE, new HeroActionType[]{HeroActionType.ATTACK, HeroActionType.GUARD, HeroActionType.HEAL});
-			heroActionsMap.Add(HeroType.LIARA, new HeroActionType[]{HeroActionType.ATTACK, HeroActionType.GUARD, HeroActionType.HEAL});
-			heroActionsMap.Add(HeroType.VICTORIA, new HeroActionType[]{HeroActionType.ATTACK, HeroActionType.GUARD, HeroActionType.HEAL});
+            heroActionsMap.Add(HeroType.ALIKA, new HeroActionType[]{HeroActionType.SWORD_SWING, HeroActionType.HEAVY_GUARD, HeroActionType.CRUSHING});
+            heroActionsMap.Add(HeroType.VICTORIA, new HeroActionType[]{HeroActionType.STAFF_ATTACK, HeroActionType.SACRIFICE, HeroActionType.HEAL});
+            heroActionsMap.Add(HeroType.LIARA, new HeroActionType[]{HeroActionType.MAGIC_ARROW, HeroActionType.INVULNERABILITY_SPHERE, HeroActionType.FIRE_WALL});
+            heroActionsMap.Add(HeroType.KATE, new HeroActionType[]{HeroActionType.DAGGERS_CUT, HeroActionType.DODGE, HeroActionType.DUST_IN_EYES});
         }
         return heroActionsMap[type];
     }

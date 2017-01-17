@@ -18,10 +18,10 @@ public static class ElementDescriptor {
 
     public static string name (this ElementType type) {
         switch (type) {
-            case ElementType.AIR: return "Воздух";
-            case ElementType.EARTH: return "Земля";
-            case ElementType.FIRE: return "Огонь";
-            case ElementType.WATER: return "Вода";
+            case ElementType.FIRE: return "Ярость";
+            case ElementType.EARTH: return "Воля";
+            case ElementType.WATER: return "Смирение";
+            case ElementType.AIR: return "Разум";
             default: Debug.Log("Unknown element type: " + type); return "";
         }
     }

@@ -21,6 +21,8 @@ public class StatusEffect {
 
     private Character owner;
 
+    public bool isSpecialStatus { get; private set; }
+
     public StatusEffect init (StatusEffectType type, Character owner) {
         this.type = type;
         this.owner = owner;
@@ -30,15 +32,22 @@ public class StatusEffect {
 	}
 
 	public void addStatus (int value, int duration) {
-		this.value = value;
-		this.duration = duration;
-		isFired = true;
-        addingTime = (int)Time.time;
-        owner.representative.repositionStatuses();
-        if (holder != null) { holder.show(); }
+        if (isFired || inProgress) {
+            this.duration += duration;
+        } else {
+    		this.value = value;
+    		this.duration = duration;
+            isSpecialStatus = value == 0 && duration == 0;
+    		isFired = true;
+            inProgress = isSpecialStatus;
+            addingTime = (int)Time.time;
+            owner.representative.repositionStatuses();
+            if (holder != null) { holder.show(); }
+        }
 	}
 
 	public void updateStatus () {
+        if (isSpecialStatus) { return; }
 		if (isFired && !inProgress) {
 			inProgress = true;
             if (holder != null) { holder.setAsEnabled(); }

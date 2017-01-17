@@ -19,7 +19,7 @@ public class FightProcessor : MonoBehaviour {
 
 	public static bool FIGHT_ANIM_PLAYER_DONE = true, FIGHT_ANIM_ENEMY_DONE = true;
 
-    private List<EnemyRepresentative> enemies;
+    public List<EnemyRepresentative> enemies { get; private set; }
 
     private List<Hero> heroes;
 
@@ -181,7 +181,17 @@ public class FightProcessor : MonoBehaviour {
 		}
 
         currCharacter = queue[0];
-		currCharacter.guarded = false;
+        if (currCharacter.isHero()) {
+            if (currCharacter.statusEffects[StatusEffectType.HERO_HEAVY_GUARD].inProgress) {
+                currCharacter.statusEffects[StatusEffectType.HERO_HEAVY_GUARD].endEffect();
+            } else if (currCharacter.statusEffects[StatusEffectType.HERO_DODGE].inProgress) {
+                currCharacter.statusEffects[StatusEffectType.HERO_DODGE].endEffect();
+            } else if (currCharacter.statusEffects[StatusEffectType.HERO_INVULNERABILITY_SPHERE].inProgress) {
+                currCharacter.statusEffects[StatusEffectType.HERO_INVULNERABILITY_SPHERE].endEffect();
+            } else if (currCharacter.statusEffects[StatusEffectType.HERO_SACRIFICE].inProgress) {
+                currCharacter.statusEffects[StatusEffectType.HERO_SACRIFICE].endEffect();
+            }
+        }
         currCharacter.refreshStatuses();
         if (currCharacter.moveDone) {
             startNextTurn();
@@ -221,16 +231,35 @@ public class FightProcessor : MonoBehaviour {
 				}
 				ElementsPool.instance.updateCounters();
                 switch (heroAction.actionType) {
-                    case HeroActionType.ATTACK:
+                    case HeroActionType.SWORD_SWING:
+                    case HeroActionType.MAGIC_ARROW:
+                    case HeroActionType.STAFF_ATTACK:
+                    case HeroActionType.DAGGERS_CUT:
                         actionTargets[0].hit(currCharacter.randomDamage());
                         break;
-					case HeroActionType.GUARD:
-						currCharacter.guarded = true;
-						break;
+
+                    case HeroActionType.HEAVY_GUARD: currCharacter.statusEffects[StatusEffectType.HERO_HEAVY_GUARD].addStatus(0, 0); break;
+                    case HeroActionType.INVULNERABILITY_SPHERE: currCharacter.statusEffects[StatusEffectType.HERO_INVULNERABILITY_SPHERE].addStatus(0, 0); break;
+                    case HeroActionType.SACRIFICE: currCharacter.statusEffects[StatusEffectType.HERO_SACRIFICE].addStatus(0, 0); break;
+                    case HeroActionType.DODGE: currCharacter.statusEffects[StatusEffectType.HERO_DODGE].addStatus(0, 0); break;
+                        
+                    case HeroActionType.CRUSHING:
+                        actionTargets[0].hit(currCharacter.randomDamage() * 2);
+                        break;
 					case HeroActionType.HEAL:
-                        actionTargets[0].heal(HeroActionType.HEAL.value());
-						break;
-					default: Debug.Log("Action: " + heroAction.actionType); break;
+                        actionTargets[0].heal(currCharacter.damage() * 2);
+                        break;
+                    case HeroActionType.FIRE_WALL:
+                        foreach (Character enemy in actionTargets) {
+                            enemy.hit(Mathf.RoundToInt((float)currCharacter.randomDamage() * .5f));
+                            break;
+                        }
+                        break;
+                    case HeroActionType.DUST_IN_EYES:
+                        actionTargets[0].statusEffects[StatusEffectType.BLINDED].addStatus(0, 3);
+                        break;
+
+					default: Debug.Log("Unknown action type: " + heroAction.actionType); break;
                 }
                 heroAction = null;
                 actionTargets = null;

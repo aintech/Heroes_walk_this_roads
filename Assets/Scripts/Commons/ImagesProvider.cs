@@ -38,9 +38,22 @@ public class ImagesProvider : MonoBehaviour {
 
     public static Sprite getHeroAction (HeroActionType type) {
         switch (type) {
-            case HeroActionType.ATTACK: return heroActions[0];
-            case HeroActionType.GUARD: return heroActions[1];
-			case HeroActionType.HEAL: return heroActions[2];
+            case HeroActionType.SWORD_SWING: return heroActions[0];
+            case HeroActionType.HEAVY_GUARD: return heroActions[1];
+            case HeroActionType.CRUSHING: return heroActions[2];
+
+            case HeroActionType.MAGIC_ARROW: return heroActions[3];
+            case HeroActionType.INVULNERABILITY_SPHERE: return heroActions[4];
+            case HeroActionType.FIRE_WALL: return heroActions[5];
+
+            case HeroActionType.STAFF_ATTACK: return heroActions[6];
+            case HeroActionType.SACRIFICE: return heroActions[7];
+            case HeroActionType.HEAL: return heroActions[8];
+
+            case HeroActionType.DAGGERS_CUT: return heroActions[9];
+            case HeroActionType.DODGE: return heroActions[10];
+            case HeroActionType.DUST_IN_EYES: return heroActions[11];
+                
             default: Debug.Log("Unknown action type: " + type); return null;
         }
     }
@@ -144,6 +157,9 @@ public class ImagesProvider : MonoBehaviour {
 			case WeaponType.IRON_SWORD: return weapons[0];
 			case WeaponType.SQUIRE_SWORD: return weapons[1];
 			case WeaponType.NOBLE_SWORD: return weapons[2];
+            case WeaponType.IRON_DAGGERS: return weapons[3];
+            case WeaponType.MAGIC_WAND: return weapons[4];
+            case WeaponType.WOODEN_STAFF: return weapons[5];
 			default: Debug.Log("Unknown weapon type: " + type); return null;
 		}
 	}

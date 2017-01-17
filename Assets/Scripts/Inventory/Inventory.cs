@@ -25,7 +25,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 
 	private bool scrollableUp, scrollableDown;
 
-	private TextMesh volumeMesh;
+//	private TextMesh volumeMesh;
 
 	public Inventory init (InventoryType inventoryType) {
 		this.inventoryType = inventoryType;
@@ -42,12 +42,12 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		downBtn = transform.FindChild ("Down Button").GetComponent<Button> ().init();
         if (inventoryType == InventoryType.INVENTORY) {
             sortBtn = transform.FindChild("Sort Button").GetComponent<Button>().init();
-            volumeMesh = transform.Find ("VolumeTxt").GetComponent<TextMesh> ();
-            MeshRenderer meshRend = volumeMesh.GetComponent<MeshRenderer> ();
-            meshRend.sortingLayerName = "Inventory";
-            meshRend.sortingOrder = 3;
+//            volumeMesh = transform.Find ("VolumeTxt").GetComponent<TextMesh> ();
+//            MeshRenderer meshRend = volumeMesh.GetComponent<MeshRenderer> ();
+//            meshRend.sortingLayerName = "Inventory";
+//            meshRend.sortingOrder = 3;
             sortBtn.gameObject.SetActive(inventoryType == InventoryType.INVENTORY);
-            volumeMesh.gameObject.SetActive(inventoryType == InventoryType.INVENTORY);
+//            volumeMesh.gameObject.SetActive(inventoryType == InventoryType.INVENTORY);
         }
 
 		checkButtons ();
@@ -234,7 +234,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		foreach (KeyValuePair<int, Item> pair in items) {
 			freeVolume -= pair.Value.volume;	
 		}
-		updateVolumeTxt();
+//		updateVolumeTxt();
 	}
 
 	public float getFreeVolume () {
@@ -279,10 +279,10 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		sortInventory();
 	}
 
-	private void updateVolumeTxt () {
-		if (inventoryType != InventoryType.INVENTORY) { return; }
-		volumeMesh.text = "Объём: " + (freeVolume < 0? "<color=red>": "<color=orange>") + freeVolume.ToString("0.0") + "</color>";
-	}
+//	private void updateVolumeTxt () {
+//		if (inventoryType != InventoryType.INVENTORY) { return; }
+//		volumeMesh.text = "Объём: " + (freeVolume < 0? "<color=red>": "<color=orange>") + freeVolume.ToString("0.0") + "</color>";
+//	}
 
 	public Dictionary<int, Item> getItems () {
 		//По странной причине иногда после боя ячейки теряют свои предметы...

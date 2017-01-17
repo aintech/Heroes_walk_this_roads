@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: c466716c67d607e4abe5dc284be4bf61
-timeCreated: 1483004821
+timeCreated: 1484661604
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -10,6 +10,10 @@ TextureImporter:
     21300006: StatusEffects_Regeneration
     21300008: StatusEffects_Armored
     21300010: StatusEffects_Speed
+    21300012: StatusEffects_HeroHeavyGuard
+    21300014: StatusEffects_InvulnerabilitySphere
+    21300016: StatusEffects_Sacrifice
+    21300018: StatusEffects_Dodge
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -129,6 +133,58 @@ TextureImporter:
         serializedVersion: 2
         x: 81
         y: 8
+        width: 31
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusEffects_HeroHeavyGuard
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 46
+        width: 31
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusEffects_InvulnerabilitySphere
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 46
+        width: 31
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusEffects_Sacrifice
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 46
+        width: 31
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusEffects_Dodge
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 46
         width: 31
         height: 31
       alignment: 0

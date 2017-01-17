@@ -1,13 +1,22 @@
 fileFormatVersion: 2
 guid: 4e139adba71390d4a97c59bcd01b49ce
-timeCreated: 1483170461
+timeCreated: 1484660532
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: HeroActions_Border
-    21300002: HeroActions_Attack
-    21300004: HeroActions_Guard
-    21300006: HeroActions_Heal
+    21300002: HeroActions_SwordSwing
+    21300004: HeroActions_HeavyGuard
+    21300006: HeroActions_Crushing
+    21300008: HeroActions_MagicArrow
+    21300010: HeroActions_InvulnerabilitySphere
+    21300012: HeroActions_FireWall
+    21300014: HeroActions_StaffAttack
+    21300016: HeroActions_Sacrifice
+    21300018: HeroActions_Heal
+    21300020: HeroActions_DaggerCut
+    21300022: HeroActions_Dodge
+    21300024: HeroActions_DustInEyes
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -61,20 +70,20 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 35
-        y: 32
-        width: 134
-        height: 134
+        y: 31
+        width: 135
+        height: 135
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: HeroActions_Attack
+      name: HeroActions_SwordSwing
       rect:
         serializedVersion: 2
-        x: 226
-        y: 33
+        x: 36
+        y: 188
         width: 132
         height: 132
       alignment: 0
@@ -83,11 +92,89 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: HeroActions_Guard
+      name: HeroActions_HeavyGuard
       rect:
         serializedVersion: 2
-        x: 408
-        y: 33
+        x: 198
+        y: 188
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: HeroActions_Crushing
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 188
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: HeroActions_MagicArrow
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 352
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: HeroActions_InvulnerabilitySphere
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 351
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: HeroActions_FireWall
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 351
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: HeroActions_StaffAttack
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 519
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: HeroActions_Sacrifice
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 518
         width: 132
         height: 132
       alignment: 0
@@ -99,10 +186,49 @@ TextureImporter:
       name: HeroActions_Heal
       rect:
         serializedVersion: 2
-        x: 595
-        y: 32
-        width: 131
-        height: 133
+        x: 362
+        y: 518
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: HeroActions_DaggerCut
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 690
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: HeroActions_Dodge
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 690
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: HeroActions_DustInEyes
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 691
+        width: 132
+        height: 132
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

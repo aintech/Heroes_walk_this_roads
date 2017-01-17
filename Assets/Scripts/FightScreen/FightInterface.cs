@@ -115,6 +115,22 @@ public class FightInterface : MonoBehaviour {
 		FightProcessor.instance.heroAction = action;
 		switch (action.targetType) {
 			case TargetType.SELF: chooseTargets(new Character[]{action.hero}); break;
+            case TargetType.ALLIES: 
+                List<Character> allies = new List<Character>();
+                foreach (Hero hero in Vars.heroes.Values) {
+                    if (hero.alive) { allies.Add(hero); }
+                }
+                chooseTargets(allies.ToArray());
+                break;
+            case TargetType.ENEMIES:
+                List<Character> enemies = new List<Character>();
+                foreach (EnemyRepresentative enemy in FightProcessor.instance.enemies) {
+                    if (enemy.character.alive) {
+                        enemies.Add(enemy.character);
+                    }
+                }
+                chooseTargets(enemies.ToArray());
+                break;
         }
     }
 

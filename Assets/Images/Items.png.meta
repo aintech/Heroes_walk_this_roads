@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: c2ebb63e896d51048bfaf934e210c497
-timeCreated: 1481295357
+timeCreated: 1484664184
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -17,6 +17,9 @@ TextureImporter:
     21300020: Items_Amulet
     21300022: Items_HealthPotion
     21300024: Items_Potion
+    21300026: Items_WoodenStaff
+    21300028: Items_IronDaggers
+    21300030: Items_MagicWand
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -226,6 +229,45 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1200
+        y: 0
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Items_WoodenStaff
+      rect:
+        serializedVersion: 2
+        x: 1500
+        y: 0
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Items_IronDaggers
+      rect:
+        serializedVersion: 2
+        x: 1650
+        y: 0
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Items_MagicWand
+      rect:
+        serializedVersion: 2
+        x: 1800
         y: 0
         width: 150
         height: 150
