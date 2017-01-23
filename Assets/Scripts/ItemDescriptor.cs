@@ -168,8 +168,8 @@ public class ItemDescriptor : MonoBehaviour {
                     } else if (holder.item.type == ItemType.RING) {
                         if (statusScreen.ringSlots[0].item == null) {
                             statusScreen.ringSlots[0].setItem(holder.takeItem());
-                        } else if (statusScreen.ringSlots[1].item == null) {
-                            statusScreen.ringSlots[1].setItem(holder.takeItem());
+//                        } else if (statusScreen.ringSlots[1].item == null) {
+//                            statusScreen.ringSlots[1].setItem(holder.takeItem());
                         } else {
                             Item item = statusScreen.ringSlots[0].takeItem();
                             statusScreen.ringSlots[0].setItem(holder.takeItem());
@@ -177,12 +177,17 @@ public class ItemDescriptor : MonoBehaviour {
                         }
                     } else {
                         EquipmentSlot slot = statusScreen.getEquipmentSlot(holder.item.type);
-                        if (slot.item == null) {
-                            slot.setItem(holder.takeItem());
-                        } else {
-                            Item item = slot.takeItem();
-                            slot.setItem(holder.takeItem());
-                            statusScreen.inventory.addItemToCell(item, null);
+                        if (slot != null) {
+                            if (slot.itemType == ItemType.WEAPON && ((WeaponData)holder.item.itemData).type.user() != statusScreen.chosenHero.type) {
+                                return;
+                            }
+                            if (slot.item == null) {
+                                slot.setItem(holder.takeItem());
+                            } else {
+                                Item item = slot.takeItem();
+                                slot.setItem(holder.takeItem());
+                                statusScreen.inventory.addItemToCell(item, null);
+                            }
                         }
                     }
                 }

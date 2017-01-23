@@ -6,23 +6,45 @@ public class EquipmentSlot : Slot {
     [HideInInspector]
     public StatusScreen statusScreen;
 
+    public Sprite swordIcon, daggersIcon, staffIcon, wandIcon;
+
+    public void checkVisible (HeroType heroType) {
+        iconRender.sprite = heroType == HeroType.ALIKA? swordIcon:
+                            heroType == HeroType.LIARA? wandIcon:
+                            heroType == HeroType.KATE? daggersIcon:
+                            heroType == HeroType.VICTORIA? staffIcon:
+                            null;
+    }
+
 	public override void setItem (Item item) {
 		if (!item.gameObject.activeInHierarchy) { item.gameObject.SetActive(true); }
-		if (item.type == ItemType.WEAPON) {
-			statusScreen.chosenHero.equipWeapon((WeaponData)item.itemData);
-		} else if (item.itemData is ArmorModifier) {
-			statusScreen.chosenHero.equipArmor((ArmorModifier)item.itemData);
-		}
+        switch (item.type) {
+            case ItemType.WEAPON: statusScreen.chosenHero.equipWeapon((WeaponData)item.itemData); break;
+            case ItemType.ARMOR: statusScreen.chosenHero.equipArmor((ArmorData)item.itemData); break;
+            case ItemType.AMULET: statusScreen.chosenHero.equipAmulet((AmuletData)item.itemData); break;
+            case ItemType.RING: statusScreen.chosenHero.equipRing((RingData)item.itemData, 0); break;
+        }
+//		if (item.type == ItemType.WEAPON) {
+//			statusScreen.chosenHero.equipWeapon((WeaponData)item.itemData);
+//        } else if (item.itemData is ArmorModifier) {
+//			statusScreen.chosenHero.equipArmor((ArmorModifier)item.itemData);
+//		}
 		base.setItem (item);
         statusScreen.updateAttributes();
 	}
 
 	public override Item takeItem () {
-		if (item.type == ItemType.WEAPON) {
-			statusScreen.chosenHero.equipWeapon(null);
-		} else if (item.itemData is ArmorModifier) {
-			statusScreen.chosenHero.unEquipArmor((ArmorModifier)item.itemData);
-		}
+        switch (item.type) {
+            case ItemType.WEAPON: statusScreen.chosenHero.equipWeapon(null); break;
+            case ItemType.ARMOR: statusScreen.chosenHero.unEquipArmor((ArmorData)item.itemData); break;
+            case ItemType.AMULET: statusScreen.chosenHero.equipAmulet(null); break;
+            case ItemType.RING: statusScreen.chosenHero.equipRing(null, 0); break;
+        }
+//		if (item.type == ItemType.WEAPON) {
+//			statusScreen.chosenHero.equipWeapon(null);
+//		} else if (item.itemData is ArmorModifier) {
+//			statusScreen.chosenHero.unEquipArmor((ArmorModifier)item.itemData);
+//		}
         Item tempItem = base.takeItem();
         statusScreen.updateAttributes();
         return tempItem;

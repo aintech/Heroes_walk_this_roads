@@ -18,7 +18,7 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 
 	private List<HeroRepresentative> portraits = new List<HeroRepresentative>();
 
-    private StrokeText healthValue, experienceValue, damageValue, armorValue, strengthValue, enduranceValue, agilityValue;
+    private StrokeText healthValue, damageValue, armorValue, strengthValue, enduranceValue, agilityValue;
 
     private bool onTownMainScreen;
 
@@ -26,38 +26,46 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 
     private HeroType lastSelected = HeroType.ALIKA;
 
+//    private Button inventoryBtn, perksBtn;
+//
+//    private PerksDisplay perksDisplay;
+
 	public StatusScreen init () {
 		instance = this;
 		ItemDescriptor.instance.statusScreen = this;
 
 		innerInit(transform.Find("Inventory").GetComponent<Inventory>().init(Inventory.InventoryType.INVENTORY), "Inventory");
 
+//        perksDisplay = transform.Find("Perks Display").GetComponent<PerksDisplay>().init();
+
         allSlots = new List<Slot>();
         equipmentSlots = new List<EquipmentSlot>();
         supplySlots = new List<SupplySlot>();
 
         Slot slot;
-        Transform slotsContainer = transform.Find("Slots Container");
+        Transform slotsContainer = transform.Find("Equipment Slots");
         slotsContainer.gameObject.SetActive(true);
         ringSlots = new EquipmentSlot[2];
         for (int i = 0; i < slotsContainer.childCount; i++) {
             slot = slotsContainer.GetChild(i).GetComponent<Slot>();
-            if (slot != null) {
-                slot.init();
-                if (slot.itemType == ItemType.SUPPLY) {
-                    supplySlots.Add((SupplySlot)slot);
-                } else {
-                    if (slot.itemType == ItemType.RING) {
-                        if (slot.transform.position.x < 5) {
-                            ringSlots[0] = (EquipmentSlot)slot;
-                        } else {
-                            ringSlots[1] = (EquipmentSlot)slot;
-                        }
-                    }
-                    equipmentSlots.Add((EquipmentSlot)slot);
-                }
-                allSlots.Add(slot);
+            slot.init();
+            if (slot.itemType == ItemType.RING) {
+//                if (slot.transform.position.x < 5) {
+                    ringSlots[0] = (EquipmentSlot)slot;
+//                } else {
+//                    ringSlots[1] = (EquipmentSlot)slot;
+//                }
             }
+            equipmentSlots.Add((EquipmentSlot)slot);
+            allSlots.Add(slot);
+        }
+
+        slotsContainer = transform.Find("Supply Slots");
+        for (int i = 0; i < slotsContainer.childCount; i++) {
+            slot = slotsContainer.GetChild(i).GetComponent<Slot>();
+            slot.init();
+            supplySlots.Add((SupplySlot)slot);
+            allSlots.Add(slot);
         }
 
         foreach (EquipmentSlot slt in equipmentSlots) { slt.statusScreen = this; }
@@ -68,7 +76,6 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
         string layerName = "Inventory";
         int layerOrder = 3;
         healthValue = attributes.Find ("Health").GetComponent<StrokeText> ().init(layerName, layerOrder);
-        experienceValue = attributes.Find("Experience").GetComponent<StrokeText>().init(layerName, layerOrder);
         damageValue = attributes.Find ("Damage").GetComponent<StrokeText> ().init(layerName, layerOrder);
         armorValue = attributes.Find ("Armor").GetComponent<StrokeText> ().init(layerName, layerOrder);
         strengthValue = attributes.Find("Strength").GetComponent<StrokeText>().init(layerName, layerOrder);
@@ -83,6 +90,9 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 		for (int i = 0; i < portraitsHolder.childCount; i++) {
 			portraits.Add(portraitsHolder.GetChild(i).GetComponent<HeroRepresentative>().init());
 		}
+
+//        inventoryBtn = transform.Find("Inventory Button").GetComponent<Button>().init();
+//        perksBtn = transform.Find("Perks Button").GetComponent<Button>().init();
 
         gameObject.SetActive(false);
 
@@ -134,7 +144,6 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 
     public void updateAttributes () {
         healthValue.setText(chosenHero.health.ToString());// + (Player.health < Player.maxHealth? "/" + Player.maxHealth.ToString(): "");
-        experienceValue.setText(((int)chosenHero.experience).ToString() + " %");
         damageValue.setText(chosenHero.damage().ToString());
         armorValue.setText(chosenHero.armorClass.ToString());
         strengthValue.setText(chosenHero.strength.ToString());
@@ -154,7 +163,19 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 		if (!byInputProcessor) { InputProcessor.removeLast(); }
 	}
 
-	protected override void checkBtnPress (Button btn) {}
+	protected override void checkBtnPress (Button btn) {
+//        if (btn == inventoryBtn) {
+//            inventory.gameObject.SetActive(true);
+//            perksDisplay.gameObject.SetActive(false);
+//            hideItemInfo();
+//        } else if (btn == perksBtn) {
+//            inventory.gameObject.SetActive(false);
+//            perksDisplay.gameObject.SetActive(true);
+//            hideItemInfo();
+//        } else {
+//            Debug.Log("Unknown button: " + btn.name);
+//        }
+    }
 
 	override protected void checkItemDrop () {
 		if (Utils.hit != null && Utils.hit.name.Equals("Cell")) {
@@ -166,7 +187,16 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 			targetInv.addItemToCell(draggedItem, cell);
         } else if (Utils.hit != null && Utils.hit.name.Equals("Slot")) {
 			EquipmentSlot slot = Utils.hit.GetComponent<EquipmentSlot> ();
-			if (slot.itemType != draggedItem.type) {
+            bool appropriateType = false;
+            if (slot.itemType == draggedItem.type) {
+                if (draggedItem.type == ItemType.WEAPON) {
+                    if (((WeaponData)draggedItem.itemData).type.user() == chosenHero.type) {
+                        appropriateType = true;
+                    }
+                } else {appropriateType = true;}
+            }
+
+            if (!appropriateType) {
 				if (draggedItem.cell == null && draggedItem.slot == null) {
 					if (inventory.gameObject.activeInHierarchy) {
 						inventory.addItemToCell (draggedItem, draggedItem.cell);
@@ -235,27 +265,33 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 
 	override protected void afterItemDrop () {
 		if (draggedItem == null) {
-			highlightSlot (false, ItemType.MATERIAL);//Material здесь вместо null, т.к. enum неможет в null
+            highlightSlot (false, null);
 		}
 	}
 
 	override protected void choseItem (Item item) {
 		base.choseItem(item);
 		if (draggedItem != null) {
-			highlightSlot (true, item.type);
+			highlightSlot (true, item);
 		}
 //		perksView.hideInfo();
 	}
 
-	private void highlightSlot (bool hightlight, ItemType itemType) {
+	private void highlightSlot (bool hightlight, Item item) {
 		if (!hightlight) {
 			foreach (Slot slot in allSlots) { slot.setActive(false); }
 		} else {
-			if (itemType == ItemType.SUPPLY) {
+            if (item.type == ItemType.SUPPLY) {
 				foreach (Slot slot in supplySlots) { slot.setActive(true); }
 			} else {
 				foreach (EquipmentSlot slot in equipmentSlots) {
-					if (slot.itemType == itemType) { slot.setActive (true); }
+                    if (slot.itemType == item.type) {
+                        if (slot.itemType == ItemType.WEAPON) {
+                            if (((WeaponData)item.itemData).type.user() == chosenHero.type) {
+                                slot.setActive(true);
+                            }
+                        } else { slot.setActive(true); }
+                    }
 				}
 			}
 		}
@@ -270,6 +306,8 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 		}
 		chosenHero = Vars.heroes[type];
 
+        getEquipmentSlot(ItemType.WEAPON).checkVisible(chosenHero.type);
+
 		if (chosenHero.weapon != null) { getEquipmentSlot(ItemType.WEAPON).setItem(chosenHero.weapon.item); }
 		if (chosenHero.armor != null) { getEquipmentSlot(ItemType.ARMOR).setItem(chosenHero.armor.item); }
 		if (chosenHero.helmet != null) { getEquipmentSlot(ItemType.HELMET).setItem(chosenHero.helmet.item); }
@@ -277,7 +315,7 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 		if (chosenHero.glove != null) { getEquipmentSlot(ItemType.GLOVE).setItem(chosenHero.glove.item); }
 		if (chosenHero.amulet != null) { getEquipmentSlot(ItemType.AMULET).setItem(chosenHero.amulet.item); }
 		if (chosenHero.ring_1 != null) { ringSlots[0].setItem(chosenHero.ring_1.item); }
-		if (chosenHero.ring_1 != null) { ringSlots[1].setItem(chosenHero.ring_2.item); }
+		if (chosenHero.ring_2 != null) { ringSlots[1].setItem(chosenHero.ring_2.item); }
 
 		playerRender.sprite = ImagesProvider.getHero(chosenHero.type);
 

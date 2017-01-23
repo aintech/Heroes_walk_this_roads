@@ -56,11 +56,12 @@ public class Hero : Character {
 	}
 
 	public void equipRing (RingData ring, int index) {
-		switch (index) {
-		case 1: this.ring_1 = ring; break;
-		case 2: this.ring_2 = ring; break;
-		default: Debug.Log("Unknown index for ring: " + index); break;
-		}
+        this.ring_1 = ring;
+//		switch (index) {
+//		case 1: this.ring_1 = ring; break;
+//		case 2: this.ring_2 = ring; break;
+//		default: Debug.Log("Unknown index for ring: " + index); break;
+//		}
 	}
 
 	private void calculateArmorClass () {

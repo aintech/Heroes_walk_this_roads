@@ -7,7 +7,9 @@ public abstract class Slot : ItemHolder {
 
 	public Sprite slotBG, activeSlotBG;
 
-	private SpriteRenderer bgRender, iconRender;
+    protected SpriteRenderer iconRender;
+
+	private SpriteRenderer bgRender;
 
 	public void init () {
 		bgRender = GetComponent<SpriteRenderer>();

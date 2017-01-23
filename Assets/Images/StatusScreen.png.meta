@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 1056e969b7409cd45a614aee66976e67
-timeCreated: 1484664965
+timeCreated: 1485183183
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -52,7 +52,7 @@ TextureImporter:
     21300090: StatusScreen_AmuletSlot
     21300092: StatusScreen_ArmorSlot
     21300094: StatusScreen_GloveSlot
-    21300096: StatusScreen_WeaponSlot
+    21300096: StatusScreen_SwordSlot
     21300098: StatusScreen_ShieldSlot
     21300100: StatusScreen_RingSlot
     21300102: StatusScreen_AttributesBG
@@ -62,6 +62,14 @@ TextureImporter:
     21300110: StatusScreen_Hero
     21300112: StatusScreen_HeroActive
     21300114: StatusScreen_HeroHoverBorder
+    21300116: StatusScreen_PerksBG
+    21300118: StatusScreen_DaggersSlot
+    21300120: StatusScreen_StaffSlot
+    21300122: StatusScreen_WandSlot
+    21300124: StatusScreen_InventoryBtnHover
+    21300126: StatusScreen_InventoryBtn
+    21300128: StatusScreen_PerksBtnHover
+    21300130: StatusScreen_PerksBtn
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -115,11 +123,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 12
-        y: 72
+        y: 45
         width: 1005
-        height: 889
+        height: 946
       alignment: 9
-      pivot: {x: 0.526, y: 0.574}
+      pivot: {x: 0.526, y: 0.588}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -384,7 +392,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: StatusScreen_WeaponSlot
+      name: StatusScreen_SwordSlot
       rect:
         serializedVersion: 2
         x: 1089
@@ -427,9 +435,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1080
-        y: 24
+        y: 80
         width: 434
-        height: 302
+        height: 214
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -505,9 +513,113 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1555
-        y: 206
+        y: 204
         width: 121
         height: 141
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_PerksBG
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 1176
+        width: 948
+        height: 829
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_DaggersSlot
+      rect:
+        serializedVersion: 2
+        x: 1227
+        y: 948
+        width: 72
+        height: 72
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_StaffSlot
+      rect:
+        serializedVersion: 2
+        x: 1084
+        y: 937
+        width: 94
+        height: 94
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_WandSlot
+      rect:
+        serializedVersion: 2
+        x: 1092
+        y: 1080
+        width: 78
+        height: 79
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_InventoryBtnHover
+      rect:
+        serializedVersion: 2
+        x: 1351
+        y: 1051
+        width: 322
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_InventoryBtn
+      rect:
+        serializedVersion: 2
+        x: 1351
+        y: 952
+        width: 322
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_PerksBtnHover
+      rect:
+        serializedVersion: 2
+        x: 1728
+        y: 1051
+        width: 233
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusScreen_PerksBtn
+      rect:
+        serializedVersion: 2
+        x: 1728
+        y: 952
+        width: 233
+        height: 60
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
