@@ -30,7 +30,7 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 	public Inventory init (InventoryType inventoryType) {
 		this.inventoryType = inventoryType;
 
-		cells = transform.GetComponentsInChildren<InventoryCell> ();
+        cells = transform.Find("Cells Container").GetComponentsInChildren<InventoryCell> ();
 
 		itemsContainer = transform.Find("Items Container");
 
@@ -258,17 +258,24 @@ public class Inventory : MonoBehaviour, ButtonHolder {
 		clearInventory();
 		for (int i = 0; i < count; i++) {
 			ItemData data = null;
-			switch (Mathf.FloorToInt (UnityEngine.Random.value * 17)) {
-				case 0: data = ItemFactory.createItemData(ItemType.SHIELD); break;
-				case 1: data = ItemFactory.createItemData(ItemType.HELMET); break;
-				case 2: data = ItemFactory.createItemData(ItemType.GLOVE); break;
-                case 3: data = ItemFactory.createItemData(ItemType.AMULET); break;
-                case 4: data = ItemFactory.createItemData(ItemType.RING); break;
-				case 5: case 6: data = ItemFactory.createItemData(ItemType.WEAPON); break;
-				case 7: case 8: data = ItemFactory.createItemData(ItemType.ARMOR); break;
-				case 9: case 10: case 11: data = ItemFactory.createItemData(ItemType.MATERIAL); break;
-				case 12: case 13: case 14: case 15: case 16: data = ItemFactory.createItemData(ItemType.SUPPLY); break;
-			}
+            switch (UnityEngine.Random.Range(0, 10)) {
+                case 0: data = ItemFactory.createItemData(ItemType.AMULET); break;
+                case 1: data = ItemFactory.createItemData(ItemType.RING); break;
+                case 2: case 3: data = ItemFactory.createItemData(ItemType.ARMOR); break;
+                case 4: case 5: case 6: data = ItemFactory.createItemData(ItemType.WEAPON); break;
+                case 7: case 8: case 9: data = ItemFactory.createItemData(ItemType.SUPPLY); break;
+            }
+//			switch (Mathf.FloorToInt (UnityEngine.Random.value * 17)) {
+//				case 0: data = ItemFactory.createItemData(ItemType.SHIELD); break;
+//				case 1: data = ItemFactory.createItemData(ItemType.HELMET); break;
+//				case 2: data = ItemFactory.createItemData(ItemType.GLOVE); break;
+//                case 3: data = ItemFactory.createItemData(ItemType.AMULET); break;
+//                case 4: data = ItemFactory.createItemData(ItemType.RING); break;
+//				case 5: case 6: data = ItemFactory.createItemData(ItemType.WEAPON); break;
+//				case 7: case 8: data = ItemFactory.createItemData(ItemType.ARMOR); break;
+//				case 9: case 10: case 11: data = ItemFactory.createItemData(ItemType.MATERIAL); break;
+//				case 12: case 13: case 14: case 15: case 16: data = ItemFactory.createItemData(ItemType.SUPPLY); break;
+//			}
 			Item item = Instantiate<Transform>(ItemFactory.itemPrefab).GetComponent<Item>().init(data);
 			item.transform.SetParent(itemsContainer);
 			if (label != null) { item.name = label; }

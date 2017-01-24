@@ -50,17 +50,18 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
             slot = slotsContainer.GetChild(i).GetComponent<Slot>();
             slot.init();
             if (slot.itemType == ItemType.RING) {
-//                if (slot.transform.position.x < 5) {
+                if (slot.transform.position.y > -1) {
                     ringSlots[0] = (EquipmentSlot)slot;
-//                } else {
-//                    ringSlots[1] = (EquipmentSlot)slot;
-//                }
+                } else {
+                    ringSlots[1] = (EquipmentSlot)slot;
+                }
             }
             equipmentSlots.Add((EquipmentSlot)slot);
             allSlots.Add(slot);
         }
 
         slotsContainer = transform.Find("Supply Slots");
+        slotsContainer.gameObject.SetActive(true);
         for (int i = 0; i < slotsContainer.childCount; i++) {
             slot = slotsContainer.GetChild(i).GetComponent<Slot>();
             slot.init();
@@ -298,7 +299,7 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 	}
 
 	public void chooseHero (HeroType type) {
-		foreach (EquipmentSlot slot in equipmentSlots) {
+        foreach (Slot slot in allSlots) {
 			slot.hideItem();
 		}
 		foreach (HeroRepresentative portrait in portraits) {
@@ -308,14 +309,18 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 
         getEquipmentSlot(ItemType.WEAPON).checkVisible(chosenHero.type);
 
-		if (chosenHero.weapon != null) { getEquipmentSlot(ItemType.WEAPON).setItem(chosenHero.weapon.item); }
-		if (chosenHero.armor != null) { getEquipmentSlot(ItemType.ARMOR).setItem(chosenHero.armor.item); }
-		if (chosenHero.helmet != null) { getEquipmentSlot(ItemType.HELMET).setItem(chosenHero.helmet.item); }
-		if (chosenHero.shield != null) { getEquipmentSlot(ItemType.SHIELD).setItem(chosenHero.shield.item); }
-		if (chosenHero.glove != null) { getEquipmentSlot(ItemType.GLOVE).setItem(chosenHero.glove.item); }
-		if (chosenHero.amulet != null) { getEquipmentSlot(ItemType.AMULET).setItem(chosenHero.amulet.item); }
-		if (chosenHero.ring_1 != null) { ringSlots[0].setItem(chosenHero.ring_1.item); }
-		if (chosenHero.ring_2 != null) { ringSlots[1].setItem(chosenHero.ring_2.item); }
+        if (chosenHero.weapon != null) { getEquipmentSlot(ItemType.WEAPON).setItemWithoutEquip(chosenHero.weapon.item); }
+        if (chosenHero.armor != null) { getEquipmentSlot(ItemType.ARMOR).setItemWithoutEquip(chosenHero.armor.item); }
+        //		if (chosenHero.helmet != null) { getEquipmentSlot(ItemType.HELMET).setItemWithoutEquip(chosenHero.helmet.item); }
+        //		if (chosenHero.shield != null) { getEquipmentSlot(ItemType.SHIELD).setItemWithoutEquip(chosenHero.shield.item); }
+        //		if (chosenHero.glove != null) { getEquipmentSlot(ItemType.GLOVE).setItemsetItemWithoutEquipchosenHero.glove.item); }
+        if (chosenHero.amulet != null) { getEquipmentSlot(ItemType.AMULET).setItemWithoutEquip(chosenHero.amulet.item); }
+        if (chosenHero.ring_1 != null) { ringSlots[0].setItemWithoutEquip(chosenHero.ring_1.item); }
+        if (chosenHero.ring_2 != null) { ringSlots[1].setItemWithoutEquip(chosenHero.ring_2.item); }
+
+        for (int i = 0; i < supplySlots.Count; i++) {
+            supplySlots[i].setItem(chosenHero.supplies[i]);
+        }
 
 		playerRender.sprite = ImagesProvider.getHero(chosenHero.type);
 

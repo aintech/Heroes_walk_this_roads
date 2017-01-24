@@ -33,6 +33,8 @@ public class ItemDescriptor : MonoBehaviour {
 
     private long descriptionId = Vars.describeableId - 1;
 
+    private Item tempItem;
+
     public ItemDescriptor init () {
         instance = this;
 
@@ -158,6 +160,7 @@ public class ItemDescriptor : MonoBehaviour {
                 break;
             case Type.INVENTORY:
                 if (holder != null && holder is InventoryCell && holder.item != null) {
+                    tempItem = holder.item;
                     if (holder.item.type == ItemType.SUPPLY) {
                         for (int i = 0; i < statusScreen.supplySlots.Count; i++) {
                             if (statusScreen.getSupplySlot(i).item == null) {
@@ -168,12 +171,12 @@ public class ItemDescriptor : MonoBehaviour {
                     } else if (holder.item.type == ItemType.RING) {
                         if (statusScreen.ringSlots[0].item == null) {
                             statusScreen.ringSlots[0].setItem(holder.takeItem());
-//                        } else if (statusScreen.ringSlots[1].item == null) {
-//                            statusScreen.ringSlots[1].setItem(holder.takeItem());
+                        } else if (statusScreen.ringSlots[1].item == null) {
+                            statusScreen.ringSlots[1].setItem(holder.takeItem());
                         } else {
-                            Item item = statusScreen.ringSlots[0].takeItem();
+                            Item ring = statusScreen.ringSlots[0].takeItem();
                             statusScreen.ringSlots[0].setItem(holder.takeItem());
-                            statusScreen.inventory.addItemToCell(item, null);
+                            statusScreen.inventory.addItemToCell(ring, null);
                         }
                     } else {
                         EquipmentSlot slot = statusScreen.getEquipmentSlot(holder.item.type);
@@ -190,6 +193,7 @@ public class ItemDescriptor : MonoBehaviour {
                             }
                         }
                     }
+                    statusScreen.updateChosenItemBorder(tempItem);
                 }
                 break;
         }

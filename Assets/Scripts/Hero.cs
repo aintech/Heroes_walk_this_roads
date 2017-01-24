@@ -16,6 +16,8 @@ public class Hero : Character {
 	public RingData ring_1 { get; private set; }
 	public RingData ring_2 { get; private set; }
 
+    public SupplyData[] supplies { get; private set; }
+
 	private float currentExperience = 0, nextLevelExperience = 100;
 
 	public float experience { get { return currentExperience / nextLevelExperience; } private set {;} }
@@ -23,6 +25,7 @@ public class Hero : Character {
 	public Hero init (HeroType type) {
 		this.type = type;
 		innerInit(type.strenght(), type.endurance(), type.agility());
+        supplies = new SupplyData[6];
 		return this;
 	}
 
@@ -56,12 +59,11 @@ public class Hero : Character {
 	}
 
 	public void equipRing (RingData ring, int index) {
-        this.ring_1 = ring;
-//		switch (index) {
-//		case 1: this.ring_1 = ring; break;
-//		case 2: this.ring_2 = ring; break;
-//		default: Debug.Log("Unknown index for ring: " + index); break;
-//		}
+		switch (index) {
+    		case 0: this.ring_1 = ring; break;
+    		case 1: this.ring_2 = ring; break;
+    		default: Debug.Log("Unknown index for ring: " + index); break;
+		}
 	}
 
 	private void calculateArmorClass () {

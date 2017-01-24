@@ -37,6 +37,8 @@ public class ElementsPool : MonoBehaviour {
 
 		updateCounters();
 
+        gameObject.SetActive(true);
+
         return this;
     }
 

@@ -42,5 +42,7 @@ public abstract class Slot : ItemHolder {
 		iconRender.enabled = true;
         bgRender.enabled = true;
 		return itemRef;
-	}
+    }
+
+    public virtual void hideItem() {}
 }
