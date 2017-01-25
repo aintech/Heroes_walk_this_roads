@@ -30,7 +30,7 @@ public class FightInterface : MonoBehaviour {
 		Transform portraitsHolder = transform.Find("Portraits");
         portraits = new List<HeroRepresentative>();
 		for (int i = 0; i < portraitsHolder.childCount; i++) {
-			portraits.Add(portraitsHolder.GetChild(i).GetComponent<HeroRepresentative>().init());
+			portraits.Add(portraitsHolder.GetChild(i).GetComponent<HeroRepresentative>().init("Fight Interface"));
 		}
 
         actionsHolder = transform.Find("Actions Holder");

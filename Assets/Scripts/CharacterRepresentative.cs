@@ -22,6 +22,19 @@ public abstract class CharacterRepresentative : Describeable {
 
     private int beforeStatusesCount;
 
+    protected SpriteRenderer imageRender;
+
+    protected Color32 normalColor = new Color32(255, 255, 255, 255),
+                      redColor = new Color32(255, 0, 0, 255),
+                      grayColor = new Color32(100, 100, 100, 255),
+                      tempColor = new Color32();
+
+    private byte colorValue;
+
+    private bool hitAnimationInProgress;
+
+    protected Vector2 flyTextPoint;
+
 	protected void innerInit () {
         statusHolders = new Dictionary<StatusEffectType, StatusEffectHolder>();
         Transform statusesHolder = transform.Find("Statuses");
@@ -68,6 +81,16 @@ public abstract class CharacterRepresentative : Describeable {
     }
 
 	public void Update () {
+        if (hitAnimationInProgress) {
+            colorValue += (byte)(colorValue > 245? (255 - colorValue): 10);
+            tempColor.g = colorValue;
+            tempColor.b = colorValue;
+            imageRender.color = tempColor;
+            if (colorValue == 255) {
+                hitAnimationInProgress = false;
+                setAsActive(character.health > 0);
+            }
+        }
 		if (Input.GetMouseButtonDown(0) && Utils.hit != null && Utils.hit == coll) {
 			if (character.isHero() && StatusScreen.instance.gameObject.activeInHierarchy) {
 				StatusScreen.instance.chooseHero (((HeroRepresentative)this).type);
@@ -109,5 +132,22 @@ public abstract class CharacterRepresentative : Describeable {
     protected void updateDamageDescription () {
         descr[2] = "Сила удара: <color=#00FF00FF>" + character.damage() + "</color>";
         ItemDescriptor.instance.recheckValues(this);
+    }
+
+    public void playDamage (int amount) {
+        onHealModified();
+        tempColor = new Color32(redColor.r, redColor.g, redColor.b, redColor.a);
+        imageRender.color = tempColor;
+        hitAnimationInProgress = true;
+        colorValue = 0;
+        FightScreen.instance.flyTextManager.fireText("-" + amount, ColorType.RED, flyTextPoint);
+    }
+
+    public void refreshColor () {
+        imageRender.color = character.health > 0? normalColor: grayColor;
+    }
+
+    public void setAsActive (bool asActive) {
+        imageRender.color = asActive? normalColor: grayColor;
     }
 }

@@ -14,7 +14,7 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 
     public List<EquipmentSlot> equipmentSlots { get; private set; }
 
-    public List<SupplySlot> supplySlots { get; private set; }
+    public SupplySlot[] supplySlots { get; private set; }
 
 	private List<HeroRepresentative> portraits = new List<HeroRepresentative>();
 
@@ -40,7 +40,7 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 
         allSlots = new List<Slot>();
         equipmentSlots = new List<EquipmentSlot>();
-        supplySlots = new List<SupplySlot>();
+        supplySlots = new SupplySlot[6];
 
         Slot slot;
         Transform slotsContainer = transform.Find("Equipment Slots");
@@ -65,7 +65,7 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
         for (int i = 0; i < slotsContainer.childCount; i++) {
             slot = slotsContainer.GetChild(i).GetComponent<Slot>();
             slot.init();
-            supplySlots.Add((SupplySlot)slot);
+            supplySlots[slot.index] = (SupplySlot)slot;
             allSlots.Add(slot);
         }
 
@@ -89,7 +89,7 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 		Transform portraitsHolder = transform.Find("Portraits");
 		portraitsHolder.gameObject.SetActive(true);
 		for (int i = 0; i < portraitsHolder.childCount; i++) {
-			portraits.Add(portraitsHolder.GetChild(i).GetComponent<HeroRepresentative>().init());
+			portraits.Add(portraitsHolder.GetChild(i).GetComponent<HeroRepresentative>().init("Inventory"));
 		}
 
 //        inventoryBtn = transform.Find("Inventory Button").GetComponent<Button>().init();
@@ -101,18 +101,14 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 	}
 
     public EquipmentSlot getEquipmentSlot (ItemType type) {
-        foreach (EquipmentSlot slot in equipmentSlots) {
-            if (slot.itemType == type) { return slot; }
-        }
-        Debug.Log("No slot for item type: " + type);
-        return null;
+        return getEquipmentSlot(type, 0);
     }
 
-    public SupplySlot getSupplySlot (int index) {
-        foreach (SupplySlot slot in supplySlots) {
-            if (slot.index == index) { return slot; }
+    public EquipmentSlot getEquipmentSlot (ItemType type, int index) {
+        foreach (EquipmentSlot slot in equipmentSlots) {
+            if (slot.itemType == type && slot.index == index) { return slot; }
         }
-        Debug.Log("Unknown slot index: " + index);
+        Debug.Log("No slot for item type: " + type);
         return null;
     }
 
@@ -144,12 +140,12 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
 	}
 
     public void updateAttributes () {
-        healthValue.setText(chosenHero.health.ToString());// + (Player.health < Player.maxHealth? "/" + Player.maxHealth.ToString(): "");
-        damageValue.setText(chosenHero.damage().ToString());
-        armorValue.setText(chosenHero.armorClass.ToString());
-        strengthValue.setText(chosenHero.strength.ToString());
-        enduranceValue.setText(chosenHero.endurance.ToString());
-        agilityValue.setText(chosenHero.agility.ToString());
+        healthValue.text = chosenHero.health.ToString();// + (Player.health < Player.maxHealth? "/" + Player.maxHealth.ToString(): "");
+        damageValue.text = chosenHero.damage().ToString();
+        armorValue.text = chosenHero.armorClass.ToString();
+        strengthValue.text = chosenHero.strength.ToString();
+        enduranceValue.text = chosenHero.endurance.ToString();
+        agilityValue.text = chosenHero.agility.ToString();
     }
 
 	public void close (bool byInputProcessor) {
@@ -221,18 +217,22 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
                 updateAttributes ();
 			}
         } else if (Utils.hit != null && Utils.hit.name.Equals("Supply")) {
-			SupplySlot slot = Utils.hit.GetComponent<SupplySlot>();
-			if (slot.item == null) {
-				setItemToSlot(slot);
-			} else {
-				Item currItem = slot.takeItem();
-				if (draggedItem.slot != null) {
-					draggedItem.slot.setItem(currItem);
-				} else if (inventory.gameObject.activeInHierarchy) {
-					inventory.addItemToCell (currItem, draggedItem.cell);
-				}
-				setItemToSlot (slot);
-			}
+            if (draggedItem.type == ItemType.SUPPLY) {
+                SupplySlot slot = Utils.hit.GetComponent<SupplySlot>();
+                if (slot.item == null) {
+                    setItemToSlot(slot);
+                } else {
+                    Item currItem = slot.takeItem();
+                    if (draggedItem.slot != null) {
+                        draggedItem.slot.setItem(currItem);
+                    } else if (inventory.gameObject.activeInHierarchy) {
+                        inventory.addItemToCell (currItem, draggedItem.cell);
+                    }
+                    setItemToSlot (slot);
+                }
+            } else {
+                draggedItem.returnToParent();
+            }
         } else if (Utils.hit != null && Utils.hit.GetComponent<HeroRepresentative>() != null) {
             HeroRepresentative hero = Utils.hit.GetComponent<HeroRepresentative>();
             if (draggedItem.type == ItemType.SUPPLY) {
@@ -318,8 +318,10 @@ public class StatusScreen : InventoryContainedScreen, Closeable {
         if (chosenHero.ring_1 != null) { ringSlots[0].setItemWithoutEquip(chosenHero.ring_1.item); }
         if (chosenHero.ring_2 != null) { ringSlots[1].setItemWithoutEquip(chosenHero.ring_2.item); }
 
-        for (int i = 0; i < supplySlots.Count; i++) {
-            supplySlots[i].setItem(chosenHero.supplies[i]);
+        for (int i = 0; i < supplySlots.Length; i++) {
+            if (chosenHero.supplies[i] != null) {
+                supplySlots[i].setItem(chosenHero.supplies[i].item);
+            }
         }
 
 		playerRender.sprite = ImagesProvider.getHero(chosenHero.type);

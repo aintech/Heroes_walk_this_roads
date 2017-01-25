@@ -6,7 +6,7 @@ public class EnemyRepresentative : CharacterRepresentative {
 
     public Enemy enemy { get; private set; }
 
-	private SpriteRenderer enemyRender, barRender, barBGRender, barHolderRender;
+    private SpriteRenderer barRender, barBGRender, barHolderRender;//enemyRender, 
 
     private SpriteRenderer topStroke, leftStroke, rightStroke;
 
@@ -26,7 +26,7 @@ public class EnemyRepresentative : CharacterRepresentative {
 
         transform.SetParent(holder);
 
-        enemyRender = GetComponent<SpriteRenderer>();
+        imageRender = GetComponent<SpriteRenderer>();
 
         Transform healthBarHolder = transform.Find("Health Bar");
         healthBar = healthBarHolder.Find("Bar");
@@ -57,7 +57,7 @@ public class EnemyRepresentative : CharacterRepresentative {
         leftStroke.sortingOrder = order;
         rightStroke.sortingOrder = order;
 
-        enemyRender.sortingOrder = order + 1;
+        imageRender.sortingOrder = order + 1;
         barBGRender.sortingOrder = order + 2;
         barRender.sortingOrder = order + 3;
         barHolderRender.sortingOrder = order + 4;
@@ -73,6 +73,8 @@ public class EnemyRepresentative : CharacterRepresentative {
 
         sendToBackground();
 
+        flyTextPoint = barHolder.position;
+
         return enemy;
 	}
 
@@ -82,12 +84,12 @@ public class EnemyRepresentative : CharacterRepresentative {
     }
 
 	private void updateSprite () {
-        enemyRender.sprite = ImagesProvider.getEnemy(enemy.type);// Imager.getEnemy(enemy.type, (float) enemy.health / (float) enemy.maxHealth);
+        imageRender.sprite = ImagesProvider.getEnemy(enemy.type);// Imager.getEnemy(enemy.type, (float) enemy.health / (float) enemy.maxHealth);
 	}
 
     public void sendToBackground () {
         setAsActive(false);
-        enemyRender.sortingLayerName = backgroundLayerName;
+        imageRender.sortingLayerName = backgroundLayerName;
         barRender.sortingLayerName = backgroundLayerName;
         barBGRender.sortingLayerName = backgroundLayerName;
         barHolderRender.sortingLayerName = backgroundLayerName;
@@ -99,7 +101,7 @@ public class EnemyRepresentative : CharacterRepresentative {
 
     public void sendToForeground () {
         setAsActive(true);
-        enemyRender.sortingLayerName = foregroundLayerName;
+        imageRender.sortingLayerName = foregroundLayerName;
         barRender.sortingLayerName = foregroundLayerName;
         barBGRender.sortingLayerName = foregroundLayerName;
         barHolderRender.sortingLayerName = foregroundLayerName;
@@ -111,7 +113,7 @@ public class EnemyRepresentative : CharacterRepresentative {
 
     public void setAsCurrentEnemy () {
         setAsActive(true);
-        enemyRender.sortingLayerName = foregroundLayerName;
+        imageRender.sortingLayerName = foregroundLayerName;
         barRender.sortingLayerName = foregroundLayerName;
         barBGRender.sortingLayerName = foregroundLayerName;
         barHolderRender.sortingLayerName = foregroundLayerName;

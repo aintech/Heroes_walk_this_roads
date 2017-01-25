@@ -105,7 +105,7 @@ public abstract class Character {
                     status.endEffect();
                 }
             }
-			representative.onHealModified();
+            representative.playDamage(amount - armorAmount);
 			return amount - armorAmount;
 		}
 	}

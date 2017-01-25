@@ -117,7 +117,7 @@ public class FightResultScreen : MonoBehaviour, ButtonHolder {
         render.sprite = Imager.getEnemy(enemy.enemy.type, 0);
 		captureBtn.setVisible(false);
 		releaseBtn.setVisible(false);
-		chambersAvailable.setText("");
+        chambersAvailable.text = "";
 //		countRankDone = (this.rankPoints > 0);
 //		countGoldDone = false;
 //		heroRank = Hero.getRank();

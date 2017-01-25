@@ -98,12 +98,12 @@ public class World : MonoBehaviour {
     }
 
     private void fillWithEnemies () {
-		foreach (Location location in worldLocations.Values) {
-			if (location.type.isEnemyCamp()) {
-				enemies.AddRange(location.spawn(landscape, enemyMarkerPrefab));
-			}
-		}
-//        enemies.Add(Instantiate<Transform>(enemyMarkerPrefab).GetComponent<EnemyMarker>().init(this, landscape, new List<EnemyType>(new EnemyType[]{EnemyType.ROGUE, EnemyType.ROGUE, EnemyType.ROGUE}), worldLocations[LocationType.ROUTINE]));
+//		foreach (Location location in worldLocations.Values) {
+//			if (location.type.isEnemyCamp()) {
+//				enemies.AddRange(location.spawn(landscape, enemyMarkerPrefab));
+//			}
+//		}
+        enemies.Add(Instantiate<Transform>(enemyMarkerPrefab).GetComponent<EnemyMarker>().init(landscape, new List<EnemyType>(new EnemyType[]{EnemyType.ROGUE, EnemyType.ROGUE, EnemyType.ROGUE}), worldLocations[LocationType.ROUTINE]));
     }
 
     public void showWorld (LocationType type) {
@@ -116,6 +116,10 @@ public class World : MonoBehaviour {
     }
 
     void Update () {
+        if (fightEnemy != null) {
+            FightScreen.instance.startFight(fightEnemy.enemyTypes);
+            enabled = false;
+        }
         if (timeCounter < Time.time && checkBtnPress()) {
             takeStep();
         }
@@ -138,6 +142,7 @@ public class World : MonoBehaviour {
         }
         tempPoint.setPoint(currPoint);
         adjustWorld();
+        moveEnemy();
     }
 
     private bool checkPosition (Point point) {
@@ -174,7 +179,6 @@ public class World : MonoBehaviour {
         }
         landscape.localPosition = landscapePosition;
         worldContainer.localPosition = worldPosition;
-        moveEnemy();
     }
 
     private void moveEnemy () {
@@ -185,8 +189,6 @@ public class World : MonoBehaviour {
         foreach (EnemyMarker enemy in enemies) {
             if (enemy.alive && enemy.position.isSame(currPoint)) {
                 fightEnemy = enemy;
-				FightScreen.instance.startFight(enemy.enemyTypes);
-                enabled = false;
                 return;
             }
         }

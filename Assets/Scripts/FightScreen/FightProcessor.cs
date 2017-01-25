@@ -129,6 +129,12 @@ public class FightProcessor : MonoBehaviour {
         elementsHolder.gameObject.SetActive(true);
         elementsHolder.holderAnimator.playElementsApperance();
 		FightScreen.instance.elementsPool.changeSize(false);
+        FightScreen.instance.skipButton.gameObject.SetActive(true);
+
+        foreach(Hero hero in heroes) { hero.representative.refreshColor(); }
+        foreach(EnemyRepresentative enem in enemies) { enem.refreshColor(); }
+
+        FightInterface.instance.setHeroActionsVisible(null);
 
         switchMachineState(StateMachine.CHECKING_ELEMENTS_POOL_ACTIONS);
     }
@@ -137,6 +143,7 @@ public class FightProcessor : MonoBehaviour {
 		elementsHolder.checkPlayerInput();
 		if (PLAYER_CHECKED_ELEMENTS) {
             PLAYER_CHECKED_ELEMENTS = false;
+            FightScreen.instance.skipButton.gameObject.SetActive(false);
             switchMachineState(StateMachine.AFTER_ELEMENTS_CHECKED);
 		}
 	}
@@ -331,15 +338,15 @@ public class FightProcessor : MonoBehaviour {
 		FightScreen.instance.fightEffectPlayer.playEffect(FightEffectType.DAMAGE, target.hit(currEnemy.character.randomDamage()));
         ((HeroRepresentative)target.representative).animator.playAnimation(HeroRepresentativeAnimator.AnimationType.DAMAGE);
 
-        if (target.alive) {
-            foreach(StatusEffect stat in target.statusEffects.Values) {
-                if (!stat.isFired || !stat.inProgress) {
-                    target.addStatus(stat.type, 5, 5);
-                    break;
-                    //                target.addStatus((StatusEffectType)Enum.GetValues(typeof (StatusEffectType)).GetValue(UnityEngine.Random.Range(0, Enum.GetValues(typeof (StatusEffectType)).Length - 1)), 5, 5);
-                }
-            }
-        }
+//        if (target.alive) {
+//            foreach(StatusEffect stat in target.statusEffects.Values) {
+//                if (!stat.isFired || !stat.inProgress) {
+//                    target.addStatus(stat.type, 5, 5);
+//                    break;
+//                    //                target.addStatus((StatusEffectType)Enum.GetValues(typeof (StatusEffectType)).GetValue(UnityEngine.Random.Range(0, Enum.GetValues(typeof (StatusEffectType)).Length - 1)), 5, 5);
+//                }
+//            }
+//        }
 //        else {
 //            ((HeroRepresentative)target.representative).setAsActive(false);
 //            removeFromQueue(target);

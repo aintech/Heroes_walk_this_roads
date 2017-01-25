@@ -53,10 +53,10 @@ public class ElementsPool : MonoBehaviour {
     }
 
 	public void updateCounters () {
-		fireCountText.setText(elements[ElementType.FIRE] == 0? "": elements[ElementType.FIRE].ToString());
-		airCountText.setText(elements[ElementType.AIR] == 0? "": elements[ElementType.AIR].ToString());
-		earthCountText.setText(elements[ElementType.EARTH] == 0? "": elements[ElementType.EARTH].ToString());
-		waterCountText.setText(elements[ElementType.WATER] == 0? "": elements[ElementType.WATER].ToString());
+        fireCountText.text = elements[ElementType.FIRE] == 0? "": elements[ElementType.FIRE].ToString();
+		airCountText.text = elements[ElementType.AIR] == 0? "": elements[ElementType.AIR].ToString();
+		earthCountText.text = elements[ElementType.EARTH] == 0? "": elements[ElementType.EARTH].ToString();
+		waterCountText.text = elements[ElementType.WATER] == 0? "": elements[ElementType.WATER].ToString();
 	}
 
     public void clear () {

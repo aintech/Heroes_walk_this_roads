@@ -48,6 +48,10 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 
     private Transform EnemyRepresentatives;
 
+    public Button skipButton { get; private set; }
+
+    public FlyTextManager flyTextManager { get; private set; }
+
 	public FightScreen init () {
 		instance = this;
 
@@ -82,11 +86,16 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
         backgroundRender = transform.Find("Background").GetComponent<SpriteRenderer>();
         backgroundRender.gameObject.SetActive(true);
 
+        skipButton = transform.Find("Skip Button").GetComponent<Button>().init();
+
+        flyTextManager = transform.Find("Fly Text Manager").GetComponent<FlyTextManager>().init();
+
 		return this;
 	}
 
     public void startFight (List<EnemyType> types) {
         initEnemies(types);
+        skipButton.gameObject.SetActive(false);
 		SupplySlot supSlot;
 		foreach (SupplySlot slot in StatusScreen.instance.supplySlots) {
 			if (slot.item != null) {
@@ -218,7 +227,9 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 	}
 
 	public void fireClickButton (Button btn) {
-		if (btn == captureBtn) {
+        if (btn == skipButton) {
+            FightProcessor.PLAYER_CHECKED_ELEMENTS = true;
+        } else if (btn == captureBtn) {
 			captureEnemy ();
 		} else if (btn == releaseBtn) {
 			closeFightScreen ();
@@ -242,7 +253,7 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 		SupplySlot supSlot;
 		foreach (SupplySlot slot in supplySlots) {
 			if (slot.item != null) {
-				supSlot = StatusScreen.instance.getSupplySlot (slot.index);
+                supSlot = StatusScreen.instance.supplySlots[slot.index];
 				supSlot.setItem(slot.takeItem());
 				supSlot.item.transform.localScale = Vector3.one;
 			}

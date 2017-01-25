@@ -88,7 +88,7 @@ public class HeroAction : Describeable {
             case HeroActionType.INVULNERABILITY_SPHERE: descr[2] = "Полностью нейтрализует один удар противника"; break;
             case HeroActionType.FIRE_WALL: descr[2] = "Наносит всем противникам по <color=#00FF00FF>" + (Mathf.RoundToInt((float)hero.damage() * .5f)) + "</color> и поджигает их"; break;
                 
-            case HeroActionType.SACRIFICE: descr[2] = "Перенапрявляет <color=#00FF00FF>75%</color> урона на союзника с самым большим здоровьем"; break;
+            case HeroActionType.SACRIFICE: descr[2] = "Перенапрявляет <color=#00FF00FF>75%</color> урона на союзника с наибольшим здоровьем"; break;
             case HeroActionType.HEAL: descr[2] = "Излечивает <color=#00FF00FF>" + (hero.damage() * 2) + "</color> здоровья союзнику"; break;
                 
             case HeroActionType.DODGE: descr[2] = "Шанс уворота от атаки противника <color=#00FF00FF>25%</color>"; break;

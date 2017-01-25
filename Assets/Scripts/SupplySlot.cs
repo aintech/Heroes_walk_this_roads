@@ -3,16 +3,15 @@ using System.Collections;
 
 public class SupplySlot : Slot {
     
-    public int index;
-
-    public override Item takeItem ()
-    {
-        throw new System.NotImplementedException ();
+    public override Item takeItem () {
+        StatusScreen.instance.chosenHero.supplies[index] = null;
+        return base.takeItem();
     }
 
-    public override void setItem (Item newItem)
-    {
-        throw new System.NotImplementedException ();
+    public override void setItem (Item item) {
+        if (!item.gameObject.activeInHierarchy) { item.gameObject.SetActive(true); }
+        StatusScreen.instance.chosenHero.supplies[index] = (SupplyData)item.itemData;
+        base.setItem(item);
     }
 
     public override void hideItem () {

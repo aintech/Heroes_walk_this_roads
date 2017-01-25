@@ -6,8 +6,6 @@ public class EquipmentSlot : Slot {
     [HideInInspector]
     public StatusScreen statusScreen;
 
-    public int index;
-
     public Sprite swordIcon, daggersIcon, staffIcon, wandIcon;
 
     public void checkVisible (HeroType heroType) {

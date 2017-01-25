@@ -2,14 +2,24 @@
 using System.Collections;
 
 public class StrokeText : MonoBehaviour {
+    
+    private TextMesh textMesh, topMesh, bottomMesh, leftMesh, rightMesh;
 
-	private TextMesh text, top, bottom, left, right;
+    public string text {
+        get { return textMesh.text; }
+        set { textMesh.text = value;
+              topMesh.text = value;
+              bottomMesh.text = value;
+              leftMesh.text = value;
+              rightMesh.text = value;
+        }
+    }
 
-	public Color32 textColor { get { return text.color; } set {text.color = value; }}
+	public Color32 color { get { return textMesh.color; } set {textMesh.color = value; }}
 
 	public StrokeText init (string layerName, int sortingOrder) {
-		text = GetComponent<TextMesh>();
-		MeshRenderer rend = text.GetComponent<MeshRenderer>();
+		textMesh = GetComponent<TextMesh>();
+		MeshRenderer rend = textMesh.GetComponent<MeshRenderer>();
 		rend.sortingLayerName = layerName;
 		rend.sortingOrder = sortingOrder + 1;
 		for (int i = 0; i < transform.childCount; i++) {
@@ -17,18 +27,10 @@ public class StrokeText : MonoBehaviour {
 			rend.sortingLayerName = layerName;
 			rend.sortingOrder = sortingOrder;
 		}
-		top = transform.Find("Top").GetComponent<TextMesh>();
-		bottom = transform.Find("Bottom").GetComponent<TextMesh>();
-		left = transform.Find("Left").GetComponent<TextMesh>();
-		right = transform.Find("Right").GetComponent<TextMesh>();
+        topMesh = transform.Find("Top").GetComponent<TextMesh>();
+		bottomMesh = transform.Find("Bottom").GetComponent<TextMesh>();
+		leftMesh = transform.Find("Left").GetComponent<TextMesh>();
+		rightMesh = transform.Find("Right").GetComponent<TextMesh>();
         return this;
-	}
-
-	public void setText (string text) {
-		this.text.text = text;
-		top.text = text;
-		bottom.text = text;
-		left.text = text;
-		right.text = text;
 	}
 }

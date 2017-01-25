@@ -3,6 +3,8 @@ using System.Collections;
 
 public abstract class Slot : ItemHolder {
 
+    public int index;
+
 	public ItemType itemType;
 
 	public Sprite slotBG, activeSlotBG;
@@ -26,12 +28,12 @@ public abstract class Slot : ItemHolder {
         }
 	}
 
-	virtual public void setItem (Item newItem) {
-		item = newItem;
-		item.slot = this;
-		item.cell = null;
-		item.transform.parent = transform;
-		item.transform.localPosition = Vector3.zero;
+	virtual public void setItem (Item item) {
+		this.item = item;
+		this.item.slot = this;
+		this.item.cell = null;
+		this.item.transform.parent = transform;
+		this.item.transform.localPosition = Vector3.zero;
 		iconRender.enabled = false;
         bgRender.enabled = false;
 	}

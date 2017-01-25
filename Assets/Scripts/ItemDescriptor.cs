@@ -162,9 +162,9 @@ public class ItemDescriptor : MonoBehaviour {
                 if (holder != null && holder is InventoryCell && holder.item != null) {
                     tempItem = holder.item;
                     if (holder.item.type == ItemType.SUPPLY) {
-                        for (int i = 0; i < statusScreen.supplySlots.Count; i++) {
-                            if (statusScreen.getSupplySlot(i).item == null) {
-                                statusScreen.getSupplySlot(i).setItem(holder.takeItem());
+                        foreach (SupplySlot slot in statusScreen.supplySlots) {
+                            if (slot.item == null) {
+                                slot.setItem(holder.takeItem());
                                 break;
                             }
                         }
