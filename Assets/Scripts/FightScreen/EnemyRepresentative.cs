@@ -14,15 +14,25 @@ public class EnemyRepresentative : CharacterRepresentative {
 
 	private Vector3 initPosition = new Vector3(0, -3.5f, 1), healthScale = Vector3.one;
 
-    private Vector3 smallScale = new Vector3(.6f, .6f, 1), normalScale = new Vector3(.7f, .7f, 1);
+    private Vector3 smallScale = new Vector3(.6f, .6f, 1), normalScale = new Vector3(.7f, .7f, 1), smallScaleMirror, normalScaleMirror;
+
+    private bool mirrorImage;
 
     private string backgroundLayerName = "Fight Screen", foregroundLayerName = "Fight Screen Foreground";
 
     private bool stroked, chosen;
 
+    public EnemyRepresentativeAnimator animator { get; private set; }
+
 	public EnemyRepresentative init (Transform holder) {
 		hoverBorder = transform.Find("Stroke").gameObject;
+
 		innerInit();
+
+        smallScaleMirror = new Vector3(-smallScale.x, smallScale.y, smallScale.z);
+        normalScaleMirror = new Vector3(-normalScale.x, normalScale.y, normalScale.z);
+
+        animator = GetComponent<EnemyRepresentativeAnimator>().init();
 
         transform.SetParent(holder);
 
@@ -39,8 +49,6 @@ public class EnemyRepresentative : CharacterRepresentative {
 		topStroke = hoverBorder.transform.Find("Top").GetComponent<SpriteRenderer>();
 		leftStroke = hoverBorder.transform.Find("Left").GetComponent<SpriteRenderer>();
 		rightStroke = hoverBorder.transform.Find("Right").GetComponent<SpriteRenderer>();
-
-        setAsActive(false);
 
         return this;
 	}
@@ -62,6 +70,10 @@ public class EnemyRepresentative : CharacterRepresentative {
         barRender.sortingOrder = order + 3;
         barHolderRender.sortingOrder = order + 4;
 
+        foreach (StatusEffect status in statuses) {
+            if (status.holder != null) { status.holder.setRenderProperties(backgroundLayerName, order + 5); }
+        }
+
         if (coll != null) {
             Destroy(coll);
         }
@@ -70,6 +82,8 @@ public class EnemyRepresentative : CharacterRepresentative {
         fillDescription();
 
         onHealModified();
+
+        mirrorImage = Random.value > .5f;
 
         sendToBackground();
 
@@ -88,19 +102,23 @@ public class EnemyRepresentative : CharacterRepresentative {
 	}
 
     public void sendToBackground () {
-        setAsActive(false);
+        setColliderEnabled(false);
         imageRender.sortingLayerName = backgroundLayerName;
         barRender.sortingLayerName = backgroundLayerName;
         barBGRender.sortingLayerName = backgroundLayerName;
         barHolderRender.sortingLayerName = backgroundLayerName;
 
+        foreach (StatusEffect status in statuses) {
+            if (status.holder != null) { status.holder.setRenderLayer(backgroundLayerName); }
+        }
+
         barHolder.gameObject.gameObject.SetActive(false);
 
-        transform.localScale = smallScale;
+        transform.localScale = mirrorImage? smallScaleMirror: smallScale;
     }
 
     public void sendToForeground () {
-        setAsActive(true);
+        setColliderEnabled(true);
         imageRender.sortingLayerName = foregroundLayerName;
         barRender.sortingLayerName = foregroundLayerName;
         barBGRender.sortingLayerName = foregroundLayerName;
@@ -108,11 +126,15 @@ public class EnemyRepresentative : CharacterRepresentative {
 
         barHolder.gameObject.gameObject.SetActive(false);
 
-        transform.localScale = smallScale;
+        foreach (StatusEffect status in statuses) {
+            if (status.holder != null) { status.holder.setRenderLayer(foregroundLayerName); }
+        }
+
+        transform.localScale = mirrorImage? smallScaleMirror: smallScale;
     }
 
     public void setAsCurrentEnemy () {
-        setAsActive(true);
+        setColliderEnabled(false);
         imageRender.sortingLayerName = foregroundLayerName;
         barRender.sortingLayerName = foregroundLayerName;
         barBGRender.sortingLayerName = foregroundLayerName;
@@ -120,7 +142,11 @@ public class EnemyRepresentative : CharacterRepresentative {
 
         barHolder.gameObject.gameObject.SetActive(true);
 
-        transform.localScale = normalScale;
+        foreach (StatusEffect status in statuses) {
+            if (status.holder != null) { status.holder.setRenderLayer(foregroundLayerName); }
+        }
+
+        transform.localScale = mirrorImage? normalScaleMirror: normalScale;
     }
 
     public override void onHealModified () {
@@ -134,6 +160,8 @@ public class EnemyRepresentative : CharacterRepresentative {
         updateHealthDescription();
     }
 
+
+
 	public void playHit () {
 //		animInAction = true;
 //		endTime = Time.time + duration;
@@ -144,8 +172,8 @@ public class EnemyRepresentative : CharacterRepresentative {
 //        throw new System.NotImplementedException ();
     }
 
-    public void setAsActive (bool asActive) {
-        enabled = asActive;
-        if (coll != null) { coll.enabled = asActive; }
-    }
+//    public void setAsActive (bool asActive) {
+//        enabled = asActive;
+//        if (coll != null) { coll.enabled = asActive; }
+//    }
 }

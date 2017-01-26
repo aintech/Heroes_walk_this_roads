@@ -16,7 +16,7 @@ public static class EnemyDescriptor {
 	}
 
 	public static int strenght (this EnemyType type) {
-		return 50;
+		return 10;
 	}
 
 	public static int endurance (this EnemyType type) {
@@ -24,7 +24,7 @@ public static class EnemyDescriptor {
 	}
 
 	public static int agility (this EnemyType type) {
-		return 20;
+		return 10;
 	}
 
 	public static int armor (this EnemyType type) {

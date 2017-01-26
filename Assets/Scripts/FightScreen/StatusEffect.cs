@@ -13,7 +13,7 @@ public class StatusEffect {
 
 	public bool inProgress { get; private set; }
 
-	public bool isFired { get; private set; }
+//	public bool isFired { get; private set; }
 
     public StatusEffectHolder holder;
 
@@ -21,7 +21,7 @@ public class StatusEffect {
 
     private Character owner;
 
-    public bool isSpecialStatus { get; private set; }
+//    public bool isSpecialStatus { get; private set; }
 
     public StatusEffect init (StatusEffectType type, Character owner) {
         this.type = type;
@@ -31,15 +31,19 @@ public class StatusEffect {
 		return this;
 	}
 
+    public void addStatus (int duration) {
+        addStatus(0, duration);
+    }
+
 	public void addStatus (int value, int duration) {
-        if (isFired || inProgress) {
+        if (inProgress) {//if (isFired || inProgress) {
             this.duration += duration;
         } else {
     		this.value = value;
     		this.duration = duration;
-            isSpecialStatus = value == 0 && duration == 0;
-    		isFired = true;
-            inProgress = isSpecialStatus;
+//            isSpecialStatus = value == 0 && duration == 0;
+//    		isFired = true;
+            inProgress = true;//isSpecialStatus;
             addingTime = (int)Time.time;
             owner.representative.repositionStatuses();
             if (holder != null) { holder.show(); }
@@ -47,11 +51,11 @@ public class StatusEffect {
 	}
 
 	public void updateStatus () {
-        if (isSpecialStatus) { return; }
-		if (isFired && !inProgress) {
-			inProgress = true;
-            if (holder != null) { holder.setAsEnabled(); }
-		}
+//        if (isSpecialStatus) { return; }
+//		if (isFired && !inProgress) {
+//			inProgress = true;
+//            if (holder != null) { holder.setAsEnabled(); }
+//		}
 		if (!inProgress) {
 			return;
 		}
@@ -60,13 +64,18 @@ public class StatusEffect {
 			applyEffect ();
 		}
 //		if (duration == 1) { turnsText.gameObject.SetActive (false); } else
-		if (duration == 0 && !type.isStatusActiveOnNextTurn()) { endEffect (); }
-		else if (duration < 0 && type.isStatusActiveOnNextTurn()) { endEffect(); }
+        if (duration == 0) { endEffect(); }
+//        if (duration == 0 && !type.isStatusActiveOnNextTurn()) { endEffect (); }
+//		else if (duration < 0 && type.isStatusActiveOnNextTurn()) { endEffect(); }
 
 //		turnsText.setText (duration.ToString ());
 	}
 
 	private void applyEffect () {
+        switch (type) {
+            case StatusEffectType.BURNING: owner.hit(value); break;
+                
+        }
 //		switch (statusType) {
 //			case StatusEffectType.REGENERATION:
 //				if (asPlayer) {
@@ -79,8 +88,9 @@ public class StatusEffect {
 	}
 
 	public void endEffect () {
+        value = duration = 0;
 		inProgress = false;
-		isFired = false;
+//		isFired = false;
         holder.hide();
         addingTime = int.MaxValue;
         owner.representative.repositionStatuses();

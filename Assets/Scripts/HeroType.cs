@@ -45,7 +45,7 @@ public static class HeroDescriptor {
 	public static int agility (this HeroType type) {
         switch (type) {
             case HeroType.KATE: return 15;
-            case HeroType.LIARA: return 10;
+            case HeroType.LIARA: return 11;
             case HeroType.VICTORIA: return 10;
             case HeroType.ALIKA: return 12;
             default: return 1;

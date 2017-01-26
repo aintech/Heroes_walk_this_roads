@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public enum StatusEffectType {
     HERO_HEAVY_GUARD, HERO_INVULNERABILITY_SPHERE, HERO_SACRIFICE, HERO_DODGE,
-	BLINDED, PARALIZED, REGENERATION, ARMORED, SPEED
+	BLINDED, PARALIZED, REGENERATION, ARMORED, SPEED, BURNING
 }
 
 public static class StatusEffectDescriptor {
@@ -22,6 +22,7 @@ public static class StatusEffectDescriptor {
 			case StatusEffectType.REGENERATION: return "Регенерация";
 			case StatusEffectType.ARMORED: return "Защита";
 			case StatusEffectType.SPEED: return "Ускорение";
+            case StatusEffectType.BURNING: return "Горит";
 			default: Debug.Log("Unknown status effect type: " + type); return "";
 		}
 	}
@@ -30,9 +31,9 @@ public static class StatusEffectDescriptor {
 //		return type == StatusEffectType.HEAL || type == StatusEffectType.NONE;
 //	}
 
-	public static bool isStatusActiveOnNextTurn (this StatusEffectType type) {
-		return type == StatusEffectType.BLINDED || type == StatusEffectType.PARALIZED;
-	}
+//	public static bool isStatusActiveOnNextTurn (this StatusEffectType type) {
+//		return type == StatusEffectType.BLINDED || type == StatusEffectType.PARALIZED;
+//	}
 
     public static string color (this StatusEffectType type) {
         if (statusColors == null) {
@@ -46,6 +47,7 @@ public static class StatusEffectDescriptor {
             statusColors.Add(StatusEffectType.REGENERATION, "<color=#00FF00FF>");
             statusColors.Add(StatusEffectType.BLINDED, "<color=red>");
             statusColors.Add(StatusEffectType.PARALIZED, "<color=red>");
+            statusColors.Add(StatusEffectType.BURNING, "<color=red>");
         }
         return statusColors[type];
     }

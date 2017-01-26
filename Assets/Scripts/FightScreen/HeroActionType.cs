@@ -67,12 +67,12 @@ public static class HeroActionDescription {
 			foreach (HeroActionType aType in Enum.GetValues(typeof (HeroActionType))) {
 				elementsCostMap.Add(aType, new Dictionary<ElementType, int>());
 			}
-            elementsCostMap[HeroActionType.CRUSHING].Add(ElementType.FIRE, 2);
-            elementsCostMap[HeroActionType.FIRE_WALL].Add(ElementType.FIRE, 2);
-            elementsCostMap[HeroActionType.FIRE_WALL].Add(ElementType.EARTH, 1);
-			elementsCostMap[HeroActionType.HEAL].Add(ElementType.WATER, 2);
-            elementsCostMap[HeroActionType.DUST_IN_EYES].Add(ElementType.EARTH, 1);
-            elementsCostMap[HeroActionType.DUST_IN_EYES].Add(ElementType.AIR, 1);
+//            elementsCostMap[HeroActionType.CRUSHING].Add(ElementType.FIRE, 2);
+//            elementsCostMap[HeroActionType.FIRE_WALL].Add(ElementType.FIRE, 2);
+//            elementsCostMap[HeroActionType.FIRE_WALL].Add(ElementType.EARTH, 1);
+//			elementsCostMap[HeroActionType.HEAL].Add(ElementType.WATER, 2);
+//            elementsCostMap[HeroActionType.DUST_IN_EYES].Add(ElementType.EARTH, 1);
+//            elementsCostMap[HeroActionType.DUST_IN_EYES].Add(ElementType.AIR, 1);
 
 		}
 		return elementsCostMap[type];

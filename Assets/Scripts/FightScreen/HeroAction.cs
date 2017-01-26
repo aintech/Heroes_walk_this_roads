@@ -86,10 +86,10 @@ public class HeroAction : Describeable {
             case HeroActionType.CRUSHING: descr[2] = "Урон противнику (200%) <color=#00FF00FF>" + (hero.damage() * 2) + "</color>"; break;
                 
             case HeroActionType.INVULNERABILITY_SPHERE: descr[2] = "Полностью нейтрализует один удар противника"; break;
-            case HeroActionType.FIRE_WALL: descr[2] = "Наносит всем противникам по <color=#00FF00FF>" + (Mathf.RoundToInt((float)hero.damage() * .5f)) + "</color> и поджигает их"; break;
+            case HeroActionType.FIRE_WALL: descr[2] = "Наносит по <color=#00FF00FF>" + (Mathf.RoundToInt((float)hero.damage() * .5f)) + "</color> урона и поджигает на 3 хода"; break;
                 
             case HeroActionType.SACRIFICE: descr[2] = "Перенапрявляет <color=#00FF00FF>75%</color> урона на союзника с наибольшим здоровьем"; break;
-            case HeroActionType.HEAL: descr[2] = "Излечивает <color=#00FF00FF>" + (hero.damage() * 2) + "</color> здоровья союзнику"; break;
+            case HeroActionType.HEAL: descr[2] = "Излечивает <color=#00FF00FF>" + (hero.damage() * 3) + "</color> здоровья союзнику"; break;
                 
             case HeroActionType.DODGE: descr[2] = "Шанс уворота от атаки противника <color=#00FF00FF>25%</color>"; break;
             case HeroActionType.DUST_IN_EYES: descr[2] = "Накладывает на противника статус <color=#00FF00FF>" + StatusEffectType.BLINDED.name() + "</color> на 3 хода"; break;

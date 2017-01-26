@@ -2,15 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class HeroRepresentativeAnimator : MonoBehaviour {
+public class EnemyRepresentativeAnimator : MonoBehaviour {
 
-    public Texture2D damageSheet;
+    public Texture2D slashSheet;
 
-    private const int SPRITE_WIDTH = 110;
+    private const int SPRITE_WIDTH = 512;
 
-    private const int SPRITE_HEIGHT = 130;
+    private const int SPRITE_HEIGHT = 512;
 
-    private static List<Sprite> damage = new List<Sprite>();
+    private static List<Sprite> slash = new List<Sprite>();
 
     private SpriteRenderer render;
 
@@ -18,14 +18,14 @@ public class HeroRepresentativeAnimator : MonoBehaviour {
 
     private int playIndex = -1;
 
-    private float playSpeed = .1f;
+    private float playSpeed = .05f;
 
     private float nextFrameTime;
 
     private bool inPlaying;
 
-    public HeroRepresentativeAnimator init () {
-        if (damage.Count == 0) { loadSpriteSheets(); }
+    public EnemyRepresentativeAnimator init () {
+        if (slash.Count == 0) { loadSpriteSheets(); }
         render = transform.Find("Effect Player Holder").GetComponent<SpriteRenderer>();
         enabled = false;
 
@@ -36,20 +36,21 @@ public class HeroRepresentativeAnimator : MonoBehaviour {
         Rect rect = new Rect(0, 0, SPRITE_WIDTH, SPRITE_HEIGHT);
         Vector2 pivot = new Vector2(.5f, .5f);
 
-        int spritesCount = Mathf.RoundToInt((float)damageSheet.width / (float)SPRITE_WIDTH);
+        int spritesCount = Mathf.RoundToInt((float)slashSheet.width / (float)SPRITE_WIDTH);
 
         for (int i = 0; i < spritesCount; i++) {
             rect.x = SPRITE_WIDTH * i;
-            damage.Add(Sprite.Create(damageSheet, rect, pivot));
+            slash.Add(Sprite.Create(slashSheet, rect, pivot));
         }
     }
 
     public void playAnimation (AnimationType type) {
         if (inPlaying) { finishAnimation(); }
         switch (type) {
-            case AnimationType.DAMAGE: currPlaying = damage; break;
+            case AnimationType.SLASH: currPlaying = slash; break;
             default: Debug.Log("Animation not done yet!"); break;
         }
+        render.transform.Rotate(new Vector3(0, 0, Random.Range(0, 360)));
         inPlaying = true;
         playIndex = -1;
         enabled = true;
@@ -77,6 +78,6 @@ public class HeroRepresentativeAnimator : MonoBehaviour {
     }
 
     public enum AnimationType {
-        DAMAGE
+        SLASH
     }
 }

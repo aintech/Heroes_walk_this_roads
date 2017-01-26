@@ -43,7 +43,7 @@ public class HeroRepresentative : CharacterRepresentative {
         imageRender.sprite = ImagesProvider.getHeroRepresentative(type);
         imageRender.gameObject.SetActive (hero != null);
 		healthBar.gameObject.SetActive (hero != null);
-		coll.enabled = hero != null && statusScreen != null;
+        setColliderEnabled(hero != null && statusScreen != null);
 		backgroundRender.sprite = hero == null ? noHeroBG : normalBG;
 
         flyTextPoint = transform.position;

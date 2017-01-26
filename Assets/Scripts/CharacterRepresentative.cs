@@ -65,19 +65,28 @@ public abstract class CharacterRepresentative : Describeable {
     public void repositionStatuses () {
         statuses.Sort((x, y) => (x.addingTime-y.addingTime));
         for (int i = 0; i < statuses.Count; i++) {
-            statuses[i].holder.transform.localPosition = new Vector3((Mathf.FloorToInt(i / 3) * xOffset), (i % 3) * yOffset, 0);
+            if (statuses[i].inProgress) {
+                if (statuses[i].holder != null) {//У противников нет некоторых видов статусов и соответственно нет холдеров под них (те, что начинаются с HERO_)
+                    if (character.isHero()) {
+                        statuses[i].holder.transform.localPosition = new Vector3((Mathf.FloorToInt(i / 3) * xOffset), (i % 3) * yOffset, 0);
+                    } else {
+                        statuses[i].holder.transform.localPosition = new Vector3((Mathf.FloorToInt(i / 3) * xOffset), (i % 3) * yOffset, 0);
+                    }
+                }
+            }
         }
     }
 
-    public void updateStatusEffects () {
+    public void updateStatusEffectsDescription () {
         if (descr.Count > beforeStatusesCount) {
             descr.RemoveRange(beforeStatusesCount, descr.Count - beforeStatusesCount);
         }
         foreach (StatusEffect status in statuses) {
-            if (status.isFired || status.inProgress) {
+            if (status.inProgress) {//if (status.isFired || status.inProgress) {
                 descr.Add(status.type.color() + status.type.name() + "</color> - " + status.duration + (status.duration == 1? " ход": status.duration > 1 && status.duration < 5? " хода": " ходов"));
             }
         }
+        ItemDescriptor.instance.recheckValues(this);
     }
 
 	public void Update () {
@@ -89,6 +98,7 @@ public abstract class CharacterRepresentative : Describeable {
             if (colorValue == 255) {
                 hitAnimationInProgress = false;
                 setAsActive(character.health > 0);
+                FightProcessor.ANIMATIONS_IN_PROCESS--;
             }
         }
 		if (Input.GetMouseButtonDown(0) && Utils.hit != null && Utils.hit == coll) {
@@ -141,6 +151,7 @@ public abstract class CharacterRepresentative : Describeable {
         hitAnimationInProgress = true;
         colorValue = 0;
         FightScreen.instance.flyTextManager.fireText("-" + amount, ColorType.RED, flyTextPoint);
+        FightProcessor.ANIMATIONS_IN_PROCESS++;
     }
 
     public void refreshColor () {
@@ -149,5 +160,9 @@ public abstract class CharacterRepresentative : Describeable {
 
     public void setAsActive (bool asActive) {
         imageRender.color = asActive? normalColor: grayColor;
+    }
+
+    public void setColliderEnabled (bool asEnabled) {
+        if (coll != null) { coll.enabled = asEnabled; }
     }
 }

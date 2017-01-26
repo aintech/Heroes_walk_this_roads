@@ -157,8 +157,8 @@ public class FightEffectPlayer : MonoBehaviour {
 				break;
 			case FightEffectType.DAMAGE:
 				effectRender.sprite = damageSprite;
-				effectTxt.color = red;
-				effectTxt.text = "-" + value;
+//				effectTxt.color = red;
+//				effectTxt.text = "-" + value;
 				break;
 			case FightEffectType.PARALIZED:
 				effectRender.sprite = paralizeSprite;
@@ -190,8 +190,8 @@ public class FightEffectPlayer : MonoBehaviour {
 
 //		bg.gameObject.SetActive(!damageEffect);
 		effectImage.gameObject.SetActive(true);
-		effectTxt.gameObject.SetActive(true);
-		effectTxtBG.gameObject.SetActive(true);
+        effectTxt.gameObject.SetActive(!damageEffect);
+        effectTxtBG.gameObject.SetActive(!damageEffect);
 	}
 
 	private void endPlay () {

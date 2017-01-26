@@ -23,7 +23,7 @@ public abstract class Character {
 
     public CharacterRepresentative representative { get; private set; }
 
-	public Dictionary<StatusEffectType, StatusEffect> statusEffects = new Dictionary<StatusEffectType, StatusEffect>();
+    private Dictionary<StatusEffectType, StatusEffect> statusEffects = new Dictionary<StatusEffectType, StatusEffect>();
 
     [HideInInspector]
     public bool moveDone;
@@ -144,13 +144,18 @@ public abstract class Character {
         }
     }
 
+    public void addStatus (StatusEffectType type, int duration) {
+        addStatus(type, 0, duration);
+    }
+
     public void addStatus (StatusEffectType type, int value, int duration) {
         statusEffects[type].addStatus(value, duration);
+        if (representative != null) { representative.updateStatusEffectsDescription(); }
     }
 
     public void refreshStatuses () {
         foreach (StatusEffect status in statusEffects.Values) { status.updateStatus(); }
-        if (representative != null) { representative.updateStatusEffects(); }
+        if (representative != null) { representative.updateStatusEffectsDescription(); }
     }
 
     public void clearStatuses () {
