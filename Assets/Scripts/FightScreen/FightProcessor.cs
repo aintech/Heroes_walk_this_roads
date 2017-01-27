@@ -32,9 +32,6 @@ public class FightProcessor : MonoBehaviour {
     private EnemyRepresentative currEnemy;
 
     [HideInInspector]
-    public HeroAction heroAction;
-
-    [HideInInspector]
     public Character[] actionTargets;
 
 	public void init (ElementsHolder elementsHolder, List<EnemyRepresentative> enemies) {
@@ -137,7 +134,8 @@ public class FightProcessor : MonoBehaviour {
         foreach(Hero hero in heroes) { hero.representative.refreshColor(); }
         foreach(EnemyRepresentative enem in enemies) { enem.refreshColor(); }
 
-        FightInterface.instance.setHeroActionsVisible(null);
+        FightInterface.instance.hideSuppliesAndPerksBtns();
+        FightInterface.instance.setChosenHero(null);
 
         switchMachineState(StateMachine.CHECKING_ELEMENTS_POOL_ACTIONS);
     }
@@ -214,7 +212,8 @@ public class FightProcessor : MonoBehaviour {
                     holder.setColliderEnabled(true);
                 }
 
-				FightInterface.instance.setHeroActionsVisible((Hero)currCharacter);
+                FightInterface.instance.setChosenHero((Hero)currCharacter);
+                FightInterface.instance.showPerks();
             } else {
                 currEnemy = (EnemyRepresentative)currCharacter.representative;
                 currEnemy.setAsCurrentEnemy();
@@ -224,7 +223,8 @@ public class FightProcessor : MonoBehaviour {
                         holder.sendToBackground();
                     }
                 }
-				FightInterface.instance.setHeroActionsVisible(null);
+                FightInterface.instance.setChosenHero(null);
+                FightInterface.instance.hideSuppliesAndPerksBtns();
             }
 
 			FightInterface.instance.updateQueue(queue);
@@ -235,12 +235,12 @@ public class FightProcessor : MonoBehaviour {
 
     private void checkCharacterTurn () {
         if (currCharacter.isHero()) { 
-            if (heroAction != null && actionTargets != null) {
-				foreach (KeyValuePair<ElementType, int> pair in heroAction.elementsCost) {
+            if (FightInterface.instance.heroAction != null && actionTargets != null) {
+                foreach (KeyValuePair<ElementType, int> pair in FightInterface.instance.heroAction.elementsCost) {
 					ElementsPool.instance.elements[pair.Key] -= pair.Value;
 				}
 				ElementsPool.instance.updateCounters();
-                switch (heroAction.actionType) {
+                switch (FightInterface.instance.heroAction.actionType) {
                     case HeroActionType.SWORD_SWING:
                     case HeroActionType.MAGIC_ARROW:
                     case HeroActionType.STAFF_ATTACK:
@@ -271,9 +271,9 @@ public class FightProcessor : MonoBehaviour {
                         actionTargets[0].addStatus(StatusEffectType.BLINDED, 3);//.statusEffects[StatusEffectType.BLINDED].addStatus(0, 3);
                         break;
 
-					default: Debug.Log("Unknown action type: " + heroAction.actionType); break;
+                    default: Debug.Log("Unknown action type: " + FightInterface.instance.heroAction.actionType); break;
                 }
-                heroAction = null;
+                FightInterface.instance.chooseAction(null);
                 actionTargets = null;
                 switchMachineState(StateMachine.FIGHT_ANIMATION);
             }

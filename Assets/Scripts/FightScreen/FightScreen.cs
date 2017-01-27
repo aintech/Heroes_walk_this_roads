@@ -28,8 +28,6 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 
 	private bool playerWin;
 
-	private List<SupplySlot> supplySlots = new List<SupplySlot>();
-
 	private Vector3 playerStatusStartPosition = new Vector3(6.8f, 0, 0),
 					enemyStatusStartPosition = new Vector3(6.9f, 7.5f, 0);
 
@@ -71,15 +69,6 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 		elementsHolder.gameObject.SetActive(true);
 		gameObject.SetActive(false);
 
-		Transform supplyHolder = transform.Find("Supply Holder");
-		SupplySlot slot;
-		for (int i = 0; i < supplyHolder.childCount; i++) {
-			slot = supplyHolder.GetChild(i).GetComponent<SupplySlot>();
-			slot.init();
-			supplySlots.Add(slot);
-		}
-        supplyHolder.gameObject.SetActive(false);
-
 		captureBtn = transform.Find ("Capture Button").GetComponent<Button> ().init ();
 		releaseBtn = transform.Find ("Release Button").GetComponent<Button> ().init ();
 
@@ -96,14 +85,14 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
     public void startFight (List<EnemyType> types) {
         initEnemies(types);
         skipButton.gameObject.SetActive(false);
-		SupplySlot supSlot;
-		foreach (SupplySlot slot in StatusScreen.instance.supplySlots) {
-			if (slot.item != null) {
-				supSlot = getSlot (slot.index);
-				supSlot.setItem(slot.takeItem());
-				supSlot.item.transform.localScale = Vector3.one;
-			}
-        }
+//		SupplySlot supSlot;
+//		foreach (SupplySlot slot in StatusScreen.instance.supplySlots) {
+//			if (slot.item != null) {
+//				supSlot = getSlot (slot.index);
+//				supSlot.setItem(slot.takeItem());
+//				supSlot.item.transform.localScale = Vector3.one;
+//			}
+//        }
 		ItemDescriptor.instance.setEnabled();
 		playerWin = false;
 		FightInterface.instance.updateHeroActions();
@@ -122,9 +111,9 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 		captureBtn.setVisible (false);
 		releaseBtn.setVisible (false);
 
-		FightInterface.instance.setHeroActionsVisible(null);
+        FightInterface.instance.setChosenHero(null);
 
-		gameObject.SetActive(true);
+        gameObject.SetActive(true);
 	}
 
     private void initEnemies (List<EnemyType> types) {
@@ -146,14 +135,6 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
         topLayerOrder = (types.Count * sortingOrderStep);
 //        backgroundRender.sortingOrder = topLayerOrder - 1;
     }
-
-	private SupplySlot getSlot (int index) {
-		foreach (SupplySlot slot in supplySlots) {
-			if (slot.index == index) { return slot; }
-		}
-		Debug.Log("Unknown slot index: " + index);
-		return null;
-	}
 
 	void Update () {
 		if (!fightStarted) {
@@ -250,14 +231,14 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
 
 	public void closeFightScreen () {
 		gameObject.SetActive(false);
-		SupplySlot supSlot;
-		foreach (SupplySlot slot in supplySlots) {
-			if (slot.item != null) {
-                supSlot = StatusScreen.instance.supplySlots[slot.index];
-				supSlot.setItem(slot.takeItem());
-				supSlot.item.transform.localScale = Vector3.one;
-			}
-		}
+//		SupplySlot supSlot;
+//		foreach (SupplySlot slot in supplySlots) {
+//			if (slot.item != null) {
+//                supSlot = StatusScreen.instance.supplySlots[slot.index];
+//				supSlot.setItem(slot.takeItem());
+//				supSlot.item.transform.localScale = Vector3.one;
+//			}
+//		}
         world.backFromFight(playerWin);
 	}
 

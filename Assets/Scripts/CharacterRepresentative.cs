@@ -105,9 +105,9 @@ public abstract class CharacterRepresentative : Describeable {
 			if (character.isHero() && StatusScreen.instance.gameObject.activeInHierarchy) {
 				StatusScreen.instance.chooseHero (((HeroRepresentative)this).type);
 			} else {
-				if (FightProcessor.instance.heroAction != null) {
-					if ((FightProcessor.instance.heroAction.targetType == TargetType.ALLY && character.isHero()) ||
-						(FightProcessor.instance.heroAction.targetType == TargetType.ENEMY && !character.isHero())) {
+                if (FightInterface.instance.heroAction != null) {
+                    if ((FightInterface.instance.heroAction.targetType == TargetType.ALLY && character.isHero()) ||
+                        (FightInterface.instance.heroAction.targetType == TargetType.ENEMY && !character.isHero())) {
 						FightProcessor.instance.actionTargets = new Character[]{character};
 					}
 				}
