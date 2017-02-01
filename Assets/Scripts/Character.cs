@@ -118,7 +118,7 @@ public abstract class Character {
 			return heal;
 		} else {
 			health += amount;
-			representative.onHealModified();
+            representative.onHealModified();
 			return amount;
 		}
 	}

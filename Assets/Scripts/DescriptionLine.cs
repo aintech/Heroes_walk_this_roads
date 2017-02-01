@@ -33,6 +33,7 @@ public class DescriptionLine : MonoBehaviour {
         valueText.text = text;
         scale.x = Utils.calcMeshLength(mesh, fontLengthMulty);
         background.localScale = scale;
+
         gameObject.SetActive(true);
 
         return mesh.bounds.size.x;

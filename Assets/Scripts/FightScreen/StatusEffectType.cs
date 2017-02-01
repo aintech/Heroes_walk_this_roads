@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public enum StatusEffectType {
     HERO_HEAVY_GUARD, HERO_INVULNERABILITY_SPHERE, HERO_SACRIFICE, HERO_DODGE,
-	BLINDED, PARALIZED, REGENERATION, ARMORED, SPEED, BURNING
+	BLINDED, PARALIZED, REGENERATION, ARMORED, SPEED, BURNING, STRENGTHENING
 }
 
 public static class StatusEffectDescriptor {
@@ -23,6 +23,7 @@ public static class StatusEffectDescriptor {
 			case StatusEffectType.ARMORED: return "Защита";
 			case StatusEffectType.SPEED: return "Ускорение";
             case StatusEffectType.BURNING: return "Горит";
+            case StatusEffectType.STRENGTHENING: return "Усиление";
 			default: Debug.Log("Unknown status effect type: " + type); return "";
 		}
 	}
@@ -44,6 +45,7 @@ public static class StatusEffectDescriptor {
             statusColors.Add(StatusEffectType.HERO_DODGE, "<color=lightblue>");
             statusColors.Add(StatusEffectType.ARMORED, "<color=lightblue>");
             statusColors.Add(StatusEffectType.SPEED, "<color=lightblue>");
+            statusColors.Add(StatusEffectType.STRENGTHENING, "<color=lightblue>");
             statusColors.Add(StatusEffectType.REGENERATION, "<color=#00FF00FF>");
             statusColors.Add(StatusEffectType.BLINDED, "<color=red>");
             statusColors.Add(StatusEffectType.PARALIZED, "<color=red>");

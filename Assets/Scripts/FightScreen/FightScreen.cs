@@ -242,47 +242,51 @@ public class FightScreen : MonoBehaviour, ButtonHolder {
         world.backFromFight(playerWin);
 	}
 
-	public void useSupply (SupplySlot slot) {
+//	public void useSupply (SupplySlot slot) {
 //		if (slot.item != null) {
 //			SupplyData data = (SupplyData)slot.item.itemData;
-//			if (fightProcessor.canUseSupply (data.type)) {
-//				bool toPlayer = data.type != SupplyType.BLINDING_POWDER && data.type != SupplyType.PARALIZING_DUST;
+//            if (FightProcessor.instance.canUseSupply (data.type)) {
+//                if (data.type == SupplyType.HEALTH_POTION) {
+//                    
+//                }
+//
+////				bool toPlayer = data.type != SupplyType.BLINDING_POWDER && data.type != SupplyType.PARALIZING_DUST;
 ////				StatusEffect statusEffect = getStatusEffectByType(data.type.toStatusEffectType(), toPlayer);
-//				FightEffectType fightEffectType = data.type.toFightEffectType();
-//
-////				if (data.type == SupplyType.HEALTH_POTION) {
-////					fightEffectPlayer.playEffect(fightEffectType, Player.heal(data.value));
-////				} else if (data.type == SupplyType.PARALIZING_DUST || data.type == SupplyType.BLINDING_POWDER) {
-////					fightEffectPlayer.playEffectOnEnemy (fightEffectType, 0);
-////					statusEffect.addStatus (data.value, data.duration);
-////				} else if (data.type == SupplyType.ARMOR_POTION || data.type == SupplyType.REGENERATION_POTION || data.type == SupplyType.SPEED_POTION) {
-////					fightEffectPlayer.playEffect (fightEffectType, data.value);
-////					statusEffect.addStatus (data.value, data.duration);
-////				} else {
-////					Debug.Log("Unknown status effect type");
+////				FightEffectType fightEffectType = data.type.toFightEffectType();
+////
+//////				if (data.type == SupplyType.HEALTH_POTION) {
+//////					fightEffectPlayer.playEffect(fightEffectType, Player.heal(data.value));
+//////				} else if (data.type == SupplyType.PARALIZING_DUST || data.type == SupplyType.BLINDING_POWDER) {
+//////					fightEffectPlayer.playEffectOnEnemy (fightEffectType, 0);
+//////					statusEffect.addStatus (data.value, data.duration);
+//////				} else if (data.type == SupplyType.ARMOR_POTION || data.type == SupplyType.REGENERATION_POTION || data.type == SupplyType.SPEED_POTION) {
+//////					fightEffectPlayer.playEffect (fightEffectType, data.value);
+//////					statusEffect.addStatus (data.value, data.duration);
+//////				} else {
+//////					Debug.Log("Unknown status effect type");
+//////				}
+////
+////				Vector3 effectPos = toPlayer? playerStatusStartPosition: enemyStatusStartPosition;
+////
+////				int activeEffects = -1;//вычитаем добавляемый эффект
+////
+////				effList = toPlayer? playerStatusEffects: enemyStatusEffects;
+////
+////				for (int i = 0; i < effList.Count; i++) {
+////					if (effList[i].isFired) { activeEffects++; }
 ////				}
-//
-//				Vector3 effectPos = toPlayer? playerStatusStartPosition: enemyStatusStartPosition;
-//
-//				int activeEffects = -1;//вычитаем добавляемый эффект
-//
-//				effList = toPlayer? playerStatusEffects: enemyStatusEffects;
-//
-//				for (int i = 0; i < effList.Count; i++) {
-//					if (effList[i].isFired) { activeEffects++; }
-//				}
-//
-//				if (toPlayer) { effectPos.x += activeEffects * playerStatusStep; }
-//				else { effectPos.y += activeEffects * enemyStatusStep; }
-//
-////				statusEffect.transform.localPosition = effectPos;
-//
-//				fightProcessor.skipMove ();
-//				FightProcessor.FIGHT_ANIM_PLAYER_DONE = false;
-//				slot.takeItem ().dispose ();
+////
+////				if (toPlayer) { effectPos.x += activeEffects * playerStatusStep; }
+////				else { effectPos.y += activeEffects * enemyStatusStep; }
+////
+//////				statusEffect.transform.localPosition = effectPos;
+////
+////				fightProcessor.skipMove ();
+////				FightProcessor.FIGHT_ANIM_PLAYER_DONE = false;
+////				slot.takeItem ().dispose ();
 //			}
 //		}
-	}
+//	}
 
 //	public StatusEffect getStatusEffectByType (StatusEffectType type, bool toPlayer) {
 //		if (type.withoutStatusHolder()) { return null; }

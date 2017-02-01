@@ -380,10 +380,9 @@ public class FightProcessor : MonoBehaviour {
 		PLAYER_MOVE_DONE = true;
 	}
 
-	public bool canUseSupply (SupplyType supplyType) {
-//        if (machineState != StateMachine.CHARACTER_TURN && !currCharacter.isHero()) {
-//			return false;
-//		}
+    private bool canUseSupply (SupplyType supplyType) {
+        if (machineState != StateMachine.CHARACTER_TURN) { return false; }
+        if (!currCharacter.isHero()) { return false; }
 //		if (supplyType == SupplyType.SPEED_POTION || supplyType == SupplyType.ARMOR_POTION || supplyType == SupplyType.REGENERATION_POTION) {
 //			StatusEffectType type = supplyType.toStatusEffectType ();
 //			foreach (StatusEffect eff in fightScreen.playerStatusEffects) {
@@ -403,6 +402,20 @@ public class FightProcessor : MonoBehaviour {
 //		}
 		return true;
 	}
+
+    public void useSupply (Item item) {
+        SupplyData data = (SupplyData)item.itemData;
+        if (canUseSupply(data.type)) {
+            
+            if (data.type == SupplyType.HEALTH_POTION) { currCharacter.heal(data.value); }
+            else { currCharacter.addStatus(data.type.toStatusEffectType(), data.value, data.duration); }
+
+            item.slot.takeItem().dispose();
+            FightInterface.instance.chooseAction(null);
+            actionTargets = null;
+            switchMachineState(StateMachine.FIGHT_ANIMATION);
+        }
+    }
 
     private void updateStatusEffects () {
         //          foreach (StatusEffect eff in fightScreen.playerStatusEffects) {

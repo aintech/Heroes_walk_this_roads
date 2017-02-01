@@ -154,8 +154,8 @@ public class ItemDescriptor : MonoBehaviour {
                 sellMarket.askToSell(holder);
                 break;
             case Type.FIGHT:
-                if (holder != null && holder is SupplySlot) {
-                    FightScreen.instance.useSupply((SupplySlot)holder);
+                if (holder != null && holder is SupplySlot && holder.item != null) {
+                    FightProcessor.instance.useSupply(holder.item);
                 }
                 break;
             case Type.INVENTORY:

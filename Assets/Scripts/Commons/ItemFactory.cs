@@ -69,23 +69,25 @@ public static class ItemFactory {
 				value = Mathf.RoundToInt(type.value() * level * qualityMultiplier(quality)) * 2;
 				duration = quality == ItemQuality.UNIQUE? 20: quality == ItemQuality.RARE? 14: quality == ItemQuality.SUPERIOR? 10: quality == ItemQuality.GOOD? 7: 5;
 				break;
-			case SupplyType.BLINDING_POWDER:
-				duration = quality == ItemQuality.UNIQUE? 12: quality == ItemQuality.RARE? 10: quality == ItemQuality.SUPERIOR? 8: quality == ItemQuality.GOOD? 6: 4;
-				break;
 			case SupplyType.HEALTH_POTION:
 				value = Mathf.RoundToInt(type.value() * level * qualityMultiplier(quality));
 				break;
-			case SupplyType.PARALIZING_DUST:
-				duration = quality == ItemQuality.UNIQUE? 7: quality == ItemQuality.RARE? 6: quality == ItemQuality.SUPERIOR? 5: quality == ItemQuality.GOOD? 4: 3;
-				break;
             case SupplyType.SPEED_POTION:
-                value = quality == ItemQuality.UNIQUE || quality == ItemQuality.RARE? 2: 1;
+            case SupplyType.STRENGTH_POTION:
+                value = Mathf.RoundToInt(type.value() * level * qualityMultiplier(quality));
+//                value = quality == ItemQuality.UNIQUE || quality == ItemQuality.RARE? 2: 1;
                 duration = quality == ItemQuality.UNIQUE? 15: quality == ItemQuality.RARE? 10: quality == ItemQuality.SUPERIOR? 10: quality == ItemQuality.GOOD? 7: 5;
-				break;
+                break;
 			case SupplyType.REGENERATION_POTION:
 				value = Mathf.RoundToInt(type.value() * level * qualityMultiplier(quality));
 				duration = quality == ItemQuality.UNIQUE? 7: quality == ItemQuality.RARE? 6: quality == ItemQuality.SUPERIOR? 5: quality == ItemQuality.GOOD? 4: 3;
-				break;
+                break;
+//            case SupplyType.PARALIZING_DUST:
+//                duration = quality == ItemQuality.UNIQUE? 7: quality == ItemQuality.RARE? 6: quality == ItemQuality.SUPERIOR? 5: quality == ItemQuality.GOOD? 4: 3;
+//                break;
+//            case SupplyType.BLINDING_POWDER:
+//                duration = quality == ItemQuality.UNIQUE? 12: quality == ItemQuality.RARE? 10: quality == ItemQuality.SUPERIOR? 8: quality == ItemQuality.GOOD? 6: 4;
+//                break;
 			default: Debug.Log("Unknown supply type: " + type); break;
 		}
 

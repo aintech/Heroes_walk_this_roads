@@ -138,8 +138,9 @@ public class ImagesProvider : MonoBehaviour {
 			case SupplyType.ARMOR_POTION: return supplies[1];
 			case SupplyType.REGENERATION_POTION: return supplies[2];
 			case SupplyType.SPEED_POTION: return supplies[3];
-			case SupplyType.BLINDING_POWDER: return supplies[4];
-			case SupplyType.PARALIZING_DUST: return supplies[5];
+            case SupplyType.STRENGTH_POTION: return supplies[4];
+//			case SupplyType.BLINDING_POWDER: return supplies[4];
+//			case SupplyType.PARALIZING_DUST: return supplies[5];
 			default: Debug.Log("Unknown supply type: " + type); return null;
 		}
 	}

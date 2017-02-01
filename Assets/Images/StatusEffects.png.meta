@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: c466716c67d607e4abe5dc284be4bf61
-timeCreated: 1485432861
+timeCreated: 1485955298
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -15,6 +15,7 @@ TextureImporter:
     21300016: StatusEffects_Sacrifice
     21300018: StatusEffects_Dodge
     21300020: StatusEffects_Burning
+    21300022: StatusEffects_Strengthening
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -198,6 +199,19 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 161
+        y: 46
+        width: 31
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: StatusEffects_Strengthening
+      rect:
+        serializedVersion: 2
+        x: 201
         y: 46
         width: 31
         height: 31

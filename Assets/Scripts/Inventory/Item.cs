@@ -95,11 +95,12 @@ public class Item : Describeable {
                 string val = "";
                 switch (sud.type) {
                     case SupplyType.HEALTH_POTION: val = "Восстанавливает <color=white>" + sud.value + "</color> HP"; break;
-                    case SupplyType.BLINDING_POWDER: val = StatusEffectType.BLINDED.name() + " на <color=white>" + sud.duration + "</color> ходов"; break;
-                    case SupplyType.PARALIZING_DUST: val = StatusEffectType.PARALIZED.name() + " на <color=white>" + sud.duration + "</color> ходов"; break;
-                    case SupplyType.SPEED_POTION: val = "Дополнительно <color=white>" + sud.value + "</color> действий на <color=white>" + sud.duration + "</color> ходов"; break;
+                    case SupplyType.SPEED_POTION: val = "Увеличивает инициативу на <color=white>" + sud.value + "</color>% на <color=white>" + sud.duration + "</color> ходов"; break;
                     case SupplyType.REGENERATION_POTION: val = "Восстановление по <color=white>" + sud.value + "</color> HP в течении <color=white>" + sud.duration + "</color> ходов"; break;
                     case SupplyType.ARMOR_POTION: val = "Повышение защиты на <color=white>" + sud.value + "</color> в течении <color=white>" + sud.duration + "</color> ходов"; break;
+                    case SupplyType.STRENGTH_POTION: val = "Увеличивает силу на <color=white>" + sud.value + "</color>% на <color=white>" + sud.duration + "</color> ходов"; break;
+//                    case SupplyType.BLINDING_POWDER: val = StatusEffectType.BLINDED.name() + " на <color=white>" + sud.duration + "</color> ходов"; break;
+//                    case SupplyType.PARALIZING_DUST: val = StatusEffectType.PARALIZED.name() + " на <color=white>" + sud.duration + "</color> ходов"; break;
                     default: Debug.Log("Unknown supply type: " + sud.type); val = ""; break;
                 }
                 descr.Add("Эффект: <color=orange>" + val + "</color>");
